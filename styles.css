@@ -1,0 +1,82 @@
+*     {
+  font-family: sans-serif;
+  color: #776e65;
+  box-sizing: border-box;
+}
+
+html body{
+  background: #faf8ef;
+  font-size: 18px;
+  padding: 10px;
+  margin: auto;
+  }
+  button {
+  border-radius: 0px;
+  border: 3px solid #ddd;
+  border-bottom: 4px solid #aaa;
+  font-size: 12px;
+  background: #eee;
+  display: inline-block;
+  vertical-align: top;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+button:hover {
+    background: #e7e7e7;
+}
+
+button:focus{
+  outline: none;
+}
+
+.videoElement { width: 100px;}
+
+.c1 { width : 12.5% }
+.c2 { width : 25% }
+.c3 { width : 37.5% }
+.c4 { width : 50% }
+.c5 { width : 62.5% }
+.c6 { width : 75% }
+.c7 { width : 87.5% }
+.c8 { width : 100% }
+
+.container { width: 95%; margin: 0 auto; }
+.container div { padding: 10px; }
+
+.row { display: flex; }
+/*.row > div { float:left; }*/
+
+.header-row {height: 3em; background-color: green}
+.slot-row {
+  flex-wrap: wrap;
+  width: 80%;
+}
+.slot-container {width: 20%;}
+.slot-placeholder {height:10em; background-color: red; margin: 5px;}
+.activity-row {
+  width: 20%;
+}
+.activity {
+  background-color: black;
+  width: 100%;
+  padding: 0;
+  margin: 15px;
+}
+.activity li {
+  background-color: blue;
+  list-style: none;
+  padding: 0;
+
+}
+@-webkit-keyframes fadeinout {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes fadeinout {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
