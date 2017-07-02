@@ -1,13 +1,6 @@
 import React, { Component } from 'react'
 
 export default class SubmitForm extends Component {
-	componentDidMount() {
-		this.connection = new WebSocket('ws://localhost:3000/ws/submit')
-		this.connection.onerror = function (error) {
-			console.log('WebSocket Error ' + error);
-		};
-	}
-
 	render() {
 		let slot, amt
 
@@ -24,7 +17,10 @@ export default class SubmitForm extends Component {
 					slot: slot.value,
 					amt: amt.value
 				}
-				this.connection.send(JSON.stringify(data))
+				var request = new XMLHttpRequest();
+				request.open('POST', '/login', true);
+				request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+				request.send(JSON.stringify(data));
 
 				slot.value = ''
 				amt.value = ''
