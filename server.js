@@ -1,23 +1,20 @@
 const express = require('express');
-const enableWs = require('express-ws');
-const path = require('path')
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpack = require('webpack');
-const webpackConfig = require('./webpack.config.js');
-
 const app = express();
-const wsInstance = enableWs(app);
- 
-const compiler = webpack(webpackConfig);
 
 const bodyParser = require('body-parser')
 app.use(bodyParser.json());
 
-var cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 app.use(cookieParser())
 
-app.use(express.static(__dirname + '/www'));
+const enableWs = require('express-ws');
+const wsInstance = enableWs(app);
 
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpack = require('webpack');
+const webpackConfig = require('./webpack.config.js');
+const compiler = webpack(webpackConfig);
+app.use(express.static(__dirname + '/www'));
 app.use(webpackDevMiddleware(compiler, {
   hot: true,
   filename: 'bundle.js',
@@ -28,15 +25,13 @@ app.use(webpackDevMiddleware(compiler, {
   historyApiFallback: true,
 }));
 
-app.post('/login', (request, response) => {
-  console.log(request.cookies.authentication)
-  if (request.cookies.authentication === undefined) {
-    let id = Math.random().toString()
-    id = id.substring(2, id.length)
-    response.cookie('authentication', id)
-  }
-  response.end()
+const path = require('path');
+app.get('*', function (request, response) {
+  response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
 })
+
+require('./server/properties.js').setApp(app);
+require('./server/login.js').setApp(app);
 
 app.post('/submit', function (request, response) {
   console.log(request.body)
@@ -51,11 +46,7 @@ app.post('/submit', function (request, response) {
   response.end();
 })
 
-app.get('*', function (request, response) {
-  response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
-})
-
-const server = app.listen(3000, function() {
+const server = app.listen(app.locals.port, function() {
   const host = server.address().address;
   const port = server.address().port;
   console.log('Syty Auction server is listening at http://%s:%s', host, port);
