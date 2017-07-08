@@ -6,61 +6,50 @@ import {
   RECEIVE_POSTS
 } from './actions'
 
-function selectedSubreddit(state = 'reactjs', action) {
-  switch (action.type) {
-    case SELECT_SUBREDDIT:
-      return action.subreddit
-    default:
-      return state
-  }
+const getRandomArbitrary = (min, max) => Math.round((Math.random() * (max - min) + min) * 100) / 100
+
+const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
+const nameArray = ["Darwin", "Paris", "Jackie", "Dominick", "Abel", "Nelson", "Jeff", "Ivan", "Gene", "Bill", "William", "Myron", "Clayton", "Bryant", "Johnie", "Graig", "Elliott", "Dante", "Benjamin", "Brant", "Bertram", "Morgan", "Johnny", "Jonathan", "Wilfred", "Robert", "Robin", "Mohammed", "Joey", "Bradly", "Denver", "Elden", "Ryan", "Leigh", "Jc", "Asa", "Hayden", "Darrell", "Von", "Gary", "Augustus", "Alphonso", "Logan", "Leon", "Marquis", "Miguel", "Ignacio", "Don", "Derrick", "Jarod"]
+const getRandomName = () => nameArray[getRandomInt(0,nameArray.length)]
+
+
+const stubSlots = new Array(15).fill().map(
+  (e,i) => ({
+    index: i+1,
+    highestBid: getRandomArbitrary(1, 1000),
+    name: getRandomName()
+  })
+)
+
+const slots = (state = stubSlots || [], action) => {
+    switch (action.type) {
+      case SELECT_SUBREDDIT:
+        return action.subreddit
+      default:
+        return state
+    }
 }
 
-function posts(
-  state = {
-    isFetching: false,
-    didInvalidate: false,
-    items: []
-  },
-  action
-) {
-  switch (action.type) {
-    case INVALIDATE_SUBREDDIT:
-      return Object.assign({}, state, {
-        didInvalidate: true
-      })
-    case REQUEST_POSTS:
-      return Object.assign({}, state, {
-        isFetching: true,
-        didInvalidate: false
-      })
-    case RECEIVE_POSTS:
-      return Object.assign({}, state, {
-        isFetching: false,
-        didInvalidate: false,
-        items: action.posts,
-        lastUpdated: action.receivedAt
-      })
-    default:
-      return state
-  }
-}
+const stubEvents = new Array(29).fill().map(
+  (e,i) => ({
+    "bidder": getRandomName(),
+    "bid": getRandomArbitrary(1, 100),
+    "slot": getRandomInt(1,25)
+  })
+)
 
-function postsBySubreddit(state = {}, action) {
-  switch (action.type) {
-    case INVALIDATE_SUBREDDIT:
-    case RECEIVE_POSTS:
-    case REQUEST_POSTS:
-      return Object.assign({}, state, {
-        [action.subreddit]: posts(state[action.subreddit], action)
-      })
-    default:
-      return state
-  }
+const activityEvents = (state = stubEvents || [], action) => {
+    switch (action.type) {
+      case SELECT_SUBREDDIT:
+        return action.subreddit
+      default:
+        return state
+    }
 }
 
 const rootReducer = combineReducers({
-  postsBySubreddit,
-  selectedSubreddit
+  slots,
+  activityEvents
 })
 
 export default rootReducer
