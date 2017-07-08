@@ -14,8 +14,10 @@ export default class SubmitForm extends Component {
 				}
 
 				var data = {
-					slot: slot.value,
-					amt: amt.value
+					firstName: 'Harry',
+		            lastName: 'Tran',
+		            company: 'Citi',
+		            table: 7
 				}
 				var request = new XMLHttpRequest();
 				request.open('POST', '/login', true);
