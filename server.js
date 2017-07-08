@@ -27,13 +27,6 @@ app.use(webpackDevMiddleware(compiler, {
   },
   historyApiFallback: true,
 }));
- 
-app.ws('/ws/submit', (ws, request) => {
-  ws.on('message', msg => {
-    console.log('Server received: ' + msg)
-  })
-  //send snapshot
-})
 
 app.post('/login', (request, response) => {
   console.log(request.cookies.authentication)
@@ -59,12 +52,11 @@ app.post('/submit', function (request, response) {
 })
 
 app.get('*', function (request, response) {
-  console.log("weird keyboard!")
   response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
 })
 
 const server = app.listen(3000, function() {
   const host = server.address().address;
   const port = server.address().port;
-  console.log('Example app listening at http://%s:%s', host, port);
+  console.log('Syty Auction server is listening at http://%s:%s', host, port);
 });
