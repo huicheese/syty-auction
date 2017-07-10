@@ -62,11 +62,44 @@ button:focus{
 .slot-placeholder {
   height:10em;
   margin: 5px;
+  position: relative;
+
   background-color: #fafafa;
+
   border-top: 2px solid #e7e7e7;
   border-right: 3px solid #ddd;
   border-bottom: 4px solid #aaa;
   border-left: 3px solid #ddd;
+}
+.slot-placeholder:after {
+    content : "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url("http://shou1dwe.github.io/i-am-rich-yo/images/box.png"); 
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    opacity : 0.3;
+}
+.slot-index {
+  font-size: 4.5em;
+  text-align: center;
+  color:#777;
+}
+.slot-bid {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  text-align: right;
+}
+.slot-placeholder img {
+    max-width: 60%;
+    margin: auto;
+    height: auto;
+    display: block;
 }
 .activity-row {
   width: 20%;
