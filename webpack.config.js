@@ -1,8 +1,11 @@
 const path = require('path');
- 
+const webpack = require('webpack');
+
 module.exports = {
+    devtool: 'cheap-module-eval-source-map',
     context: path.join(__dirname, 'src'),
     entry: [
+        'webpack-hot-middleware/client',
         './index.js',
     ],
     module: {
@@ -20,9 +23,12 @@ module.exports = {
         path: path.join(__dirname, 'www'),
         filename: 'bundle.js',
     },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin()
+    ],
     resolve: {
         modules: [
             path.join(__dirname, 'node_modules'),
         ],
-    },
+    }
 };

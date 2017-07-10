@@ -24,6 +24,7 @@ app.use(webpackDevMiddleware(compiler, {
   },
   historyApiFallback: true,
 }));
+app.use(require("webpack-hot-middleware")(compiler));
 
 const path = require('path');
 app.get('*', function (request, response) {
