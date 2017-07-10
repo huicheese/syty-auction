@@ -47,27 +47,44 @@ button:focus{
 .row { display: flex; }
 /*.row > div { float:left; }*/
 
-.header-row {height: 3em; background-color: green}
+.header-row {
+  height: 3em; 
+}
 .slot-row {
   flex-wrap: wrap;
   width: 80%;
+  background: #eee;
+  border: 3px solid #ddd;
 }
-.slot-container {width: 20%;}
-.slot-placeholder {height:10em; background-color: red; margin: 5px;}
-.activity-row {
+.slot-container {
   width: 20%;
 }
+.slot-placeholder {
+  height:10em;
+  margin: 5px;
+  background-color: #fafafa;
+  border-top: 2px solid #e7e7e7;
+  border-right: 3px solid #ddd;
+  border-bottom: 4px solid #aaa;
+  border-left: 3px solid #ddd;
+}
+.activity-row {
+  width: 20%;
+  background: #eee;
+  border: 3px solid #ddd;
+}
 .activity {
-  background-color: black;
   width: 100%;
-  padding: 0;
-  margin: 15px;
+  padding: 5px;
+  margin: 1px;
+  background-color: #fafafa;
+  border-top: 2px solid #aaa;
+  border-right: 2px solid #ddd;
+  border-bottom: 2px solid #e7e7e7;
+  border-left: 3px solid #ddd;
 }
 .activity li {
-  background-color: blue;
   list-style: none;
-  padding: 0;
-
 }
 @-webkit-keyframes fadeinout {
   0% { opacity: 0; }
