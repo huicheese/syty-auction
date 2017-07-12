@@ -16,39 +16,40 @@ const webpackConfig = require('./webpack.config.js');
 const compiler = webpack(webpackConfig);
 app.use(express.static(__dirname + '/www'));
 app.use(webpackDevMiddleware(compiler, {
-  hot: true,
-  filename: 'bundle.js',
-  publicPath: '/',
-  stats: {
-    colors: true,
-  },
-  historyApiFallback: true,
+    hot: true,
+    filename: 'bundle.js',
+    publicPath: '/',
+    stats: {
+        colors: true,
+    },
+    historyApiFallback: true,
 }));
 app.use(require("webpack-hot-middleware")(compiler));
 
 const path = require('path');
 app.get('*', function (request, response) {
-  response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
+    response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
 })
 
 require('./server/properties.js').setApp(app);
 require('./server/login.js').setApp(app);
+require('./server/database.js').initialize();
 
 app.post('/submit', function (request, response) {
-  console.log(request.body)
-  console.log(request.cookies)
-  wsInstance.getWss().clients.forEach(client => {
+    console.log(request.body)
+    console.log(request.cookies)
+    wsInstance.getWss().clients.forEach(client => {
     //if (client.readyState === WebSocket.OPEN) {
         client.send("ehhhhes");
         console.log('222');
     // }
-  })
-  console.log('done')
-  response.end();
+    })
+    console.log('done')
+    response.end();
 })
 
 const server = app.listen(app.locals.port, function() {
-  const host = server.address().address;
-  const port = server.address().port;
-  console.log('Syty Auction server is listening at http://%s:%s', host, port);
+    const host = server.address().address;
+    const port = server.address().port;
+    console.log('Syty Auction server is listening at http://%s:%s', host, port);
 });
