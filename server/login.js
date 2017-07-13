@@ -1,36 +1,56 @@
+var Promise = require('bluebird');
+var encode = require('hashCode').hashCode;
 var utils = require('./utils.js');
+var database = require('./database.js');
 
 exports.setApp = function(app) {
   app.post('/login', (request, response) => {
     if (!utils.isValidAuth(request.cookies.sytyAuth)) {
-      if (!request.body)
-        return response.status(400).send('Login form is empty')
+        if (!request.body)
+            return response.status(400).send('Login form is empty')
 
-      if (!request.body.firstName || !request.body.firstName.trim())
-        return response.status(400).send('First name is empty')
+        if (!request.body.firstName || !request.body.firstName.trim())
+            return response.status(400).send('First name is empty')
 
-      if (!request.body.lastName || !request.body.lastName.trim())
-        return response.status(400).send('Last name is empty')
+        if (!request.body.lastName || !request.body.lastName.trim())
+            return response.status(400).send('Last name is empty')
 
-      if (!request.body.company || !request.body.company.trim())
-        return response.status(400).send('Company is empty')
+        if (!request.body.company || !request.body.company.trim())
+            return response.status(400).send('Company is empty')
 
-      if (!request.body.table || isNaN(request.body.table))
-        return response.status(400).send('Table number is invalid')
+        if (!request.body.table || isNaN(request.body.table))
+            return response.status(400).send('Table number is invalid')
 
-      let authData = JSON.stringify({
-            firstName: request.body.firstName,
-            lastName: request.body.lastName,
-            company: request.body.company,
-            table: request.body.table+1
-          });
-      let expiry = new Date(Date.now() + app.locals.cookiesExpiration);
+        let userID =
+            generateUserID(
+                request.body.firstName,
+                request.body.lastName,
+                request.body.company,
+                request.body.table);
 
-      console.log('Login successful for %s', authData);
-      response.cookie('sytyAuth', authData, { expires: expiry });
-      response.status(200).send('Login successful');
+        database
+            .createUser(request.body.firstName, request.body.lastName, request.body.company, request.body.table)
+            .then(() => {
+                let expiry = new Date(Date.now() + app.locals.cookiesExpiration);
+                response.cookie('sytyAuth', userID, { expires: expiry });
+                response.status(200).send('Login successful');
+            })
+            .catch(err => {
+                console.error('Failed to login', err.stack);
+                response.status(400).send('Failed to login');
+            });
     }
-    else
-      response.status(200).send('User already logged in')
+    else {
+        response.status(200).send('User already logged in')
+    }
   })
 };
+
+function generateUserID(firstName, lastName, company, table) {
+    return encode().value(JSON.stringify({
+        firstName: firstName,
+        lastName: lastName,
+        company: company,
+        table: table
+    }));
+}
