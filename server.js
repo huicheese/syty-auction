@@ -35,6 +35,9 @@ require('./server/properties.js').setApp(app);
 require('./server/login.js').setApp(app);
 require('./server/database.js').initialize();
 
+// TODO: GET snapshot, query DB, return full dashboard
+// TODO: POST submit, update DB, send update via WS
+
 app.post('/submit', function (request, response) {
     console.log(request.body)
     console.log(request.cookies)

@@ -16,6 +16,7 @@ export default class Root extends Component {
 					<div>
 						<Route exact path="/" component={DashboardRoot} />
 						<Route exact path="/view" component={AsyncApp} />
+						<Route exact path="/test" component={SubmitForm} />
 					</div>
 				</Router>
 			</Provider>

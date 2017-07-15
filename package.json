@@ -19,10 +19,12 @@
   },
   "homepage": "https://github.com/shou1dwe/syty-auction#readme",
   "dependencies": {
+    "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
     "express-logging": "^1.1.1",
     "express-ws": "^3.0.0",
+    "hashcode": "^1.0.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-hot-loader": "^3.0.0-beta.7",
@@ -31,7 +33,7 @@
     "redux": "^3.7.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
-    "sqlite3": "^3.1.8",
+    "sqlite": "^2.8.0",
     "ws": "^3.0.0"
   },
   "devDependencies": {

@@ -1,86 +1,112 @@
 var path = require('path');
-var sqlite3 = require('sqlite3').verbose();
-var db, submitBidStmt, slotQueryStmt, allSlotsQueryStmt;
+var Promise = require('bluebird');
+var db = require('sqlite')
+var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, userListQueryStmt;
 
-function createDatabase() {
-	console.log('Initializing Database...');
-	db = new sqlite3.Database(path.join(__dirname, '..', 'db', 'database.db'), createUserTable);
-};
+function initialize() {
+	Promise
+		.resolve()
+		.then(() => db.open(path.join(__dirname, '..', 'db', 'database.db'), { Promise }))
+		.then(() => console.log("Opened database"))
+		.then(() => db.run(
+			`CREATE TABLE IF NOT EXISTS Users (
+				UserID TEXT NOT NULL PRIMARY KEY,
+				FirstName TEXT NOT NULL,
+				LastName TEXT NOT NULL,
+				Company TEXT,
+				TableNumber INTEGER NOT NULL
+			)`
+		))
+		.then(() => console.log("Created table Users"))
+		.then(() => db.run(
+			`CREATE TABLE IF NOT EXISTS Biddings (
+				UserID TEXT NOT NULL,
+				Slot INTEGER NOT NULL,
+				Bid INTEGER NOT NULL
+			)`
+		))
+		.then(() => console.log("Created table Biddings"))
+		.then(() => {
+			db.prepare('INSERT OR IGNORE INTO Users VALUES(?, ?, ?, ?, ?)')
+			.then(stmt => createUserStmt = stmt);
 
-function createUserTable() {
-	console.log('Creating User table...');
-	db.run(`
-		CREATE TABLE IF NOT EXISTS Users (
-			UserID TEXT NOT NULL PRIMARY KEY,
-			FirstName TEXT NOT NULL,
-			LastName TEXT NOT NULL,
-			Company TEXT,
-			Table INTEGER NOT NULL
-		)
-		`, createBiddingTable);
-};
+			db.prepare('INSERT INTO Biddings VALUES(?, ?, ?)')
+			.then(stmt => submitBidStmt = stmt);
 
-function createBiddingTable() {
-	console.log('Creating Biddings table...');
-	db.run(`
-		CREATE TABLE IF NOT EXISTS Biddings (
-			UserID TEXT NOT NULL,
-			Slot INTEGER NOT NULL,
-			Bid INTEGER NOT NULL
-		)
-		`, prepareStatements);
-};
-
-function prepareStatements() {
-	console.log('Preparing statements...');
-
-	submitBidStmt =
-		db.prepare('INSERT INTO Biddings VALUES(?, ?, ?)');
-
-	slotQueryStmt =
-		db.prepare(`
-			SELECT GROUP_CONCAT(UserID) AS MaxBidders, MAX(Bid) AS MaxBid
-			FROM Biddings
-			WHERE Slot = ?
-			`);
-		
-	allSlotsQueryStmt =
-		db.prepare(`
-			SELECT t.Slot, h.MaxBid, GROUP_CONCAT(t.UserID) AS MaxBidders
-			FROM
-				Biddings t
-
-				INNER JOIN
-
-				(SELECT Slot, MAX(bid) AS MaxBid
+			db.prepare(`
+				SELECT GROUP_CONCAT(UserID) AS MaxBidders, MAX(Bid) AS MaxBid
 				FROM Biddings
-				GROUP BY Slot) h
+				WHERE Slot = ?
+				`)
+			.then(stmt => slotQueryStmt = stmt);
 
-				ON t.Slot = h.Slot AND t.Bid = h.MaxBid
-			GROUP BY t.Slot
-			`);
+			db.prepare(`
+				SELECT t.Slot, h.MaxBid, GROUP_CONCAT(t.UserID) AS MaxBidders
+				FROM
+					Biddings t
 
-	console.log("Database initialization completed");
+					INNER JOIN
+
+					(SELECT Slot, MAX(bid) AS MaxBid
+					FROM Biddings
+					GROUP BY Slot) h
+
+					ON t.Slot = h.Slot AND t.Bid = h.MaxBid
+				GROUP BY t.Slot
+				`)
+			.then(stmt => allSlotsQueryStmt = stmt);
+
+			db.prepare(`
+				SELECT UserID, FirstName, LastName, Company, TableNumber
+				FROM Users
+				WHERE UserID = ?
+				`)
+			.then(stmt => userQueryStmt = stmt);
+
+			db.prepare(`
+				SELECT UserID, FirstName, LastName, Company, TableNumber
+				FROM Users
+				WHERE UserID IN (?)
+				`)
+			.then(stmt => userListQueryStmt = stmt);
+		})
+		.then(() => console.log("Database initialization completed"))
+		.catch(err => console.error(err.stack));
 };
+
+function getUser(userID) {
+	return Promise.resolve(userQueryStmt.get(userID));
+}
+
+function createUser(userID, firstName, lastName, company, table) {
+	return Promise.resolve(createUserStmt.run(userID, firstName, lastName, company, table));
+}
 
 module.exports = {
-	initialize: function() {
-		createDatabase();
-	},
+	initialize: initialize,
+	createUser: createUser,
 
-  	submitBid: function(userID, slot, bid) {
-  		submitBidStmt.run(userID, slot, bid);
-  	},
+ //  	submitBid: function(userID, slot, bid) {
+ //  		submitBidStmt.run(userID, slot, bid);
+ //  	},
 
-  	getFullSnapshot: function(snapshotCallback) {
-  		allSlotsQueryStmt.all(function(err, rows) {
-  			snapshotCallback(rows);
-  		});
-  	},
+ //  	getFullSnapshot: function(snapshotCallback) {
+ //  		allSlotsQueryStmt.all(function(err, rows) {
+ //  			snapshotCallback(rows);
+ //  		});
+ //  	},
 
-  	getSlotSnapshot: function(slot, updateCallback) {
-  		slotQueryStmt.get(slot, function(err, row) {
-			updateCallback(row);
-		});
-  	}
+ //  	getSlotSnapshot: function(slot, updateCallback) {
+ //  		slotQueryStmt.get(slot, function(err, row) {
+	// 		updateCallback(row);
+	// 	});
+ //  	},
+
+	getUser: getUser,
+
+ //  	getUserList: function(userIDs, callback) {
+ //  		userListQueryStmt.all(userIDs, function(err, rows) {
+ //  			callback(rows);
+ //  		});
+ //  	}
 };
