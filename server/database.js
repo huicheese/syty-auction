@@ -3,10 +3,10 @@ var Promise = require('bluebird');
 var db = require('sqlite')
 var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, userListQueryStmt;
 
-function initialize() {
+let initialize = () =>
 	Promise
 		.resolve()
-		.then(() => db.open(path.join(__dirname, '..', 'db', 'database.db'), { Promise }))
+		.then(() => db.open(path.join(__dirname, '..', 'database.db'), { Promise }))
 		.then(() => console.log("Opened database"))
 		.then(() => db.run(
 			`CREATE TABLE IF NOT EXISTS Users (
@@ -72,41 +72,14 @@ function initialize() {
 		})
 		.then(() => console.log("Database initialization completed"))
 		.catch(err => console.error(err.stack));
-};
 
-function getUser(userID) {
-	return Promise.resolve(userQueryStmt.get(userID));
-}
+let getUser = userID => Promise.resolve(userQueryStmt.get(userID));
 
-function createUser(userID, firstName, lastName, company, table) {
-	return Promise.resolve(createUserStmt.run(userID, firstName, lastName, company, table));
-}
+let createUser = (userID, firstName, lastName, company, table) =>
+	Promise.resolve(createUserStmt.run(userID, firstName, lastName, company, table));
 
 module.exports = {
 	initialize: initialize,
-	createUser: createUser,
-
- //  	submitBid: function(userID, slot, bid) {
- //  		submitBidStmt.run(userID, slot, bid);
- //  	},
-
- //  	getFullSnapshot: function(snapshotCallback) {
- //  		allSlotsQueryStmt.all(function(err, rows) {
- //  			snapshotCallback(rows);
- //  		});
- //  	},
-
- //  	getSlotSnapshot: function(slot, updateCallback) {
- //  		slotQueryStmt.get(slot, function(err, row) {
-	// 		updateCallback(row);
-	// 	});
- //  	},
-
 	getUser: getUser,
-
- //  	getUserList: function(userIDs, callback) {
- //  		userListQueryStmt.all(userIDs, function(err, rows) {
- //  			callback(rows);
- //  		});
- //  	}
+	createUser: createUser,
 };
