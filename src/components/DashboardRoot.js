@@ -3,6 +3,11 @@ import BiddingSlotBoxContainer from '../containers/BiddingSlotBoxContainer'
 import ActivityEventBoxContainer from '../containers/ActivityEventBoxContainer'
 
 class Dashboard extends React.Component {
+
+  	componentDidMount() {
+    	this.props.actions.initializeConnection();
+  	}
+
 	render() {
 		return (
 			<div className="container">

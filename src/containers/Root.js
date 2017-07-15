@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import configureStore from '../configureStore'
 import AsyncApp from './AsyncApp'
 import SubmitForm from './SubmitForm'
-import DashboardRoot from '../components/DashboardRoot'
+import DashboardRootContainer from './DashboardRootContainer'
 
 const store = configureStore()
 
@@ -14,7 +14,7 @@ export default class Root extends Component {
 			<Provider store={store}>
 				<Router>
 					<div>
-						<Route exact path="/" component={DashboardRoot} />
+						<Route exact path="/" component={DashboardRootContainer} />
 						<Route exact path="/view" component={AsyncApp} />
 						<Route exact path="/test" component={SubmitForm} />
 					</div>
