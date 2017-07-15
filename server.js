@@ -27,9 +27,6 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(require("webpack-hot-middleware")(compiler));
 
 const path = require('path');
-app.get('*', function (request, response) {
-    response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
-})
 
 require('./server/properties.js').setApp(app);
 require('./server/dashboard.js').setApp(app);
@@ -37,8 +34,13 @@ require('./server/login.js').setApp(app);
 
 require('./server/database.js').initialize();
 
-// TODO: GET snapshot, query DB, return full dashboard
-// TODO: POST submit, update DB, send update via WS
+app.ws('/updates', function(ws, req) {
+  ws.on('message', function(msg) {
+    console.log(msg);
+  });
+  console.log('new connection established on /updates');
+});
+
 
 app.post('/submit', function (request, response) {
     console.log(request.body)
@@ -53,6 +55,9 @@ app.post('/submit', function (request, response) {
     response.end();
 })
 
+app.get('*', function (request, response) {
+    response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
+})
 const server = app.listen(app.locals.port, function() {
     const host = server.address().address;
     const port = server.address().port;
