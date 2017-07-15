@@ -3,9 +3,16 @@ var encode = require('hashCode').hashCode;
 var utils = require('./utils.js');
 var database = require('./database.js');
 
-exports.setApp = function(app) {
-  app.post('/login', (request, response) => {
-    if (!utils.isValidAuth(request.cookies.sytyAuth)) {
+exports.setApp = app => {
+    app.post('/login', (request, response) => {
+        utils
+            .checkAuth(request.cookies.sytyAuth)
+            .then(isValidAuth => executeLogin(isValidAuth, request, response, app));
+    });
+};
+
+let executeLogin = (isValidAuth, request, response, app) => {
+    if (!isValidAuth) {
         if (!request.body)
             return response.status(400).send('Login form is empty')
 
@@ -29,7 +36,7 @@ exports.setApp = function(app) {
                 request.body.table);
 
         database
-            .createUser(request.body.firstName, request.body.lastName, request.body.company, request.body.table)
+            .createUser(userID, request.body.firstName, request.body.lastName, request.body.company, request.body.table)
             .then(() => {
                 let expiry = new Date(Date.now() + app.locals.cookiesExpiration);
                 response.cookie('sytyAuth', userID, { expires: expiry });
@@ -43,14 +50,12 @@ exports.setApp = function(app) {
     else {
         response.status(200).send('User already logged in')
     }
-  })
 };
 
-function generateUserID(firstName, lastName, company, table) {
-    return encode().value(JSON.stringify({
+let generateUserID = (firstName, lastName, company, table) =>
+    encode().value(JSON.stringify({
         firstName: firstName,
         lastName: lastName,
         company: company,
         table: table
     }));
-}

@@ -1,27 +1,18 @@
+var Promise = require('bluebird');
 var database = require('./database.js');
 
-module.exports = {
+let checkAuth = authCookie =>
+    Promise.resolve(typeof authCookie !== 'undefined' && verifyIfUserExists(authCookie));
 
-    isValidAuth: function(authCookie) {
-        if (!authCookie)
+let verifyIfUserExists = authCookie =>
+    database
+        .getUser(authCookie)
+        .then(user => typeof user !== 'undefined')
+        .catch(err => {
+            console.error('Failed to check User ' + authCookie, err.stack);
             return false;
+        });
 
-        database
-            .getUser(authCookie)
-            .then(user => return typeof user !== undefined)
-            .catch(err => {
-                console.error('Failed to check User ' + authCookie, err.stack);
-                return false;
-            })
-    }
-};
-
-function tryParseJSON(jsonString){
-    try {
-        let json = JSON.parse(jsonString);
-        if (json && typeof json === "object")
-            return json;
-    }
-    catch (e) { }
-    return false;
+module.exports = {
+    checkAuth: checkAuth
 };
