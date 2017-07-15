@@ -12,6 +12,7 @@ class Dashboard extends React.Component {
 
 				<div className="c8 row">
 					<BiddingSlotBoxContainer />
+					&nbsp;
 					<ActivityEventBoxContainer />
 				</div>
 
