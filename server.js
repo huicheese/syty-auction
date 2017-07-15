@@ -32,7 +32,9 @@ app.get('*', function (request, response) {
 })
 
 require('./server/properties.js').setApp(app);
+require('./server/dashboard.js').setApp(app);
 require('./server/login.js').setApp(app);
+
 require('./server/database.js').initialize();
 
 // TODO: GET snapshot, query DB, return full dashboard
