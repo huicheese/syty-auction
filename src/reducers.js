@@ -1,50 +1,49 @@
 import { combineReducers } from 'redux'
 import {
-  SELECT_SUBREDDIT,
-  INVALIDATE_SUBREDDIT,
-  REQUEST_POSTS,
-  RECEIVE_POSTS
+  WS_MESSAGE_RECEIVED
 } from './actions'
 
-const getRandomArbitrary = (min, max) => Math.round((Math.random() * (max - min) + min) * 100) / 100
-
-const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
-const nameArray = ["Darwin", "Paris", "Jackie", "Dominick", "Abel", "Nelson", "Jeff", "Ivan", "Gene", "Bill", "William", "Myron", "Clayton", "Bryant", "Johnie", "Graig", "Elliott", "Dante", "Benjamin", "Brant", "Bertram", "Morgan", "Johnny", "Jonathan", "Wilfred", "Robert", "Robin", "Mohammed", "Joey", "Bradly", "Denver", "Elden", "Ryan", "Leigh", "Jc", "Asa", "Hayden", "Darrell", "Von", "Gary", "Augustus", "Alphonso", "Logan", "Leon", "Marquis", "Miguel", "Ignacio", "Don", "Derrick", "Jarod"]
-const getRandomName = () => nameArray[getRandomInt(0,nameArray.length)]
-
-
-const stubSlots = new Array(15).fill().map(
+const numSlot = 25
+const numEvents = 35
+const stubSlots = new Array(numSlot).fill().map(
   (e,i) => ({
-    index: i+1,
-    highestBid: getRandomArbitrary(1, 1000),
-    name: getRandomName()
+    index: i,
+  })
+)
+const stubEvents = new Array(numEvents).fill().map(
+  (e,i) => ({
+     index: Math.random(),
   })
 )
 
 const slots = (state = stubSlots || [], action) => {
     switch (action.type) {
-      case SELECT_SUBREDDIT:
-        return action.subreddit
+      case WS_MESSAGE_RECEIVED:
+        if(action.slots && action.slots.length) {
+          let newState = state.slice()
+          action.slots.forEach(s => newState[s.index] = s)
+          return newState
+        }
       default:
-        return state
+        // empty
     }
+    return state
 }
 
-const stubEvents = new Array(29).fill().map(
-  (e,i) => ({
-    "bidder": getRandomName(),
-    "bid": getRandomArbitrary(1, 100),
-    "slot": getRandomInt(1,25)
-  })
-)
 
 const activityEvents = (state = stubEvents || [], action) => {
     switch (action.type) {
-      case SELECT_SUBREDDIT:
-        return action.subreddit
+      case WS_MESSAGE_RECEIVED:
+        if(action.events && action.events.length) {
+          let newState = state.slice(0, -(action.events.length))
+          action.events.forEach(e=>e.index=Math.random())
+          newState.unshift(...action.events)
+          return newState
+        }
       default:
-        return state
+        // empty
     }
+    return state
 }
 
 const rootReducer = combineReducers({

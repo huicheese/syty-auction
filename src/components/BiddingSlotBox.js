@@ -6,7 +6,7 @@ const BiddingSlotBox = ({slots}) => {
 			<div className="row slot-row">
 				{
 					slots.map((entry, key) =>
-							<BiddingSlot key={key} 
+							<BiddingSlot key={entry.index} 
 							index={entry.index} 
 							bid={entry.highestBid}
 							bidder={entry.name} />

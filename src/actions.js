@@ -32,16 +32,10 @@ export const disconnected = () => {
 export const messageReceived = (msg) => {
   return {
     type: WS_MESSAGE_RECEIVED,
-    msg:msg
+    events: msg.events,
+    slots: msg.slots
   }
 }
-
-
-
-
-
-
-
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
