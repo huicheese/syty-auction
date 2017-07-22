@@ -16,7 +16,7 @@ const getRandomName = () => nameArray[getRandomInt(0,nameArray.length)]
 
 const stubSlots = new Array(15).fill().map(
   (e,i) => ({
-    index: i+1,
+    index: i,
     highestBid: getRandomArbitrary(1, 1000),
     name: getRandomName()
   })
