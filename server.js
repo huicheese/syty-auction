@@ -27,12 +27,27 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(require("webpack-hot-middleware")(compiler));
 
 require('./server/properties.js').setApp(app);
-require('./server/dashboard.js').setApp(app);
+let dashboard = require('./server/dashboard.js');
+dashboard.setApp(app);
 require('./server/login.js').setApp(app);
 
 require('./server/database.js').initialize();
 
 const path = require('path');
+let bot;
+app.get('/startBot', function (request, response) {
+    bot = setInterval(function() {
+        wsInstance.getWss('/updates').clients.forEach(function (client) {
+            client.send(dashboard.getRandomUpdates());
+        })
+    }, 16);
+    response.send();
+});
+app.get('/stopBot', function (request, response) {
+    if(bot) clearInterval(bot);
+    response.send();
+});
+
 app.get('*', function (request, response) {
     response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
 });

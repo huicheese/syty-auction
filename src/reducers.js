@@ -3,7 +3,7 @@ import {
   WS_MESSAGE_RECEIVED
 } from './actions'
 
-const numSlot = 15
+const numSlot = 25
 const numEvents = 35
 const stubSlots = new Array(numSlot).fill().map(
   (e,i) => ({
