@@ -1,7 +1,8 @@
+var Promise = require('bluebird');
 var utils = require('./utils.js');
 var database = require('./database.js');
 
-let setApp = (app, wsInstance) => {
+exports.setApp = (app, wsInstance) => {
     app.ws('/updates', (ws, request) => {
         ws.send(JSON.stringify({slots: stubSlots, events: stubEvents}));
     });
@@ -11,6 +12,21 @@ let setApp = (app, wsInstance) => {
             .checkAuth(request.cookies.sytyAuth)
             .then(isValidAuth => executeSubmit(isValidAuth, request, response))
             .then(isSubmitSuccessful => executeUpdate(isSubmitSuccessful, request, wsInstance));
+    });
+
+    let bot;
+    app.get('/startBot', function (request, response) {
+        bot = setInterval(function() {
+            wsInstance.getWss('/updates').clients.forEach(function (client) {
+                client.send(getRandomUpdates());
+            })
+        }, 16);
+        response.send();
+    });
+
+    app.get('/stopBot', function (request, response) {
+        if(bot) clearInterval(bot);
+        response.send();
     });
 };
 
@@ -45,51 +61,59 @@ let executeUpdate = (isSubmitSuccessful, request, wsInstance) => {
     if (!isSubmitSuccessful)
         return;
 
-    let update = JSON.stringify(buildUpdate(request.cookies.sytyAuth, request.body.slot, request.body.bid));
-    wsInstance.getWss().clients.forEach(client => client.send(update));
+    console.log('Sending live update on Slot[%s] after Bid of [%s]', request.body.slot, request.body.bid);
+    buildUpdate(request.cookies.sytyAuth, request.body.slot, request.body.bid)
+        .then(updateJson => JSON.stringify(updateJson))
+        .then(update => wsInstance.getWss().clients.forEach(client => client.send(update)));
 };
 
-let buildUpdate = (userID, slot, bid) => {
-    let slotInfoUpdate = buildSlotInfoUpdate(slot);
-    let eventUpdate = buildEventUpdate(userID, slot, bid);
-    return { slots: [slotInfoUpdate], events: [eventUpdate]};
-}
+let buildUpdate = (userID, slot, bid) =>
+    Promise
+        .join(
+            buildSlotInfoUpdate(slot),
+            buildEventUpdate(userID, slot, bid),
+            (slotInfoUpdate, eventUpdate) => ({ slots: [slotInfoUpdate], events: [eventUpdate] })
+        );
 
-let buildEventUpdate = (userID, slot, bid) => {
-    return {
-        slot: slot,
-        bid: bid,
-        bidder: getUserInfo(userID)
-    };
-}
+let buildSlotInfoUpdate = slot =>
+    database
+        .getSlotInfo(slot)
+        .then(slotInfo => parseSlotInfo(slot, slotInfo));
 
-let buildSlotInfoUpdate = slot => {
-    return
-        database
-            .getSlotInfo(slot)
-            .then(slotInfo => parseSlotInfo(slot, slotInfo))
-}
+let parseSlotInfo = (slot, slotInfo) =>
+    Promise
+        .resolve()
+        .then(() => {
+            if (slotInfo.MaxBid > 0) {
+                return getUserInfo(slotInfo.MaxBidders.split(',')[0])
+                            .then(userInfo => ({
+                                index: slot,
+                                highestBid: slotInfo.MaxBid,
+                                highestBidder: userInfo
+                            }));
+            }
+            return { index: slot };
+        });
 
-let parseSlotInfo = (slot, slotInfo) => {
-    let slotJson = {index: slot};
-    if (slotInfo.MaxBid > 0) {
-        slotJson.highestBid = slotInfo.MaxBid;
-        slotJson.highestBidder = getUserInfo(slotInfo.MaxBidders.split(',')[0])
-    }
-    return slotJson;
-};
+let buildEventUpdate = (userID, slot, bid) =>
+    getUserInfo(userID)
+        .then(userInfo => ({
+            slot: slot,
+            bid: bid,
+            bidder: userInfo
+        }));
 
-let getUserInfo = userID => {
-    return
-        database
-            .getUserInfo(userID)
-            .then(user => ({
-                firstName: user.FirstName,
-                lastName: user.LastName,
-                company: user.Company,
-                table: user.TableNumber
-            }));
-};
+let getUserInfo = userID =>
+    database
+        .getUser(userID)
+        .then(user => ({
+            firstName: user.FirstName,
+            lastName: user.LastName,
+            company: user.Company,
+            table: user.TableNumber
+        }));
+
+/* STUB */
 
 const getRandomArbitrary = (min, max) => Math.round((Math.random() * (max - min) + min) * 100) / 100
 
@@ -128,10 +152,3 @@ let getRandomUpdates = () => {
     events: new Array(numUpdates).fill().map((e,i) => getStubEventUpdates(i))
   })
 }
-
-module.exports = {
-  getStubSlotUpdate: getStubSlotUpdate,
-  getStubEventUpdates: getStubEventUpdates,
-  getRandomUpdates: getRandomUpdates,
-  setApp: setApp
-};

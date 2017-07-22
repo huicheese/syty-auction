@@ -13,6 +13,12 @@ export default class SubmitForm extends Component {
 					return
 				}
 
+				var user = {
+					firstName: 'Harry',
+					lastName: 'Tran',
+					company: 'Citi',
+					table: 7
+				}
 				var data = {
 					userID: '-1437513729',
 		            slot: slot.value,
