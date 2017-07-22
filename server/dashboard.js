@@ -1,11 +1,94 @@
-exports.setApp = app => {
+var utils = require('./utils.js');
+var database = require('./database.js');
+
+exports.setApp = (app, wsInstance) => {
     app.ws('/updates', (ws, request) => {
         ws.send(JSON.stringify({slots: stubSlots, events: stubEvents}));
     });
 
     app.post('/submit', (request, response) => {
-
+        utils
+            .checkAuth(request.cookies.sytyAuth)
+            .then(isValidAuth => executeSubmit(isValidAuth, request, response))
+            .then(isSubmitSuccessful => executeUpdate(isSubmitSuccessful, request, wsInstance));
     });
+};
+
+let executeSubmit = (isValidAuth, request, response) => {
+    let valid = false;
+    if (!isValidAuth)
+        response.status(400).send("Please login first");
+    else if (!request.body)
+        response.status(400).send('Bidding form is empty')
+    else if (!request.body.slot || isNaN(request.body.slot))
+        response.status(400).send('Slot number is invalid')
+    else if (!request.body.bid || isNaN(request.body.bid))
+        response.status(400).send('Bid amount is invalid')
+    else
+        valid = true;
+
+    return valid &&
+        database
+            .submitBid(request.cookies.sytyAuth, request.body.slot, request.body.bid)
+            .then(() => {
+                response.status(200).send('Submit successful');
+                return true;
+            })
+            .catch(err => {
+                console.error('Failed to submit', err.stack);
+                response.status(400).send('Failed to submit');
+                return false;
+            });
+};
+
+let executeUpdate = (isSubmitSuccessful, request, wsInstance) => {
+    if (!isSubmitSuccessful)
+        return;
+
+    let update = JSON.stringify(buildUpdate(request.cookies.sytyAuth, request.body.slot, request.body.bid));
+    wsInstance.getWss().clients.forEach(client => client.send(update));
+};
+
+let buildUpdate = (userID, slot, bid) => {
+    let slotInfoUpdate = buildSlotInfoUpdate(slot);
+    let eventUpdate = buildEventUpdate(userID, slot, bid);
+    return { slots: [slotInfoUpdate], events: [eventUpdate]};
+}
+
+let buildEventUpdate = (userID, slot, bid) => {
+    return {
+        slot: slot,
+        bid: bid,
+        bidder: getUserInfo(userID)
+    };
+}
+
+let buildSlotInfoUpdate = slot => {
+    return
+        database
+            .getSlotInfo(slot)
+            .then(slotInfo => parseSlotInfo(slot, slotInfo))
+}
+
+let parseSlotInfo = (slot, slotInfo) => {
+    let slotJson = {index: slot};
+    if (slotInfo.MaxBid > 0) {
+        slotJson.highestBid = slotInfo.MaxBid;
+        slotJson.highestBidder = getUserInfo(slotInfo.MaxBidders.split(',')[0])
+    }
+    return slotJson;
+};
+
+let getUserInfo = userID => {
+    return
+        database
+            .getUserInfo(userID)
+            .then(user => ({
+                firstName: user.FirstName,
+                lastName: user.LastName,
+                company: user.Company,
+                table: user.TableNumber
+            }));
 };
 
 const getRandomArbitrary = (min, max) => Math.round((Math.random() * (max - min) + min) * 100) / 100

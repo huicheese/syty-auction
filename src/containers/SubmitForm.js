@@ -14,13 +14,12 @@ export default class SubmitForm extends Component {
 				}
 
 				var data = {
-					firstName: 'Harry',
-		            lastName: 'Tran',
-		            company: 'Citi',
-		            table: 7
+					userID: '-1437513729',
+		            slot: slot.value,
+		            bid: amt.value
 				}
 				var request = new XMLHttpRequest();
-				request.open('POST', '/login', true);
+				request.open('POST', '/submit', true);
 				request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
 				request.send(JSON.stringify(data));
 

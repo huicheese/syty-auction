@@ -78,8 +78,16 @@ let getUser = userID => Promise.resolve(userQueryStmt.get(userID));
 let createUser = (userID, firstName, lastName, company, table) =>
 	Promise.resolve(createUserStmt.run(userID, firstName, lastName, company, table));
 
+let submitBid = (userID, slot, bid) =>
+	Promise.resolve(submitBidStmt.run(userID, slot, bid));
+
+let getSlotInfo = slot =>
+	Promise.resolve(slotQueryStmt.get(slot));
+
 module.exports = {
 	initialize: initialize,
 	getUser: getUser,
 	createUser: createUser,
+	submitBid: submitBid,
+	getSlotInfo: getSlotInfo
 };

@@ -1,4 +1,3 @@
-var Promise = require('bluebird');
 var encode = require('hashCode').hashCode;
 var utils = require('./utils.js');
 var database = require('./database.js');

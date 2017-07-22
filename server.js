@@ -27,7 +27,7 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(require("webpack-hot-middleware")(compiler));
 
 require('./server/properties.js').setApp(app);
-require('./server/dashboard.js').setApp(app);
+require('./server/dashboard.js').setApp(app, wsInstance);
 require('./server/login.js').setApp(app);
 
 require('./server/database.js').initialize();
