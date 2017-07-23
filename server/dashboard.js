@@ -78,7 +78,7 @@ let buildUpdate = (userID, slot, bid) =>
 let buildSlotInfoUpdate = slot =>
     database
         .getSlotInfo(slot)
-        .then(slotInfo => parseSlotInfo(slot, slotInfo));
+        .then(slotInfo => parseSlotInfo(parseInt(slot)-1, slotInfo));
 
 let parseSlotInfo = (slot, slotInfo) =>
     Promise
@@ -129,7 +129,7 @@ function getStubSlotUpdate(index) {
   return {
     index: index || getRandomInt(0,24),
     highestBid: getRandomArbitrary(1, 1000),
-    name: getRandomName()
+    highestBidder: { firstName: getRandomName() }
   }
 }
 
@@ -139,7 +139,7 @@ const stubEvents = new Array(29).fill().map(
 
 function getStubEventUpdates() {
   return {
-    "bidder": getRandomName(),
+    "bidder": { firstName: getRandomName() },
     "bid": getRandomArbitrary(1, 100),
     "slot": getRandomInt(1,25)
   }

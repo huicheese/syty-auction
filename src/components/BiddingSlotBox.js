@@ -9,7 +9,7 @@ const BiddingSlotBox = ({slots}) => {
 							<BiddingSlot key={entry.index} 
 							index={entry.index} 
 							bid={entry.highestBid}
-							bidder={entry.name} />
+							bidder={entry.highestBidder.firstName} />
 						)
 				}
 			</div>

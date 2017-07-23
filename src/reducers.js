@@ -8,11 +8,7 @@ const numEvents = 35
 const stubSlots = new Array(numSlot).fill().map(
   (e,i) => ({
     index: i,
-  })
-)
-const stubEvents = new Array(numEvents).fill().map(
-  (e,i) => ({
-     index: Math.random(),
+    highestBidder: {}
   })
 )
 
@@ -31,7 +27,7 @@ const slots = (state = stubSlots || [], action) => {
 }
 
 
-const activityEvents = (state = stubEvents || [], action) => {
+const activityEvents = (state = [], action) => {
     switch (action.type) {
       case WS_MESSAGE_RECEIVED:
         if(action.events && action.events.length) {
