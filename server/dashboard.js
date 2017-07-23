@@ -10,8 +10,10 @@ exports.setApp = (app, wsInstance) => {
     app.post('/submit', (request, response) => {
         utils
             .checkAuth(request.cookies.sytyAuth)
-            .then(isValidAuth => executeSubmit(isValidAuth, request, response))
-            .then(isSubmitSuccessful => executeUpdate(isSubmitSuccessful, request, wsInstance));
+            .then(isValidAuth => validateBid(isValidAuth, request))
+            .then(validationResult => executeBid(validationResult))
+            .then(submissionResult => respondBiddingResult(submissionResult, response))
+            .then(submissionResult => executeUpdate(submissionResult, wsInstance));
     });
 
     let bot;
@@ -30,39 +32,53 @@ exports.setApp = (app, wsInstance) => {
     });
 };
 
-let executeSubmit = (isValidAuth, request, response) => {
-    let valid = false;
-    if (!isValidAuth)
-        response.status(400).send("Please login first");
-    else if (!request.body)
-        response.status(400).send('Bidding form is empty')
-    else if (!request.body.slot || isNaN(request.body.slot))
-        response.status(400).send('Slot number is invalid')
-    else if (!request.body.bid || isNaN(request.body.bid))
-        response.status(400).send('Bid amount is invalid')
-    else
-        valid = true;
+let validateBid = (isValidAuth, request) => {
+    let requestContent = {
+        userID: (request.cookies && request.cookies.sytyAuth) || "",
+        slot: (request.body && request.body.slot) || "",
+        bid: (request.body && request.body.bid) || "",
+    };
 
-    return valid &&
+    let error;
+    if (!isValidAuth)
+        error = 'Please login first';    
+    else if (isNaN(requestContent.slot))
+        error = 'Slot number is invalid';
+    else if (isNaN(requestContent.bid))
+        error = 'Bid amount is invalid';
+
+    requestContent.error = error;
+    requestContent.isValid = typeof error === 'undefined';
+    return requestContent;
+};
+
+let executeBid = (validationResult) => {
+    return validationResult.isValid &&
         database
-            .submitBid(request.cookies.sytyAuth, request.body.slot, request.body.bid)
-            .then(() => {
-                response.status(200).send('Submit successful');
-                return true;
-            })
+            .submitBid(validationResult.userID, validationResult.slot, validationResult.bid)
+            .then(() => validationResult)
             .catch(err => {
-                console.error('Failed to submit', err.stack);
-                response.status(400).send('Failed to submit');
-                return false;
+                validationResult.error = 'Failed to submit';
+                validationResult.isValid = false;
+                console.error(validationResult.error, err.stack);
+                return validationResult;
             });
 };
 
-let executeUpdate = (isSubmitSuccessful, request, wsInstance) => {
-    if (!isSubmitSuccessful)
+let respondBiddingResult = (submissionResult, response) => {
+    if (submissionResult.isValid)
+        response.status(200).send('Submit successful');
+    else
+        response.status(400).send(submissionResult.error);
+    return submissionResult;
+};
+
+let executeUpdate = (submissionResult, wsInstance) => {
+    if (!submissionResult.isValid)
         return;
 
-    console.log('Sending live update on Slot[%s] after Bid of [%s]', request.body.slot, request.body.bid);
-    buildUpdate(request.cookies.sytyAuth, request.body.slot, request.body.bid)
+    console.log('Sending live update on Slot[%s] after Bid of [%s]', submissionResult.slot, submissionResult.bid);
+    buildUpdate(submissionResult.userID, submissionResult.slot, submissionResult.bid)
         .then(updateJson => JSON.stringify(updateJson))
         .then(update => wsInstance.getWss().clients.forEach(client => client.send(update)));
 };
