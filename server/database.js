@@ -34,7 +34,7 @@ let initialize = () =>
 			.then(stmt => submitBidStmt = stmt);
 
 			db.prepare(`
-				SELECT GROUP_CONCAT(UserID) AS MaxBidders, MAX(Bid) AS MaxBid
+				SELECT Slot, GROUP_CONCAT(UserID) AS MaxBidders, MAX(Bid) AS MaxBid
 				FROM Biddings
 				WHERE Slot = ?
 				`)
@@ -84,10 +84,14 @@ let submitBid = (userID, slot, bid) =>
 let getSlotInfo = slot =>
 	Promise.resolve(slotQueryStmt.get(slot));
 
+let getAllSlotsInfo = () =>
+	Promise.resolve(allSlotsQueryStmt.all());
+
 module.exports = {
 	initialize: initialize,
-	getUser: getUser,
 	createUser: createUser,
+	getUser: getUser,
 	submitBid: submitBid,
-	getSlotInfo: getSlotInfo
+	getSlotInfo: getSlotInfo,
+	getAllSlotsInfo: getAllSlotsInfo
 };

@@ -4,7 +4,8 @@ var database = require('./database.js');
 
 exports.setApp = (app, wsInstance) => {
     app.ws('/updates', (ws, request) => {
-        ws.send(JSON.stringify({slots: stubSlots, events: stubEvents}));
+        buildSlotInfoSnapshot()
+            .then(snapshot => ws.send(JSON.stringify({ slots: snapshot })));
     });
 
     app.post('/submit', (request, response) => {
@@ -31,6 +32,11 @@ exports.setApp = (app, wsInstance) => {
         response.send();
     });
 };
+
+let buildSlotInfoSnapshot = () =>
+    database
+        .getAllSlotsInfo()
+        .map(slotInfo => parseSlotInfo(slotInfo));
 
 let validateBid = (isValidAuth, request) => {
     let requestContent = {
@@ -94,21 +100,22 @@ let buildUpdate = (userID, slot, bid) =>
 let buildSlotInfoUpdate = slot =>
     database
         .getSlotInfo(slot)
-        .then(slotInfo => parseSlotInfo(parseInt(slot)-1, slotInfo));
+        .then(slotInfo => parseSlotInfo(slotInfo));
 
-let parseSlotInfo = (slot, slotInfo) =>
+let parseSlotInfo = slotInfo =>
     Promise
-        .resolve()
-        .then(() => {
+        .resolve(slotInfo)
+        .then(slotInfo => {
+            let index = parseInt(slotInfo.Slot) - 1;
             if (slotInfo.MaxBid > 0) {
                 return getUserInfo(slotInfo.MaxBidders.split(',')[0])
                             .then(userInfo => ({
-                                index: slot,
+                                index: index,
                                 highestBid: slotInfo.MaxBid,
                                 highestBidder: userInfo
                             }));
             }
-            return { index: slot };
+            return { index: index };
         });
 
 let buildEventUpdate = (userID, slot, bid) =>
