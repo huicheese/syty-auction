@@ -34,25 +34,27 @@ let initialize = () =>
 			.then(stmt => submitBidStmt = stmt);
 
 			db.prepare(`
-				SELECT Slot, GROUP_CONCAT(UserID) AS MaxBidders, MAX(Bid) AS MaxBid
-				FROM Biddings
-				WHERE Slot = ?
+				SELECT t.Slot, t.UserID, t.Bid
+				FROM Biddings t
+				WHERE t.rowid =
+					(SELECT h.rowid
+					FROM Biddings h
+					WHERE t.Slot = h.Slot
+					ORDER BY h.Bid DESC, h.rowid
+					LIMIT 1)
+				AND t.Slot = ?
 				`)
 			.then(stmt => slotQueryStmt = stmt);
 
 			db.prepare(`
-				SELECT t.Slot, h.MaxBid, GROUP_CONCAT(t.UserID) AS MaxBidders
-				FROM
-					Biddings t
-
-					INNER JOIN
-
-					(SELECT Slot, MAX(bid) AS MaxBid
-					FROM Biddings
-					GROUP BY Slot) h
-
-					ON t.Slot = h.Slot AND t.Bid = h.MaxBid
-				GROUP BY t.Slot
+				SELECT t.Slot, t.UserID, t.Bid
+				FROM Biddings t
+				WHERE t.rowid =
+					(SELECT h.rowid
+					FROM Biddings h
+					WHERE t.Slot = h.Slot
+					ORDER BY h.Bid DESC, h.rowid
+					LIMIT 1)
 				`)
 			.then(stmt => allSlotsQueryStmt = stmt);
 

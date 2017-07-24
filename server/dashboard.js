@@ -59,6 +59,9 @@ let validateBid = (isValidAuth, request) => {
 };
 
 let executeBid = (validationResult) => {
+    if (!validationResult.isValid)
+        return validationResult;
+
     return validationResult.isValid &&
         database
             .submitBid(validationResult.userID, validationResult.slot, validationResult.bid)
@@ -107,11 +110,11 @@ let parseSlotInfo = slotInfo =>
         .resolve(slotInfo)
         .then(slotInfo => {
             let index = parseInt(slotInfo.Slot) - 1;
-            if (slotInfo.MaxBid > 0) {
-                return getUserInfo(slotInfo.MaxBidders.split(',')[0])
+            if (slotInfo.Bid > 0) {
+                return getUserInfo(slotInfo.UserID)
                             .then(userInfo => ({
                                 index: index,
-                                highestBid: slotInfo.MaxBid,
+                                highestBid: slotInfo.Bid,
                                 highestBidder: userInfo
                             }));
             }
