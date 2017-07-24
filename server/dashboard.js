@@ -4,8 +4,13 @@ var database = require('./database.js');
 
 exports.setApp = (app, wsInstance) => {
     app.ws('/updates', (ws, request) => {
-        buildSlotInfoSnapshot()
-            .then(snapshot => ws.send(JSON.stringify({ slots: snapshot })));
+        Promise
+            .join(
+                buildSlotInfoSnapshot(),
+                buildEventSnapshot(app.locals.eventSnapshotSize),
+                (slotInfoSnapshot, eventSnapshot) => ({ slots: slotInfoSnapshot, events: eventSnapshot }))
+            .then(snapshotJson => JSON.stringify(snapshotJson))
+            .then(snapshotData => ws.send(snapshotData));
     });
 
     app.post('/submit', (request, response) => {
@@ -37,6 +42,11 @@ let buildSlotInfoSnapshot = () =>
     database
         .getAllSlotsInfo()
         .map(slotInfo => parseSlotInfo(slotInfo));
+
+let buildEventSnapshot = (size) =>
+    database
+        .getRecentBiddings(size)
+        .map(event => buildEventUpdate(event.UserID, event.Slot, event.Bid));
 
 let validateBid = (isValidAuth, request) => {
     let requestContent = {
@@ -105,21 +115,18 @@ let buildSlotInfoUpdate = slot =>
         .getSlotInfo(slot)
         .then(slotInfo => parseSlotInfo(slotInfo));
 
-let parseSlotInfo = slotInfo =>
-    Promise
-        .resolve(slotInfo)
-        .then(slotInfo => {
-            let index = parseInt(slotInfo.Slot) - 1;
-            if (slotInfo.Bid > 0) {
-                return getUserInfo(slotInfo.UserID)
-                            .then(userInfo => ({
-                                index: index,
-                                highestBid: slotInfo.Bid,
-                                highestBidder: userInfo
-                            }));
-            }
-            return { index: index };
-        });
+let parseSlotInfo = slotInfo => {
+    let index = parseInt(slotInfo.Slot) - 1;
+    if (slotInfo.Bid > 0) {
+        return getUserInfo(slotInfo.UserID)
+                    .then(userInfo => ({
+                        index: index,
+                        highestBid: slotInfo.Bid,
+                        highestBidder: userInfo
+                    }));
+    }
+    return { index: index };
+};
 
 let buildEventUpdate = (userID, slot, bid) =>
     getUserInfo(userID)

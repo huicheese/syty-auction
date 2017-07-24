@@ -29,7 +29,6 @@ app.use(require("webpack-hot-middleware")(compiler));
 require('./server/properties.js').setApp(app);
 require('./server/login.js').setApp(app);
 require('./server/dashboard.js').setApp(app, wsInstance);
-
 require('./server/database.js').initialize();
 
 const path = require('path');
