@@ -15,9 +15,9 @@ export default class SubmitForm extends Component {
 
 				var user = {
 					firstName: 'Harry',
-					lastName: 'Tran',
+					lastName: 'Tan',
 					company: 'Citi',
-					table: 7
+					table: 8
 				}
 				var data = {
 					userID: '-1437513729',
@@ -25,9 +25,9 @@ export default class SubmitForm extends Component {
 		            bid: amt.value
 				}
 				var request = new XMLHttpRequest();
-				request.open('POST', '/submit', true);
+				request.open('POST', '/login', true);
 				request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-				request.send(JSON.stringify(data));
+				request.send(JSON.stringify(user));
 
 				slot.value = ''
 				amt.value = ''
