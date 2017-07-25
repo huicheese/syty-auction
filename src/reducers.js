@@ -33,7 +33,6 @@ const activityEvents = (state = [], action) => {
         if(action.events && action.events.length) {
           let shifts = action.events.length - numEvents + state.length
           let newState = shifts > 0 ? state.slice(0, -shifts) :  state.slice()
-          action.events.forEach(e=>e.index=Math.random())
           newState.unshift(...action.events)
           return newState
         }

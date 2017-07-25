@@ -133,7 +133,8 @@ let buildEventUpdate = (userID, slot, bid) =>
         .then(userInfo => ({
             slot: slot,
             bid: bid,
-            bidder: userInfo
+            bidder: userInfo,
+            index: utils.uuid()
         }));
 
 let getUserInfo = userID =>

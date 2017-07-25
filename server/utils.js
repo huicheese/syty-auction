@@ -1,5 +1,9 @@
 var Promise = require('bluebird');
+var crypto = require('crypto');
 var database = require('./database.js');
+
+let uuid = () => randomHex() + '-' + randomHex() + '-' + randomHex() + '-' + randomHex();
+let randomHex = () => crypto.randomBytes(4).toString('hex');
 
 let checkAuth = authCookie =>
     Promise.resolve(typeof authCookie !== 'undefined' && verifyIfUserExists(authCookie));
@@ -14,5 +18,6 @@ let verifyIfUserExists = authCookie =>
         });
 
 module.exports = {
-    checkAuth: checkAuth
+    checkAuth: checkAuth,
+    uuid: uuid
 };
