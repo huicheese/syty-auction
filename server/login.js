@@ -5,28 +5,28 @@ exports.setApp = app => {
     app.post('/login', (request, response) => {
         utils
             .checkAuth(request.cookies.sytyAuth)
-            .then(isValidAuth => executeLogin(isValidAuth, request, response, app.locals.cookiesExpiration));
+            .then(authValidationResult => executeLogin(authValidationResult, request.body, response, app.locals.cookiesExpiration));
     });
 };
 
-let executeLogin = (isValidAuth, request, response, cookiesExpiration) => {
-    if (!isValidAuth) {
-        let userInfo = utils.validateUserInfo(request.body);
-        if (!userInfo.isValid) {
-            response.status(400).send(userInfo.error);
+let executeLogin = (authValidationResult, userInfo, response, cookiesExpiration) => {
+    if (!authValidationResult.isValid) {
+        let userInfoValidationResult = utils.validateUserInfo(userInfo);
+        if (!userInfoValidationResult.isValid) {
+            response.status(400).send(userInfoValidationResult.error);
             return;
         }
 
-        database
-            .createUser(userInfo.userID, userInfo.firstName, userInfo.lastName, userInfo.company, userInfo.table)
-            .then(() => {
-                let expiry = new Date(Date.now() + cookiesExpiration);
-                response.cookie('sytyAuth', userInfo.userID, { expires: expiry });
-                response.status(200).send('Login successful');
-            })
-            .catch(err => {
-                console.error('Failed to login', err.stack);
-                response.status(400).send('Failed to login');
+        utils
+            .createUserIfRequired(userInfoValidationResult)
+            .then(userCreationResult => {
+                if (userCreationResult.isValid) {
+                    let expiry = new Date(Date.now() + cookiesExpiration);
+                    response.cookie('sytyAuth', userCreationResult.userID, { expires: expiry });
+                    response.status(200).send('Login successful');
+                } else {
+                    response.status(400).send('Failed to login');
+                }
             });
     }
     else {

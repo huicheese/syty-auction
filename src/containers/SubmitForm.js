@@ -14,20 +14,27 @@ export default class SubmitForm extends Component {
 				}
 
 				var user = {
-					firstName: 'Harry',
+					firstName: 'Larry',
 					lastName: 'Tan',
 					company: 'Citi',
 					table: 8
 				}
 				var data = {
-					userID: '-1437513729',
 		            slot: slot.value,
 		            bid: amt.value
 				}
+				var adminSubmit = {
+					firstName: 'Garry',
+					lastName: 'Tan',
+					company: 'Citi',
+					table: 8,
+					slot: slot.value,
+		            bid: amt.value
+				}
 				var request = new XMLHttpRequest();
-				request.open('POST', '/login', true);
+				request.open('POST', '/submit', true);
 				request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-				request.send(JSON.stringify(user));
+				request.send(JSON.stringify(data));
 
 				slot.value = ''
 				amt.value = ''

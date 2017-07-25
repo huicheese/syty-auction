@@ -7,7 +7,10 @@ let uuid = () => randomHex() + '-' + randomHex() + '-' + randomHex() + '-' + ran
 let randomHex = () => crypto.randomBytes(4).toString('hex');
 
 let checkAuth = authCookie =>
-    Promise.resolve(typeof authCookie !== 'undefined' && verifyIfUserExists(authCookie));
+    Promise.resolve({
+		userID: authCookie,
+		isValid: typeof authCookie !== 'undefined' && verifyIfUserExists(authCookie)
+	});
 
 let verifyIfUserExists = authCookie =>
     database
@@ -33,7 +36,7 @@ let validateUserInfo = userInfo => {
         error = 'Last name is empty';
     else if (!content.company)
         error = 'Company is empty';
-    else if (isNaN(content.table))
+    else if (!content.table || isNaN(content.table))
         error = 'Table number is invalid';
 
     content.error = error;
@@ -42,7 +45,7 @@ let validateUserInfo = userInfo => {
     if (content.isValid)
     	generateUserID(content);
     return content;
-}
+};
 
 let generateUserID = (userInfo) => {
     let userID =
@@ -53,10 +56,32 @@ let generateUserID = (userInfo) => {
 	        table: userInfo.table
 	    })).toString();
     userInfo.userID = userID;
-}
+};
+
+let createUserIfRequired = userInfoValidationResult => {
+    if (!userInfoValidationResult.isValid)
+        return userInfoValidationResult;
+
+    return userInfoValidationResult.isValid &&
+        database
+            .createUser(
+                userInfoValidationResult.userID,
+                userInfoValidationResult.firstName,
+                userInfoValidationResult.lastName,
+                userInfoValidationResult.company,
+                userInfoValidationResult.table)
+            .then(() => userInfoValidationResult)
+            .catch(err => {
+                userInfoValidationResult.error = 'Failed to create user';
+                userInfoValidationResult.isValid = false;
+            	console.error(userInfoValidationResult.error, err.stack);
+                return userInfoValidationResult;
+            });
+};
 
 module.exports = {
     uuid: uuid,
     checkAuth: checkAuth,
-    validateUserInfo: validateUserInfo
+    validateUserInfo: validateUserInfo,
+    createUserIfRequired: createUserIfRequired
 };

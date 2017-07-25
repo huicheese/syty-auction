@@ -16,8 +16,18 @@ exports.setApp = (app, wsInstance) => {
     app.post('/submit', (request, response) => {
         utils
             .checkAuth(request.cookies.sytyAuth)
-            .then(isValidAuth => validateBid(isValidAuth, request))
-            .then(validationResult => executeBid(validationResult))
+            .then(authValidationResult => validateBid(authValidationResult, request))
+            .then(bidValidationResult => executeBid(bidValidationResult))
+            .then(submissionResult => respondBiddingResult(submissionResult, response))
+            .then(submissionResult => executeUpdate(submissionResult, wsInstance));
+    });
+
+    app.post('/adminSubmit', (request, response) => {
+        Promise
+            .resolve(utils.validateUserInfo(request.body))
+            .then(userInfoValidationResult => utils.createUserIfRequired(userInfoValidationResult))
+            .then(authValidationResult => validateBid(authValidationResult, request))
+            .then(bidValidationResult => executeBid(bidValidationResult))
             .then(submissionResult => respondBiddingResult(submissionResult, response))
             .then(submissionResult => executeUpdate(submissionResult, wsInstance));
     });
@@ -48,19 +58,19 @@ let buildEventSnapshot = (size) =>
         .getRecentBiddings(size)
         .map(event => buildEventUpdate(event.UserID, event.Slot, event.Bid));
 
-let validateBid = (isValidAuth, request) => {
+let validateBid = (authValidationResult, request) => {
     let requestContent = {
-        userID: (request.cookies && request.cookies.sytyAuth) || "",
+        userID: (authValidationResult.userID) || "",
         slot: (request.body && request.body.slot) || "",
         bid: (request.body && request.body.bid) || "",
     };
 
     let error;
-    if (!isValidAuth)
-        error = 'Please login first';    
-    else if (isNaN(requestContent.slot))
+    if (!authValidationResult.isValid)
+        error = authValidationResult.error || 'Unauthorized';    
+    else if (!requestContent.slot || isNaN(requestContent.slot))
         error = 'Slot number is invalid';
-    else if (isNaN(requestContent.bid))
+    else if (!requestContent.bid || isNaN(requestContent.bid))
         error = 'Bid amount is invalid';
 
     requestContent.error = error;
