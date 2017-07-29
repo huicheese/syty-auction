@@ -37,6 +37,36 @@ export const messageReceived = (msg) => {
   }
 }
 
+const loginRequested = () => ({ type: "LOGIN_REQUESTED"})
+const loginSuccess = () => ({ type: "LOGIN_SUCCESS"})
+const loginFail = (msg) => ({ type: "LOGIN_FAIL", error:msg})
+
+export function fetchLogin(firstName, lastName, company, table) {
+  return dispatch => {
+    dispatch(loginRequested())
+    let toSend = JSON.stringify({
+                  firstName:firstName,
+                  lastName:lastName,
+                  company:company,
+                  table:table
+                });
+    console.log(toSend)
+
+    return fetch(`login`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                credentials: 'same-origin',
+                body: toSend})
+      .then(response => response.ok ?
+        dispatch(loginSuccess()) : 
+        response.text().then(msg => dispatch(loginFail(msg)))
+      ).catch(v1 => console.log(v1))
+
+  }
+}
+
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'

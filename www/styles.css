@@ -48,7 +48,7 @@ button:focus{
 /*.row > div { float:left; }*/
 
 .header-row {
-  height: 3em; 
+  height: 30em; 
 }
 .slot-row {
   flex-wrap: wrap;
@@ -77,7 +77,7 @@ button:focus{
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url("http://shou1dwe.github.io/i-am-rich-yo/images/box.png"); 
+    background-image: url("https://shou1dwe.github.io/i-am-rich-yo/images/box.png"); 
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;
