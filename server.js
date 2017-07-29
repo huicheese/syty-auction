@@ -13,6 +13,7 @@ const wsInstance = enableWs(app);
 
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
+console.log(process.env.NODE_ENV);
 const webpackConfig = require('./webpack.config.js')(process.env.NODE_ENV || 'dev');
 const compiler = webpack(webpackConfig);
 const isDevelopment = process.env.NODE_ENV !== 'production';
