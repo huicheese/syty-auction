@@ -36,12 +36,6 @@ require('./server/login.js').setApp(app);
 require('./server/dashboard.js').setApp(app, wsInstance);
 require('./server/database.js').initialize();
 
-app.get('*.js', function (req, res, next) {
-    req.url = req.url + '.gz';
-    res.set('Content-Encoding', 'gzip');
-    next();
-});
-
 app.get('*', function (request, response) {
     response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
 });
