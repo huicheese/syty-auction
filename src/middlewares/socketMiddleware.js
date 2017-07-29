@@ -32,7 +32,6 @@ const socketMiddleware = (function(){
         store.dispatch(actions.messageReceived(msg));
     else
         console.log("Received unknown message type: '" + msg.type + "'");
-    
   }
 
   return store => next => action => {
