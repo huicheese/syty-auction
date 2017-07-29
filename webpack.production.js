@@ -13,6 +13,9 @@ module.exports = {
                 exclude: /node_modules/,
                 use: [
                     'babel-loader',
+                    options: {
+                        presets: ['es2015']
+                    }
                 ],
             },
         ],
