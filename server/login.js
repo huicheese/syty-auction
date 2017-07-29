@@ -5,7 +5,12 @@ exports.setApp = app => {
     app.post('/login', (request, response) => {
         utils
             .checkAuth(request.cookies.sytyAuth)
-            .then(authValidationResult => executeLogin(authValidationResult, request.body, response, app.locals.cookiesExpiration));
+            .then(authValidationResult =>
+                    executeLogin(
+                        authValidationResult,
+                        request.body,
+                        response,
+                        process.env.COOKIES_EXPIRATION || app.locals.cookiesExpiration));
     });
 };
 

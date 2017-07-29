@@ -36,7 +36,7 @@ app.get('*', function (request, response) {
     response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
 });
 
-const server = app.listen(app.locals.port, function() {
+const server = app.listen(process.env.PORT || app.locals.port, function() {
     const host = server.address().address;
     const port = server.address().port;
     console.log('Syty Auction server is listening at http://%s:%s', host, port);
