@@ -1,6 +1,6 @@
 var Promise = require('bluebird');
 var crypto = require('crypto');
-var encode = require('hashCode').hashCode;
+var encode = require('hashcode').hashCode;
 var database = require('./database.js');
 
 let uuid = () => randomHex() + '-' + randomHex() + '-' + randomHex() + '-' + randomHex();

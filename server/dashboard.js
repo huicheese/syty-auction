@@ -7,7 +7,7 @@ exports.setApp = (app, wsInstance) => {
         Promise
             .join(
                 buildSlotInfoSnapshot(),
-                buildEventSnapshot(app.locals.eventSnapshotSize),
+                buildEventSnapshot(process.env.EVENT_SNAPSHOT_SIZE || app.locals.eventSnapshotSize),
                 (slotInfoSnapshot, eventSnapshot) => ({ slots: slotInfoSnapshot, events: eventSnapshot }))
             .then(snapshotJson => JSON.stringify(snapshotJson))
             .then(snapshotData => ws.send(snapshotData));
