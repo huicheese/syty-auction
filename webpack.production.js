@@ -4,9 +4,7 @@ const webpack = require('webpack');
 module.exports = {
     context: path.join(__dirname, 'src'),
     entry: [
-        'react-hot-loader/patch',
-        'webpack-hot-middleware/client',
-        './index.js',
+        './index.js'
     ],
     module: {
         rules: [
@@ -23,23 +21,6 @@ module.exports = {
         path: path.join(__dirname, 'www'),
         filename: 'bundle.js',
     },
-    plugins: [
-        new webpack.LoaderOptionsPlugin({
-            minimize: true,
-            debug: false
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            beautify: false,
-            mangle: {
-                screw_ie8: true,
-                keep_fnames: true
-            },
-            compress: {
-                screw_ie8: true
-            },
-            comments: false
-        })
-    ],
     resolve: {
         modules: [
             path.join(__dirname, 'node_modules'),
