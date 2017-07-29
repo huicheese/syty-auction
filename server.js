@@ -14,17 +14,20 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config.js');
 const compiler = webpack(webpackConfig);
+const isDevelopment = process.env.NODE_ENV !== "production";
+if (isDevelopment) {
+    app.use(webpackDevMiddleware(compiler, {
+        hot: true,
+        filename: 'bundle.js',
+        publicPath: '/',
+        stats: {
+            colors: true,
+        },
+        historyApiFallback: true,
+    }));
+    app.use(require("webpack-hot-middleware")(compiler));
+}
 app.use(express.static(__dirname + '/www'));
-app.use(webpackDevMiddleware(compiler, {
-    hot: true,
-    filename: 'bundle.js',
-    publicPath: '/',
-    stats: {
-        colors: true,
-    },
-    historyApiFallback: true,
-}));
-app.use(require("webpack-hot-middleware")(compiler));
 
 require('./server/properties.js').setApp(app);
 require('./server/login.js').setApp(app);

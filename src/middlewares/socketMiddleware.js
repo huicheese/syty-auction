@@ -5,8 +5,11 @@ export const WS_DISCONNECT = 'WS_DISCONNECT'
 export const WS_RECEIVE_MESSAGE = 'WS_RECEIVE_MESSAGE'
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE'
 
+const isDevelopment = process.env.NODE_ENV !== "production";
+const wsServer = isDevelopment ? 'localhost' : 'citi-charity-golf.herokuapp.com';
+
 const socketMiddleware = (function(){
-  const wsUrl = "ws://localhost:3000/updates"
+  const wsUrl = 'ws://' + wsServer + ':3000/updates';
   var socket = null;
 
   const onOpen = (ws,store,token) => evt => {
