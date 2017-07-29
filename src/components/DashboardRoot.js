@@ -1,6 +1,7 @@
 import React from 'react'
 import BiddingSlotBoxContainer from '../containers/BiddingSlotBoxContainer'
 import ActivityEventBoxContainer from '../containers/ActivityEventBoxContainer'
+import LoginFormContainer from '../containers/LoginFormContainer'
 
 class Dashboard extends React.Component {
 
@@ -13,6 +14,7 @@ class Dashboard extends React.Component {
 			<div className="container">
 				<div className="c8 row header-row">
 					<span>Citi Auction</span>
+					<LoginFormContainer />
 				</div>
 
 				<div className="c8 row">
