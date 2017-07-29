@@ -36,6 +36,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "sqlite": "^2.8.0",
+    "webpack": "^3.4.1",
     "webpack-dev-middleware": "^1.11.0",
     "ws": "^3.0.0"
   },
