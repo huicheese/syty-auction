@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const app = express();
 
@@ -27,14 +28,13 @@ if (isDevelopment) {
     }));
     app.use(require("webpack-hot-middleware")(compiler));
 }
-app.use(express.static(__dirname + '/www'));
+app.use(express.static(path.join(__dirname, '/www')));
 
 require('./server/properties.js').setApp(app);
 require('./server/login.js').setApp(app);
 require('./server/dashboard.js').setApp(app, wsInstance);
 require('./server/database.js').initialize();
 
-const path = require('path');
 app.get('*', function (request, response) {
     response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
 });
