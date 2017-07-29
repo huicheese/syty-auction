@@ -5,7 +5,8 @@ export const WS_DISCONNECT = 'WS_DISCONNECT'
 export const WS_RECEIVE_MESSAGE = 'WS_RECEIVE_MESSAGE'
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE'
 
-const wsServer = process.env.IP || 'localhost';
+//const wsServer = process.env.IP || 'localhost';
+const wsServer = 'localhost';
 const wsPort = process.env.PORT || '3000';
 
 const socketMiddleware = (function(){
