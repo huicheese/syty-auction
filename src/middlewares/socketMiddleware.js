@@ -5,11 +5,8 @@ export const WS_DISCONNECT = 'WS_DISCONNECT'
 export const WS_RECEIVE_MESSAGE = 'WS_RECEIVE_MESSAGE'
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE'
 
-const wsServer = process.env.IP || 'localhost';
-const wsPort = process.env.PORT || '3000';
-
 const socketMiddleware = (function(){
-  const wsUrl = 'ws://' + wsServer + ':' + wsPort + '/updates';
+  var wsUrl = location.origin.replace(/^http/, 'ws') + '/updates';
   var socket = null;
 
   const onOpen = (ws,store,token) => evt => {
