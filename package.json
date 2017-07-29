@@ -19,6 +19,9 @@
   },
   "homepage": "https://github.com/shou1dwe/syty-auction#readme",
   "dependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
@@ -42,8 +45,6 @@
     "ws": "^3.0.0"
   },
   "devDependencies": {
-    "babel-core": "^6.25.0",
-    "babel-loader": "^7.1.0",
     "babel-preset-react": "^6.24.1",
     "html-webpack-plugin": "^2.29.0",
     "redux-devtools": "^3.4.0",

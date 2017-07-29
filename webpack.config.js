@@ -31,8 +31,5 @@ module.exports = {
         modules: [
             path.join(__dirname, 'node_modules'),
         ],
-    },
-    resolveLoader: {
-        root: path.join(__dirname, 'node_modules')
     }
 };
