@@ -1,6 +1,6 @@
 # Syty-Auction
 
-This app combines Auction and traditional Malay game named Tikam-Tikam together.
+This app combines **Auction** and traditional Malay game named **Tikam-Tikam** together.
 The game consists a board of numbers, each has a hidden prize behind. It could be extremely expensive, or almost valueless. No one knows what they are bidding for, but the list of prizes will be published before the event to keep everyone's hope high.
 
 This project is created to facilitate Citibank Singapore's Charity Golf event in 2017.
