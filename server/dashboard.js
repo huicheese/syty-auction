@@ -32,6 +32,16 @@ exports.setApp = (app, wsInstance) => {
             .then(submissionResult => executeUpdate(submissionResult, wsInstance));
     });
 
+    app.get('/areyousure/nuke', (request, response) => {
+        database
+            .nukeBiddings()
+            .then(() => response.status(200).send('Cleaned up all Biddings history'))
+            .catch(err => {
+                console.error('Failed to nuke Biddings history', err.stack);
+                response.status(400).send('Failed to clean up Biddings history');
+            });
+    })
+
     let bot;
     app.get('/startBot', function (request, response) {
         bot = setInterval(function() {
