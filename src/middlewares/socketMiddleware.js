@@ -6,7 +6,7 @@ export const WS_RECEIVE_MESSAGE = 'WS_RECEIVE_MESSAGE'
 export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE'
 
 const socketMiddleware = (function(){
-  const wsUrl = "ws://localhost:3000/updates"
+  var wsUrl = location.origin.replace(/^http/, 'ws') + '/updates';
   var socket = null;
 
   const onOpen = (ws,store,token) => evt => {
@@ -28,7 +28,6 @@ const socketMiddleware = (function(){
         store.dispatch(actions.messageReceived(msg));
     else
         console.log("Received unknown message type: '" + msg.type + "'");
-    
   }
 
   return store => next => action => {
