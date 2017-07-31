@@ -7,6 +7,13 @@ export const WS_CONNECTED = 'WS_CONNECTED'
 export const WS_DISCONNECTED = 'WS_DISCONNECTED'
 export const WS_MESSAGE_RECEIVED = 'WS_MESSAGE_RECEIVED'
 
+export const LOGIN_REQUESTED = 'LOGIN_REQUESTED'
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+export const LOGIN_FAIL = 'LOGIN_FAIL'
+
+export const BID_REQUESTED = 'BID_REQUESTED'
+export const BID_SUCCESS = 'BID_SUCCESS'
+export const BID_FAIL = 'BID_FAIL'
 
 export const initializeConnection = () => {
   return {
@@ -37,14 +44,14 @@ export const messageReceived = (msg) => {
   }
 }
 
-const loginRequested = () => ({ type: "LOGIN_REQUESTED"})
-const loginSuccess = () => ({ type: "LOGIN_SUCCESS"})
-const loginFail = (msg) => ({ type: "LOGIN_FAIL", error:msg})
+const loginRequested = () => ({ type: LOGIN_REQUESTED})
+const loginSuccess = () => ({ type: LOGIN_SUCCESS})
+const loginFail = (msg) => ({ type: LOGIN_FAIL, error:msg})
 
 export function fetchLogin(firstName, lastName, company, table) {
   return dispatch => {
     dispatch(loginRequested())
-    return basePost({
+    return basePost(`login`, {
                   firstName:firstName,
                   lastName:lastName,
                   company:company,
@@ -58,9 +65,26 @@ export function fetchLogin(firstName, lastName, company, table) {
   }
 }
 
-function basePost(data) {
+const bidRequested = (opID) => ({ opID: opID, type: BID_REQUESTED})
+const bidSuccess = (opID) => ({ opID: opID, type: BID_SUCCESS})
+const bidFail = (opID, msg) => ({ opID: opID, type: BID_FAIL, error:msg})
+
+export function fetchBid(slot, bid) {
+  let opID = slot + "-" + bid + "-" + Math.random()
+  return dispatch => {
+    dispatch(bidRequested(opID))
+    return basePost(`submit`, {bid, slot})
+      .then(response => response.ok ?
+        dispatch(bidSuccess(opID)) : 
+        response.text().then(msg => dispatch(bidFail(opID, msg)))
+      ).catch(v1 => console.log(opID + ": " + v1))
+
+  }
+}
+
+function basePost(apiPath, data) {
   let toSend = JSON.stringify(data)
-  return fetch(`login`, {
+  return fetch(apiPath, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
