@@ -43,14 +43,13 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "sqlite": "^2.8.0",
+    "webpack": "^3.4.1",
+    "webpack-dev-middleware": "^1.11.0",
+    "webpack-hot-middleware": "^2.18.2",
     "ws": "^3.0.0"
   },
   "devDependencies": {
     "html-webpack-plugin": "^2.29.0",
     "redux-devtools": "^3.4.0",
-    "webpack": "^3.4.1",
-    "webpack-dev-middleware": "^1.11.0",
-    "webpack-hot-middleware": "^2.18.2",
-    "webpack-dev-server": "^2.5.0"
   }
 }
