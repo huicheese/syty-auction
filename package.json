@@ -50,6 +50,6 @@
   },
   "devDependencies": {
     "html-webpack-plugin": "^2.29.0",
-    "redux-devtools": "^3.4.0",
+    "redux-devtools": "^3.4.0"
   }
 }
