@@ -15,7 +15,10 @@ let checkAuth = authCookie =>
 let verifyIfUserExists = authCookie =>
     database
         .getUser(authCookie)
-        .then(user => typeof user !== 'undefined')
+        .then(user => {
+            console.log('User', user);
+            return typeof user !== 'undefined';
+        })
         .catch(err => {
             console.error('Failed to check User ' + authCookie, err.stack);
             return false;

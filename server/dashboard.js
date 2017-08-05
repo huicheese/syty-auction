@@ -76,8 +76,10 @@ let validateBid = (authValidationResult, request) => {
     };
 
     let error;
-    if (!authValidationResult.isValid)
+    if (!authValidationResult.isValid) {
+        console.error('Invalid Auth validation result', authValidationResult);
         error = authValidationResult.error || 'Unauthorized';    
+    }
     else if (!requestContent.slot || isNaN(requestContent.slot))
         error = 'Slot number is invalid';
     else if (!requestContent.bid || isNaN(requestContent.bid))
