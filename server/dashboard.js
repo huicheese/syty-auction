@@ -69,6 +69,8 @@ let buildEventSnapshot = (size) =>
         .map(event => buildEventUpdate(event.UserID, event.Slot, event.Bid));
 
 let validateBid = (authValidationResult, request) => {
+    console.log(authValidationResult);
+
     let requestContent = {
         userID: (authValidationResult.userID) || "",
         slot: (request.body && request.body.slot) || "",
