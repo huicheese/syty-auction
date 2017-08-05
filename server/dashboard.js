@@ -116,10 +116,14 @@ let executeUpdate = (submissionResult, wsInstance) => {
     if (!submissionResult.isValid)
         return;
 
-    console.log('Sending live update on Slot[%s] after Bid of [%s]', submissionResult.slot, submissionResult.bid);
+    console.log('Sending live update after Bidding', submissionResult);
     buildUpdate(submissionResult.userID, submissionResult.slot, submissionResult.bid)
         .then(updateJson => JSON.stringify(updateJson))
-        .then(update => wsInstance.getWss().clients.forEach(client => client.send(update)));
+        .then(update => {
+            let clients = wsInstance.getWss().clients;
+            console.log('Sending live data to %d connected clients', clients.size);
+            clients.forEach(client => client.send(update))
+        });
 };
 
 let buildUpdate = (userID, slot, bid) =>

@@ -25,6 +25,7 @@ let executeLogin = (authValidationResult, userInfo, response, cookiesExpiration)
         utils
             .createUserIfRequired(userInfoValidationResult)
             .then(userCreationResult => {
+                console.log('Login result for User', userCreationResult);
                 if (userCreationResult.isValid) {
                     let expiry = new Date(Date.now() + cookiesExpiration);
                     response.cookie('sytyAuth', userCreationResult.userID, { expires: expiry });
