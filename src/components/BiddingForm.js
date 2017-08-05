@@ -18,7 +18,7 @@ const BiddingForm = props => {
         </div>
       </div>
       <div>
-        <button type="submit" disabled={pristine || bidRequested}>Login</button>
+        <button type="submit" disabled={pristine || bidRequested}>Submit</button>
       </div>
     </form>
     );

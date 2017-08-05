@@ -82,6 +82,19 @@ export function fetchBid(slot, bid) {
   }
 }
 
+export function fetchAdminBid(firstName, lastName, company, table, slot, bid) {
+  let opID = slot + "-" + bid + "-" + Math.random()
+  return dispatch => {
+    dispatch(bidRequested(opID))
+    return basePost(`adminSubmit`, {firstName, lastName, company, table, bid, slot})
+      .then(response => response.ok ?
+        dispatch(bidSuccess(opID)) : 
+        response.text().then(msg => dispatch(bidFail(opID, msg)))
+      ).catch(v1 => console.log(opID + ": " + v1))
+
+  }
+}
+
 function basePost(apiPath, data) {
   let toSend = JSON.stringify(data)
   return fetch(apiPath, {

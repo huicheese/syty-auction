@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import configureStore from '../configureStore'
-import SubmitForm from './SubmitForm'
 import DashboardRootContainer from './DashboardRootContainer'
+import AdminBidRootContainer from './AdminBidRootContainer'
 
 const store = configureStore()
 
@@ -14,7 +14,7 @@ export default class Root extends Component {
 				<Router>
 					<div>
 						<Route exact path="/" component={DashboardRootContainer} />
-						<Route exact path="/test" component={SubmitForm} />
+						<Route exact path="/adminBid" component={AdminBidRootContainer} />
 					</div>
 				</Router>
 			</Provider>
