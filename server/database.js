@@ -1,7 +1,7 @@
 var path = require('path');
 var Promise = require('bluebird');
 var db = require('sqlite')
-var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, userListQueryStmt, recentBiddingsQueryStmt, nukeBiddingsStmt;
+var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, allUsersQueryStmt, recentBiddingsQueryStmt, nukeBiddingsStmt;
 
 let initialize = () =>
 	Promise
@@ -68,9 +68,8 @@ let initialize = () =>
 			db.prepare(`
 				SELECT UserID, FirstName, LastName, Company, TableNumber
 				FROM Users
-				WHERE UserID IN (?)
 				`)
-			.then(stmt => userListQueryStmt = stmt);
+			.then(stmt => allUsersQueryStmt = stmt);
 
 			db.prepare(`
 				SELECT Slot, UserID, Bid
@@ -109,6 +108,9 @@ let getRecentBiddings = size =>
 let nukeBiddings = () =>
 	Promise.resolve(nukeBiddingsStmt.run());
 
+let getAllUsers = () =>
+	Promise.resolve(allUsersQueryStmt.all());
+
 module.exports = {
 	initialize: initialize,
 	createUser: createUser,
@@ -117,5 +119,6 @@ module.exports = {
 	getSlotInfo: getSlotInfo,
 	getAllSlotsInfo: getAllSlotsInfo,
 	getRecentBiddings: getRecentBiddings,
-	nukeBiddings: nukeBiddings
+	nukeBiddings: nukeBiddings,
+	getAllUsers: getAllUsers
 };
