@@ -161,6 +161,7 @@ let getUserInfo = userID =>
     database
         .getUser(userID)
         .then(user => ({
+            userID: userID,
             firstName: user.FirstName,
             lastName: user.LastName,
             company: user.Company,
