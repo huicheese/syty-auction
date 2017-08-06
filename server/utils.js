@@ -6,23 +6,22 @@ var database = require('./database.js');
 let uuid = () => randomHex() + '-' + randomHex() + '-' + randomHex() + '-' + randomHex();
 let randomHex = () => crypto.randomBytes(4).toString('hex');
 
-let checkAuth = authCookie =>
-    Promise.resolve({
-		userID: authCookie,
-		isValid: typeof authCookie !== 'undefined' && verifyIfUserExists(authCookie)
-	});
+let checkAuth = authCookie => {
+    if (typeof authCookie === 'undefined')
+        return Promise.resolve({ userID: authCookie, isValid: false });
 
-let verifyIfUserExists = authCookie =>
+    return verifyIfUserExists(authCookie)
+            .then(isValid => ({ userID: authCookie, isValid: isValid }))
+            .catch(error => {
+                console.error('Failed to checkAuth for User[%s]', authCookie, error.stack);
+                return { userID: authCookie, isValid: false };
+            });
+}
+
+let verifyIfUserExists = userID =>
     database
-        .getUser(authCookie)
-        .then(user => {
-            console.log('User', user);
-            return typeof user !== 'undefined';
-        })
-        .catch(err => {
-            console.error('Failed to check User ' + authCookie, err.stack);
-            return false;
-        });
+        .getUser(userID)
+        .then(user => typeof user !== 'undefined');
 
 let validateUserInfo = userInfo => {
 	let content = {
@@ -63,23 +62,22 @@ let generateUserID = (userInfo) => {
 
 let createUserIfRequired = userInfoValidationResult => {
     if (!userInfoValidationResult.isValid)
-        return userInfoValidationResult;
+        return Promise.resolve(userInfoValidationResult);
 
-    return userInfoValidationResult.isValid &&
-        database
-            .createUser(
-                userInfoValidationResult.userID,
-                userInfoValidationResult.firstName,
-                userInfoValidationResult.lastName,
-                userInfoValidationResult.company,
-                userInfoValidationResult.table)
-            .then(() => userInfoValidationResult)
-            .catch(err => {
-                userInfoValidationResult.error = 'Failed to create user';
-                userInfoValidationResult.isValid = false;
-            	console.error(userInfoValidationResult.error, err.stack);
-                return userInfoValidationResult;
-            });
+    return database
+                .createUser(
+                    userInfoValidationResult.userID,
+                    userInfoValidationResult.firstName,
+                    userInfoValidationResult.lastName,
+                    userInfoValidationResult.company,
+                    userInfoValidationResult.table)
+                .then(() => userInfoValidationResult)
+                .catch(err => {
+                    userInfoValidationResult.error = 'Failed to create user';
+                    userInfoValidationResult.isValid = false;
+                	console.error(userInfoValidationResult.error, err.stack);
+                    return userInfoValidationResult;
+                });
 };
 
 module.exports = {

@@ -1,7 +1,7 @@
 var path = require('path');
 var Promise = require('bluebird');
 var db = require('sqlite')
-var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, allUsersQueryStmt, recentBiddingsQueryStmt, nukeBiddingsStmt;
+var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, allUsersQueryStmt, recentBiddingsQueryStmt, nukeBiddingsStmt, nukeUsersStmt;
 
 let initialize = () =>
 	Promise
@@ -84,6 +84,12 @@ let initialize = () =>
 				VACCUM;
 				`)
 			.then(stmt => nukeBiddingsStmt = stmt);
+
+			db.prepare(`
+				DELETE FROM Users;
+				VACCUM;
+				`)
+			.then(stmt => nukeUsersStmt = stmt);
 		})
 		.then(() => console.log("Database initialization completed"))
 		.catch(err => console.error(err.stack));
@@ -108,6 +114,9 @@ let getRecentBiddings = size =>
 let nukeBiddings = () =>
 	Promise.resolve(nukeBiddingsStmt.run());
 
+let nukeUsers = () =>
+	Promise.resolve(nukeUsersStmt.run());
+
 let getAllUsers = () =>
 	Promise.resolve(allUsersQueryStmt.all());
 
@@ -120,5 +129,6 @@ module.exports = {
 	getAllSlotsInfo: getAllSlotsInfo,
 	getRecentBiddings: getRecentBiddings,
 	nukeBiddings: nukeBiddings,
+	nukeUsers: nukeUsers,
 	getAllUsers: getAllUsers
 };

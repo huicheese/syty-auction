@@ -32,7 +32,7 @@ exports.setApp = (app, wsInstance) => {
             .then(submissionResult => executeUpdate(submissionResult, wsInstance));
     });
 
-    app.get('/areyousure/nuke', (request, response) => {
+    app.get('/areyousure/nukeBiddings', (request, response) => {
         database
             .nukeBiddings()
             .then(() => response.status(200).send('Cleaned up all Biddings history'))
@@ -40,7 +40,17 @@ exports.setApp = (app, wsInstance) => {
                 console.error('Failed to nuke Biddings history', err.stack);
                 response.status(400).send('Failed to clean up Biddings history');
             });
-    })
+    });
+
+    app.get('/areyousure/nukeUsers', (request, response) => {
+        database
+            .nukeUsers()
+            .then(() => response.status(200).send('Cleaned up all Users'))
+            .catch(err => {
+                console.error('Failed to nuke Users', err.stack);
+                response.status(400).send('Failed to clean up Users');
+            });
+    });
 
     let bot;
     app.get('/startBot', function (request, response) {
@@ -69,8 +79,6 @@ let buildEventSnapshot = (size) =>
         .map(event => buildEventUpdate(event.UserID, event.Slot, event.Bid));
 
 let validateBid = (authValidationResult, request) => {
-    console.log(authValidationResult);
-
     let requestContent = {
         userID: (authValidationResult.userID) || "",
         slot: (request.body && request.body.slot) || "",
@@ -96,16 +104,15 @@ let executeBid = (validationResult) => {
     if (!validationResult.isValid)
         return validationResult;
 
-    return validationResult.isValid &&
-        database
-            .submitBid(validationResult.userID, validationResult.slot, validationResult.bid)
-            .then(() => validationResult)
-            .catch(err => {
-                validationResult.error = 'Failed to submit';
-                validationResult.isValid = false;
-                console.error(validationResult.error, err.stack);
-                return validationResult;
-            });
+    return database
+                .submitBid(validationResult.userID, validationResult.slot, validationResult.bid)
+                .then(() => validationResult)
+                .catch(err => {
+                    validationResult.error = 'Failed to submit';
+                    validationResult.isValid = false;
+                    console.error(validationResult.error, err.stack);
+                    return validationResult;
+                });
 };
 
 let respondBiddingResult = (submissionResult, response) => {
