@@ -6,10 +6,7 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json());
 
 const cookieParser = require('cookie-parser')
-app.use(cookieParser())
-
-const enableWs = require('express-ws');
-const wsInstance = enableWs(app);
+app.use(cookieParser());
 
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
@@ -30,17 +27,23 @@ if (isDevelopment) {
 }
 app.use(express.static(path.join(__dirname, '/www')));
 
-require('./server/properties.js').setApp(app);
-require('./server/login.js').setApp(app);
-require('./server/dashboard.js').setApp(app, wsInstance);
 require('./server/database.js').initialize();
-
-app.get('*', function (request, response) {
-    response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
-});
+require('./server/properties.js').setApp(app);
 
 const server = app.listen(process.env.PORT || app.locals.port, function() {
     const host = server.address().address;
     const port = server.address().port;
     console.log('Syty Auction server is listening at http://%s:%s', host, port);
+});
+
+var io = require('socket.io').listen(server, {
+    pingInterval: 60000,
+    pingTimeout: 10000,
+});
+
+require('./server/login.js').setApp(app);
+require('./server/dashboard.js').setApp(app, io);
+
+app.get('*', function (request, response) {
+    response.sendFile(path.resolve(__dirname, 'www', 'index.html'))
 });
