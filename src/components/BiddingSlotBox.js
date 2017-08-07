@@ -1,7 +1,7 @@
 import React from 'react'
 import BiddingSlot from './BiddingSlot'
 
-const BiddingSlotBox = ({slots}) => {
+const BiddingSlotBox = ({slots, onSlotClick}) => {
 	return (
 			<div className="row slot-row">
 				{
@@ -9,7 +9,8 @@ const BiddingSlotBox = ({slots}) => {
 							<BiddingSlot key={entry.index} 
 							index={entry.index} 
 							bid={entry.highestBid}
-							bidder={entry.highestBidder.firstName} />
+							bidder={entry.highestBidder.firstName} 
+							onSlotClick={(e)=> onSlotClick(e, entry.index + 1, entry.highestBid)} />
 						)
 				}
 			</div>

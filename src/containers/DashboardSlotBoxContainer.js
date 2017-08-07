@@ -1,6 +1,6 @@
 import BiddingSlotBox from '../components/BiddingSlotBox'
 import { connect } from 'react-redux'
-import { clickSlot } from '../actions'
+import { expandSlot } from '../actions'
 
 const mapStateToProps = (state, ownProps) => {
   const { slots } = state
@@ -12,9 +12,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onSlotClick: (event, index) => {
-      dispatch(clickSlot(index));
+      dispatch(expandSlot(index));
     }
-  }
+  };
 }
 
 const BiddingSlotBoxContainer = connect(mapStateToProps, mapDispatchToProps)(BiddingSlotBox)

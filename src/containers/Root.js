@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import configureStore from '../configureStore'
 import DashboardRootContainer from './DashboardRootContainer'
+import BidSubmissionRootContainer from './BidSubmissionRootContainer'
 import AdminBidRootContainer from './AdminBidRootContainer'
 
 const store = configureStore()
@@ -14,6 +15,7 @@ export default class Root extends Component {
 				<Router>
 					<div>
 						<Route exact path="/" component={DashboardRootContainer} />
+						<Route exact path="/submit" component={BidSubmissionRootContainer} />
 						<Route exact path="/adminBid" component={AdminBidRootContainer} />
 					</div>
 				</Router>

@@ -7,9 +7,15 @@ export const WS_CONNECTED = 'WS_CONNECTED'
 export const WS_DISCONNECTED = 'WS_DISCONNECTED'
 export const WS_MESSAGE_RECEIVED = 'WS_MESSAGE_RECEIVED'
 
+export const LOGIN_EXPAND = 'LOGIN_EXPAND'
 export const LOGIN_REQUESTED = 'LOGIN_REQUESTED'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAIL = 'LOGIN_FAIL'
+
+export const INTERACTION_BOX_CLOSE = 'INTERACTION_BOX_CLOSE'
+
+export const SLOT_CLICK = 'SLOT_CLICK'
+export const SLOT_EXPAND = 'SLOT_EXPAND'
 
 export const BID_REQUESTED = 'BID_REQUESTED'
 export const BID_SUCCESS = 'BID_SUCCESS'
@@ -48,6 +54,10 @@ const loginRequested = () => ({ type: LOGIN_REQUESTED})
 const loginSuccess = () => ({ type: LOGIN_SUCCESS})
 const loginFail = (msg) => ({ type: LOGIN_FAIL, error:msg})
 
+export const expandLogin = () => ({
+  type: LOGIN_EXPAND
+})
+
 export function fetchLogin(firstName, lastName, company, table) {
   return dispatch => {
     dispatch(loginRequested())
@@ -64,6 +74,18 @@ export function fetchLogin(firstName, lastName, company, table) {
 
   }
 }
+export const closeInteractionBox = () => ({
+  type: INTERACTION_BOX_CLOSE
+})
+export const clickSlot = (slot) => ({
+  type: SLOT_CLICK,
+  slot
+})
+
+export const expandSlot = (slot) => ({
+  type: SLOT_EXPAND,
+  slot
+})
 
 const bidRequested = (opID) => ({ opID: opID, type: BID_REQUESTED})
 const bidSuccess = (opID) => ({ opID: opID, type: BID_SUCCESS})

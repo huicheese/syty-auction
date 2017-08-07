@@ -6,12 +6,6 @@ const BiddingForm = props => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Slot</label>
-        <div>
-          <Field name="slot" component="input" type="text" placeholder="Slot #"/>
-        </div>
-      </div>
-      <div>
         <label>Amount</label>
         <div>
           <Field name="amount" component="input" type="number" placeholder="Please input your bid"/>

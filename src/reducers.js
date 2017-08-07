@@ -1,6 +1,9 @@
 import { combineReducers } from 'redux'
 import {
-  WS_MESSAGE_RECEIVED
+  WS_MESSAGE_RECEIVED, 
+  INTERACTION_BOX_CLOSE,
+  SLOT_CLICK, SLOT_EXPAND, BID_REQUESTED,
+  LOGIN_EXPAND, LOGIN_SUCCESS
 } from './actions'
 import { reducer as reduxFormReducer } from 'redux-form';
 
@@ -13,7 +16,16 @@ const stubSlots = new Array(numSlot).fill().map(
   })
 )
 
-const user = (state = {}, action) => {
+// retrieve login state from cookie
+const user = (state = {
+  isLoggedIn: false
+}, action) => {
+  switch (action.type) {
+    case LOGIN_SUCCESS:
+      return Object.assign({}, state, {
+        isLoggedIn: true
+    })
+  }
   return state;
 }
 
@@ -46,11 +58,50 @@ const activityEvents = (state = [], action) => {
     return state
 }
 
+const interaction = (state = {
+  slotRequested: null,
+  slotExpanded: null,
+  loginExpanded: false
+}, action) => {
+  switch(action.type) {
+    case INTERACTION_BOX_CLOSE:
+      return Object.assign({}, state, {
+        slotRequested: null,
+        slotExpanded: null,
+        loginExpanded: false
+      })      
+    case SLOT_EXPAND:
+      return Object.assign({}, state, {
+        slotExpanded: action.slot
+      })
+    case SLOT_CLICK:
+      return Object.assign({}, state, {
+        slotRequested: action.slot
+      })
+    case BID_REQUESTED:
+      return Object.assign({}, state, {
+        slotRequested: null
+      })
+    case LOGIN_EXPAND:
+      return Object.assign({}, state, {
+        loginExpanded: true
+      })
+    case LOGIN_SUCCESS:
+      return Object.assign({}, state, {
+        loginExpanded: false
+    })  
+    default:
+      // empty
+  }
+  return state
+} 
+
 
 const rootReducer = combineReducers({
   user,
   slots,
   activityEvents,
+  interaction,
   form: reduxFormReducer, // mounted under "form"
 })
 
