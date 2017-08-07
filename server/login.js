@@ -12,6 +12,11 @@ exports.setApp = app => {
                         response,
                         process.env.COOKIES_EXPIRATION || app.locals.cookiesExpiration));
     });
+
+    app.get('/logout', (request, response) => {
+        response.cookie('sytyAuth', '', { expires : new Date() });
+        response.status(200).send('Logout successful');
+    })
 };
 
 let executeLogin = (authValidationResult, userInfo, response, cookiesExpiration) => {

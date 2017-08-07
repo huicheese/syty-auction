@@ -31,7 +31,6 @@ if (isDevelopment) {
 app.use(express.static(path.join(__dirname, '/www')));
 
 require('./server/properties.js').setApp(app);
-require('./server/reporting.js').setApp(app);
 require('./server/login.js').setApp(app);
 require('./server/dashboard.js').setApp(app, wsInstance);
 require('./server/database.js').initialize();
