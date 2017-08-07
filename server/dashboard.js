@@ -93,7 +93,7 @@ let buildSlotInfoSnapshot = () =>
 let buildEventSnapshot = (size) =>
     database
         .getRecentBiddings(size)
-        .map(event => buildEventUpdate(event.UserID, event.Slot, event.Bid));
+        .map(event => buildEventUpdate(event.BidID, event.UserID, event.Slot, event.Bid));
 
 let validateBid = (authValidationResult, request) => {
     let requestContent = {
@@ -121,8 +121,9 @@ let executeBid = (validationResult) => {
     if (!validationResult.isValid)
         return validationResult;
 
+    validationResult.bidID = utils.uuid();
     return database
-                .submitBid(validationResult.userID, validationResult.slot, validationResult.bid)
+                .submitBid(validationResult.bidID, validationResult.userID, validationResult.slot, validationResult.bid)
                 .then(() => validationResult)
                 .catch(err => {
                     validationResult.error = 'Failed to submit';
@@ -145,16 +146,16 @@ let executeUpdate = (submissionResult, io) => {
         return;
 
     console.log('Sending live update after Bidding', submissionResult);
-    buildUpdate(submissionResult.userID, submissionResult.slot, submissionResult.bid)
+    buildUpdate(submissionResult.bidID, submissionResult.userID, submissionResult.slot, submissionResult.bid)
         .then(updateJson => JSON.stringify(updateJson))
         .then(update => io.sockets.emit('data', update));
 };
 
-let buildUpdate = (userID, slot, bid) =>
+let buildUpdate = (bidID, userID, slot, bid) =>
     Promise
         .join(
             buildSlotInfoUpdate(slot),
-            buildEventUpdate(userID, slot, bid),
+            buildEventUpdate(bidID, userID, slot, bid),
             (slotInfoUpdate, eventUpdate) => ({ slots: [slotInfoUpdate], events: [eventUpdate] })
         );
 
@@ -176,13 +177,13 @@ let parseSlotInfo = slotInfo => {
     return { index: index };
 };
 
-let buildEventUpdate = (userID, slot, bid) =>
+let buildEventUpdate = (bidID, userID, slot, bid) =>
     getUserInfo(userID)
         .then(userInfo => ({
             slot: slot,
             bid: bid,
             bidder: userInfo,
-            index: utils.uuid()
+            index: bidID
         }));
 
 let getUserInfo = userID =>
