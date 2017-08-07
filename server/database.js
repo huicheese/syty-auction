@@ -20,6 +20,7 @@ let initialize = () =>
 		.then(() => console.log("Created table Users"))
 		.then(() => db.run(
 			`CREATE TABLE IF NOT EXISTS Biddings (
+				BidID TEXT NOT NULL,
 				UserID TEXT NOT NULL,
 				Slot INTEGER NOT NULL,
 				Bid INTEGER NOT NULL
@@ -30,7 +31,7 @@ let initialize = () =>
 			db.prepare('INSERT OR IGNORE INTO Users VALUES(?, ?, ?, ?, ?)')
 			.then(stmt => createUserStmt = stmt);
 
-			db.prepare('INSERT INTO Biddings VALUES(?, ?, ?)')
+			db.prepare('INSERT INTO Biddings VALUES(?, ?, ?, ?)')
 			.then(stmt => submitBidStmt = stmt);
 
 			db.prepare(`
@@ -72,7 +73,7 @@ let initialize = () =>
 			.then(stmt => allUsersQueryStmt = stmt);
 
 			db.prepare(`
-				SELECT Slot, UserID, Bid
+				SELECT BidID, Slot, UserID, Bid
 				FROM Biddings
 				ORDER BY rowid DESC
 				LIMIT ?
@@ -99,8 +100,8 @@ let getUser = userID => Promise.resolve(userQueryStmt.get(userID));
 let createUser = (userID, firstName, lastName, company, table) =>
 	Promise.resolve(createUserStmt.run(userID, firstName, lastName, company, table));
 
-let submitBid = (userID, slot, bid) =>
-	Promise.resolve(submitBidStmt.run(userID, slot, bid));
+let submitBid = (bidID, userID, slot, bid) =>
+	Promise.resolve(submitBidStmt.run(bidID, userID, slot, bid));
 
 let getSlotInfo = slot =>
 	Promise.resolve(slotQueryStmt.get(slot));

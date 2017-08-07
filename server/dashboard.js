@@ -2,15 +2,15 @@ var Promise = require('bluebird');
 var utils = require('./utils.js');
 var database = require('./database.js');
 
-exports.setApp = (app, wsInstance) => {
-    app.ws('/updates', (ws, request) => {
+exports.setApp = (app, io) => {
+    io.on('connection', socket => {
         Promise
             .join(
                 buildSlotInfoSnapshot(),
                 buildEventSnapshot(process.env.EVENT_SNAPSHOT_SIZE || app.locals.eventSnapshotSize),
                 (slotInfoSnapshot, eventSnapshot) => ({ slots: slotInfoSnapshot, events: eventSnapshot }))
             .then(snapshotJson => JSON.stringify(snapshotJson))
-            .then(snapshotData => ws.send(snapshotData));
+            .then(snapshotData => socket.emit('data', snapshotData));
     });
 
     app.post('/submit', (request, response) => {
@@ -19,7 +19,7 @@ exports.setApp = (app, wsInstance) => {
             .then(authValidationResult => validateBid(authValidationResult, request))
             .then(bidValidationResult => executeBid(bidValidationResult))
             .then(submissionResult => respondBiddingResult(submissionResult, response))
-            .then(submissionResult => executeUpdate(submissionResult, wsInstance));
+            .then(submissionResult => executeUpdate(submissionResult, io));
     });
 
     app.post('/adminSubmit', (request, response) => {
@@ -29,7 +29,7 @@ exports.setApp = (app, wsInstance) => {
             .then(authValidationResult => validateBid(authValidationResult, request))
             .then(bidValidationResult => executeBid(bidValidationResult))
             .then(submissionResult => respondBiddingResult(submissionResult, response))
-            .then(submissionResult => executeUpdate(submissionResult, wsInstance));
+            .then(submissionResult => executeUpdate(submissionResult, io));
     });
 
     app.get('/areyousure/nukeBiddings', (request, response) => {
@@ -74,9 +74,7 @@ exports.setApp = (app, wsInstance) => {
     let bot;
     app.get('/startBot', function (request, response) {
         bot = setInterval(function() {
-            wsInstance.getWss('/updates').clients.forEach(function (client) {
-                client.send(getRandomUpdates());
-            })
+            io.sockets.emit('data', getRandomUpdates());
         }, 16);
         response.send();
     });
@@ -95,7 +93,7 @@ let buildSlotInfoSnapshot = () =>
 let buildEventSnapshot = (size) =>
     database
         .getRecentBiddings(size)
-        .map(event => buildEventUpdate(event.UserID, event.Slot, event.Bid));
+        .map(event => buildEventUpdate(event.BidID, event.UserID, event.Slot, event.Bid));
 
 let validateBid = (authValidationResult, request) => {
     let requestContent = {
@@ -123,8 +121,9 @@ let executeBid = (validationResult) => {
     if (!validationResult.isValid)
         return validationResult;
 
+    validationResult.bidID = utils.uuid();
     return database
-                .submitBid(validationResult.userID, validationResult.slot, validationResult.bid)
+                .submitBid(validationResult.bidID, validationResult.userID, validationResult.slot, validationResult.bid)
                 .then(() => validationResult)
                 .catch(err => {
                     validationResult.error = 'Failed to submit';
@@ -142,25 +141,21 @@ let respondBiddingResult = (submissionResult, response) => {
     return submissionResult;
 };
 
-let executeUpdate = (submissionResult, wsInstance) => {
+let executeUpdate = (submissionResult, io) => {
     if (!submissionResult.isValid)
         return;
 
     console.log('Sending live update after Bidding', submissionResult);
-    buildUpdate(submissionResult.userID, submissionResult.slot, submissionResult.bid)
+    buildUpdate(submissionResult.bidID, submissionResult.userID, submissionResult.slot, submissionResult.bid)
         .then(updateJson => JSON.stringify(updateJson))
-        .then(update => {
-            let clients = wsInstance.getWss().clients;
-            console.log('Sending live data to %d connected clients', clients.size);
-            clients.forEach(client => client.send(update))
-        });
+        .then(update => io.sockets.emit('data', update));
 };
 
-let buildUpdate = (userID, slot, bid) =>
+let buildUpdate = (bidID, userID, slot, bid) =>
     Promise
         .join(
             buildSlotInfoUpdate(slot),
-            buildEventUpdate(userID, slot, bid),
+            buildEventUpdate(bidID, userID, slot, bid),
             (slotInfoUpdate, eventUpdate) => ({ slots: [slotInfoUpdate], events: [eventUpdate] })
         );
 
@@ -182,13 +177,13 @@ let parseSlotInfo = slotInfo => {
     return { index: index };
 };
 
-let buildEventUpdate = (userID, slot, bid) =>
+let buildEventUpdate = (bidID, userID, slot, bid) =>
     getUserInfo(userID)
         .then(userInfo => ({
             slot: slot,
             bid: bid,
             bidder: userInfo,
-            index: utils.uuid()
+            index: bidID
         }));
 
 let getUserInfo = userID =>
