@@ -7,7 +7,7 @@ import {
 } from './actions'
 import { reducer as reduxFormReducer } from 'redux-form';
 
-const numSlot = 25
+const numSlot = 30
 const numEvents = 35
 const stubSlots = new Array(numSlot).fill().map(
   (e,i) => ({
