@@ -9,6 +9,7 @@ html body{
   font-size: 18px;
   padding: 10px;
   margin: auto;
+  touch-action: none;
   }
   button {
   border-radius: 0px;
