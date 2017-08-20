@@ -17,7 +17,6 @@ export const INTERACTION_BOX_CLOSE = 'INTERACTION_BOX_CLOSE'
 export const SLOT_CLICK = 'SLOT_CLICK'
 export const SLOT_EXPAND = 'SLOT_EXPAND'
 
-export const BID_SET = 'BID_SET'
 export const BID_REQUESTED = 'BID_REQUESTED'
 export const BID_SUCCESS = 'BID_SUCCESS'
 export const BID_FAIL = 'BID_FAIL'
@@ -86,11 +85,6 @@ export const clickSlot = (slot) => ({
 export const expandSlot = (slot) => ({
   type: SLOT_EXPAND,
   slot
-})
-
-export const modifyBidAmount = (instruction) => ({
-  type: BID_SET,
-  instruction
 })
 
 const bidRequested = (opID) => ({ opID: opID, type: BID_REQUESTED})

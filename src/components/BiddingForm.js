@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Field, reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import BiddingNumPad from './BiddingNumPad'
 
 const BiddingForm = props => {
@@ -9,9 +9,8 @@ const BiddingForm = props => {
       <div>
         <label>Amount</label>
         <div>
-          <Field name="amount" component="input" type="number" placeholder="Please input your bid"/>
+          <Field name="amount" component={BiddingNumPad} />
         </div>
-        <BiddingNumPad />
       </div>
       <div>
         <button type="submit" disabled={pristine || bidRequested}>Submit</button>

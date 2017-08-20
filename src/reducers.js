@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import {
   WS_MESSAGE_RECEIVED, 
   INTERACTION_BOX_CLOSE,
-  SLOT_CLICK, SLOT_EXPAND, BID_SET, BID_REQUESTED,
+  SLOT_CLICK, SLOT_EXPAND, BID_REQUESTED,
   LOGIN_EXPAND, LOGIN_SUCCESS
 } from './actions'
 import {
@@ -82,10 +82,6 @@ const interaction = (state = {
       return Object.assign({}, state, {
         slotRequested: action.slot
       })
-    case BID_SET:
-      return Object.assign({}, state, {
-        bidAmount: getNewBidAmount(state.bidAmount, action.instruction)
-      })
     case BID_REQUESTED:
       return Object.assign({}, state, {
         slotRequested: null
@@ -102,28 +98,6 @@ const interaction = (state = {
       // empty
   }
   return state
-} 
-
-const getNewBidAmount = (old, inst) => {
-  let val = parseInt(inst.value);
-  let newVal = 0;
-  switch(inst.instruction) {
-    case CAL_APPEND:
-      newVal = old < 100000000000 ? old * 10 + val : old;
-      break;
-    case CAL_CLEAR:
-      newVal = 0;
-      break;
-    case CAL_BACK:
-      newVal = old > 0 ? Math.floor(old/10) : old;
-      break;  
-    case CAL_INCREMENT:
-      newVal = old < 100000000000 && (old + val) < 100000000000 ? old + val : old
-      break;
-  }
-  console.log(old)
-  console.log(newVal)
-  return newVal;
 }
 
 const rootReducer = combineReducers({

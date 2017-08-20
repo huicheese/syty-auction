@@ -5,7 +5,7 @@ import { fetchBid } from '../actions'
 function mapStateToProps(state, ownProps) {
   return {
     bidRequested: false, // TODO
-    initialValues: {slot: ownProps.slot},
+    initialValues: {slot: ownProps.slot, amount: state.interaction.bidAmount},
     bidAmount: state.interaction.bidAmount
   };
 }
