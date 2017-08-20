@@ -14,8 +14,8 @@ export default class Root extends Component {
 			<Provider store={store}>
 				<Router>
 					<div>
-						<Route exact path="/" component={DashboardRootContainer} />
-						<Route exact path="/submit" component={BidSubmissionRootContainer} />
+						<Route exact path="/" component={BidSubmissionRootContainer} />
+						<Route exact path="/dashboard" component={DashboardRootContainer} />
 						<Route exact path="/adminBid" component={AdminBidRootContainer} />
 					</div>
 				</Router>
