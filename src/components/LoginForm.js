@@ -4,32 +4,32 @@ import { Form, Field, reduxForm } from 'redux-form';
 const LoginForm = props => {
   const { handleSubmit, pristine, reset, loginRequested } = props;
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="login-form" onSubmit={handleSubmit}>
       <div>
-        <label>First Name</label>
+        <label htmlFor="firstName">First Name</label>
         <div>
           <Field name="firstName" component="input" type="text" placeholder="First Name"/>
         </div>
       </div>
       <div>
-        <label>Last Name</label>
+        <label htmlFor="lastName">Last Name</label>
         <div>
           <Field name="lastName" component="input" type="text" placeholder="Last Name"/>
         </div>
       </div>
       <div>
-        <label>Company</label>
+        <label htmlFor="company">Company</label>
         <div>
           <Field name="company" component="input" type="text" placeholder="Company"/>
         </div>
       </div>
       <div>
-        <label>Table</label>
+        <label htmlFor="firstName">Table</label>
         <div>
           <Field name="table" component="input" type="text" placeholder="Table Number"/>
         </div>
       </div>
-      <div>
+      <div className="interaction-footer">
         <button type="submit" disabled={pristine || loginRequested}>Login</button>
       </div>
     </form>

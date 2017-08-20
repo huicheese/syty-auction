@@ -7,12 +7,13 @@ const BiddingForm = props => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        {highestBid && "Current Highest Bid: S$ " + highestBid}
+        {highestBid && <div>Current Highest Bid: S$ {highestBid}</div>}
+        <br/>
         <div>
           <Field name="amount" component={BiddingNumPad} />
         </div>
       </div>
-      <div>
+      <div className="interaction-footer">
         <button type="submit" disabled={pristine || bidRequested}>Submit</button>
       </div>
     </form>

@@ -53,7 +53,7 @@ export default class BiddingNumPad extends Component {
         <CalculatorButton displayText="7" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 7)} />  
         <CalculatorButton displayText="8" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 8)} />  
         <CalculatorButton displayText="9" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 9)} />  
-        <CalculatorButton displayText="CLEAR" onCalButtonClick={() => this.modifyAmount(CAL_CLEAR, 0)} />  
+        <CalculatorButton displayText="C" onCalButtonClick={() => this.modifyAmount(CAL_CLEAR, 0)} />  
         <CalculatorButton displayText="0" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 0)} />  
         <CalculatorButton displayText="<" onCalButtonClick={() => this.modifyAmount(CAL_BACK, -1)} />  
   
