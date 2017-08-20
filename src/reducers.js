@@ -62,7 +62,7 @@ const activityEvents = (state = [], action) => {
 }
 
 const interaction = (state = {
-  slotRequested: 2,
+  slotRequested: null,
   slotExpanded: null,
   bidAmount: 0,
   loginExpanded: false

@@ -6,7 +6,7 @@ function mapStateToProps(state, ownProps) {
   return {
     bidRequested: false, // TODO
     initialValues: {slot: ownProps.slot, amount: state.interaction.bidAmount},
-    bidAmount: state.interaction.bidAmount
+    highestBid: state.slots[ownProps.slot - 1].highestBid
   };
 }
 
