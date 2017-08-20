@@ -57,9 +57,9 @@ export default class BiddingNumPad extends Component {
         <CalculatorButton displayText="0" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 0)} />  
         <CalculatorButton displayText="<" onCalButtonClick={() => this.modifyAmount(CAL_BACK, -1)} />  
   
-        <CalculatorButton className="cal-button-buy" displayText="+5" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, val)} />
-        <CalculatorButton className="cal-button-buy" displayText="+50" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, val)} />
-        <CalculatorButton className="cal-button-sell" displayText="+100" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, val)} />
+        <CalculatorButton className="cal-button-buy" displayText="+5" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 5)} />
+        <CalculatorButton className="cal-button-buy" displayText="+50" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 10)} />
+        <CalculatorButton className="cal-button-sell" displayText="+100" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 100)} />
       </div>
     )
   }
