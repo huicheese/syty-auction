@@ -5,9 +5,6 @@ import {
   SLOT_CLICK, SLOT_EXPAND, BID_REQUESTED,
   LOGIN_EXPAND, LOGIN_SUCCESS
 } from './actions'
-import {
-  CAL_APPEND, CAL_CLEAR, CAL_BACK, CAL_INCREMENT
-} from './components/BiddingNumPad'
 import { reducer as reduxFormReducer } from 'redux-form';
 
 const numSlot = 30

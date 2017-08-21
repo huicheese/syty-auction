@@ -5,8 +5,11 @@ import configureStore from '../configureStore'
 import DashboardRootContainer from './DashboardRootContainer'
 import BidSubmissionRootContainer from './BidSubmissionRootContainer'
 import AdminBidRootContainer from './AdminBidRootContainer'
+import * as Cookies from "js-cookie";
 
-const store = configureStore()
+let curAuth = Cookies.get('sytyAuth')
+debugger
+const store = configureStore({user:{isLoggedIn: curAuth != undefined}})
 
 export default class Root extends Component {
 	render() {
