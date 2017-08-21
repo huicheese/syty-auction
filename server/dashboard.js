@@ -75,7 +75,7 @@ exports.setApp = (app, io) => {
     app.get('/startBot', function (request, response) {
         bot = setInterval(function() {
             io.sockets.emit('data', getRandomUpdates());
-        }, 16);
+        }, 2000);
         response.send();
     });
 
@@ -205,16 +205,21 @@ const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) +
 const nameArray = ["Darwin", "Paris", "Jackie", "Dominick", "Abel", "Nelson", "Jeff", "Ivan", "Gene", "Bill", "William", "Myron", "Clayton", "Bryant", "Johnie", "Graig", "Elliott", "Dante", "Benjamin", "Brant", "Bertram", "Morgan", "Johnny", "Jonathan", "Wilfred", "Robert", "Robin", "Mohammed", "Joey", "Bradly", "Denver", "Elden", "Ryan", "Leigh", "Jc", "Asa", "Hayden", "Darrell", "Von", "Gary", "Augustus", "Alphonso", "Logan", "Leon", "Marquis", "Miguel", "Ignacio", "Don", "Derrick", "Jarod"]
 const getRandomName = () => nameArray[getRandomInt(0,nameArray.length-1)]
 
-const stubSlots = new Array(15).fill().map(
-  (e,i) => getStubSlotUpdate()
-)
+const stubSlots = new Array(30)
 
-function getStubSlotUpdate(index) {
-  return {
-    index: index || getRandomInt(0,24),
-    highestBid: getRandomArbitrary(1, 1000),
-    highestBidder: { firstName: getRandomName() }
+function getStubSlotUpdate(i) {
+  let index = i || getRandomInt(0,29);
+  let cur = stubSlots[index] || {
+    index: index,
+    highestBid: 0
+  };
+  cur.highestBid += getRandomInt(1, 100);
+  if(cur.highestBid > 5000) {
+    stubSlots.forEach(e => e.highestBid = 0);    
   }
+  cur.highestBidder = { firstName: getRandomName() };
+  stubSlots[index] = cur;
+  return cur;
 }
 
 const stubEvents = new Array(29).fill().map(
