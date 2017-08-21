@@ -12,7 +12,7 @@ const numEvents = 35
 const stubSlots = new Array(numSlot).fill().map(
   (e,i) => ({
     index: i,
-    highestBidder: {}
+    highestBidders: {}
   })
 )
 

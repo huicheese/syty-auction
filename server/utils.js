@@ -1,7 +1,7 @@
 var Promise = require('bluebird');
 var crypto = require('crypto');
 var encode = require('hashcode').hashCode;
-var database = require('./database.js');
+var database = require('./database-pg.js');
 
 let uuid = () => randomHex() + '-' + randomHex() + '-' + randomHex() + '-' + randomHex();
 let randomHex = () => crypto.randomBytes(4).toString('hex');
@@ -65,12 +65,7 @@ let createUserIfRequired = userInfoValidationResult => {
         return Promise.resolve(userInfoValidationResult);
 
     return database
-                .createUser(
-                    userInfoValidationResult.userID,
-                    userInfoValidationResult.firstName,
-                    userInfoValidationResult.lastName,
-                    userInfoValidationResult.company,
-                    userInfoValidationResult.table)
+                .createUser(userInfoValidationResult)
                 .then(() => userInfoValidationResult)
                 .catch(err => {
                     userInfoValidationResult.error = 'Failed to create user';

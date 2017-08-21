@@ -1,6 +1,6 @@
 var Promise = require('bluebird');
 var utils = require('./utils.js');
-var database = require('./database.js');
+var database = require('./database-pg.js');
 
 exports.setApp = (app, io) => {
     io.on('connection', socket => {
@@ -93,7 +93,7 @@ let buildSlotInfoSnapshot = () =>
 let buildEventSnapshot = (size) =>
     database
         .getRecentBiddings(size)
-        .map(event => buildEventUpdate(event.BidID, event.UserID, event.Slot, event.Bid));
+        .map(event => buildEventUpdate(event.bidid, event.userid, event.slot, event.bid));
 
 let validateBid = (authValidationResult, request) => {
     let requestContent = {
@@ -123,7 +123,7 @@ let executeBid = (validationResult) => {
 
     validationResult.bidID = utils.uuid();
     return database
-                .submitBid(validationResult.bidID, validationResult.userID, validationResult.slot, validationResult.bid)
+                .submitBid(validationResult)
                 .then(() => validationResult)
                 .catch(err => {
                     validationResult.error = 'Failed to submit';
@@ -156,22 +156,24 @@ let buildUpdate = (bidID, userID, slot, bid) =>
         .join(
             buildSlotInfoUpdate(slot),
             buildEventUpdate(bidID, userID, slot, bid),
-            (slotInfoUpdate, eventUpdate) => ({ slots: [slotInfoUpdate], events: [eventUpdate] })
+            (slotInfoUpdate, eventUpdate) => ({ slots: slotInfoUpdate, events: [eventUpdate] })
         );
 
 let buildSlotInfoUpdate = slot =>
     database
         .getSlotInfo(slot)
-        .then(slotInfo => parseSlotInfo(slotInfo));
+        .map(slotInfo => parseSlotInfo(slotInfo));
 
 let parseSlotInfo = slotInfo => {
-    let index = parseInt(slotInfo.Slot) - 1;
-    if (slotInfo.Bid > 0) {
-        return getUserInfo(slotInfo.UserID)
+    let index = parseInt(slotInfo.slot) - 1;
+    if (slotInfo.bid > 0) {
+        return Promise
+                    .resolve(slotInfo.maxuserids)
+                    .map(userID => getUserInfo(userID))
                     .then(userInfo => ({
                         index: index,
-                        highestBid: slotInfo.Bid,
-                        highestBidder: userInfo
+                        highestBid: slotInfo.bid,
+                        highestBidders: userInfo
                     }));
     }
     return { index: index };
@@ -191,10 +193,10 @@ let getUserInfo = userID =>
         .getUser(userID)
         .then(user => ({
             userID: userID,
-            firstName: user.FirstName,
-            lastName: user.LastName,
-            company: user.Company,
-            table: user.TableNumber
+            firstName: user.firstname,
+            lastName: user.lastname,
+            company: user.company,
+            table: user.tablenumber
         }));
 
 /* STUB */
@@ -213,7 +215,7 @@ function getStubSlotUpdate(index) {
   return {
     index: index || getRandomInt(0,24),
     highestBid: getRandomArbitrary(1, 1000),
-    highestBidder: { firstName: getRandomName() }
+    highestBidders: { firstName: getRandomName() }
   }
 }
 
