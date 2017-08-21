@@ -14,7 +14,7 @@ exports.setApp = app => {
     });
 
     app.get('/logout', (request, response) => {
-        response.cookie('sytyAuth', '', { expires : new Date() });
+        response.clearCookie('sytyAuth');
         response.status(200).send('Logout successful');
     })
 };

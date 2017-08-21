@@ -8,7 +8,6 @@ import AdminBidRootContainer from './AdminBidRootContainer'
 import * as Cookies from "js-cookie";
 
 let curAuth = Cookies.get('sytyAuth')
-debugger
 const store = configureStore({user:{isLoggedIn: curAuth != undefined}})
 
 export default class Root extends Component {
