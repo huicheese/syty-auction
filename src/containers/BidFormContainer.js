@@ -8,7 +8,7 @@ function mapStateToProps(state, ownProps) {
     initialValues: {
       slot: ownProps.slot, 
       // amount: state.interaction.bidAmount
-      amount: state.slots[ownProps.slot - 1].highestBid
+      amount: state.slots[ownProps.slot - 1].highestBid || 0
     },
     highestBid: state.slots[ownProps.slot - 1].highestBid
   };
