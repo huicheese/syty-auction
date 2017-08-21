@@ -61,6 +61,7 @@ const activityEvents = (state = [], action) => {
 const interaction = (state = {
   slotRequested: null,
   slotExpanded: null,
+  bidAmount: 0,
   loginExpanded: false
 }, action) => {
   switch(action.type) {
@@ -94,8 +95,7 @@ const interaction = (state = {
       // empty
   }
   return state
-} 
-
+}
 
 const rootReducer = combineReducers({
   user,

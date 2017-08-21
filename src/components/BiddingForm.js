@@ -1,22 +1,25 @@
 import React from 'react';
-import { Form, Field, reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
+import BiddingNumPad from './BiddingNumPad'
 
 const BiddingForm = props => {
-  const { handleSubmit, pristine, reset, bidRequested } = props;
+  const { handleSubmit, pristine, reset, bidRequested, highestBid } = props;
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Amount</label>
+        {highestBid && <div>Current Highest Bid: S$ {highestBid}</div>}
+        <br/>
         <div>
-          <Field name="amount" component="input" type="number" placeholder="Please input your bid"/>
+          <Field name="amount" component={BiddingNumPad} />
         </div>
       </div>
-      <div>
+      <div className="interaction-footer">
         <button type="submit" disabled={pristine || bidRequested}>Submit</button>
       </div>
     </form>
     );
 };
+
 
 export default reduxForm({
   form: 'bidding',
