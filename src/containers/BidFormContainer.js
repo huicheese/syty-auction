@@ -5,7 +5,11 @@ import { fetchBid } from '../actions'
 function mapStateToProps(state, ownProps) {
   return {
     bidRequested: false, // TODO
-    initialValues: {slot: ownProps.slot, amount: state.interaction.bidAmount},
+    initialValues: {
+      slot: ownProps.slot, 
+      // amount: state.interaction.bidAmount
+      amount: state.slots[ownProps.slot - 1].highestBid
+    },
     highestBid: state.slots[ownProps.slot - 1].highestBid
   };
 }
