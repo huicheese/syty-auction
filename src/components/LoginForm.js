@@ -26,7 +26,7 @@ const LoginForm = props => {
       <div>
         <label htmlFor="firstName">Table</label>
         <div>
-          <Field name="table" component="input" type="text" placeholder="Table Number"/>
+          <Field name="table" component="input" type="number" step={1} pattern={"\\d*"} placeholder="Table Number"/>
         </div>
       </div>
       <div className="interaction-footer">
