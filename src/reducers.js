@@ -33,8 +33,11 @@ const slots = (state = stubSlots || [], action) => {
     switch (action.type) {
       case WS_MESSAGE_RECEIVED:
         if(action.slots && action.slots.length) {
-          let newState = state.slice()
-          action.slots.forEach(s => newState[s.index] = s)
+          let newState = state.map(i => Object.assign({}, i, {hasChange: false}))
+          action.slots.forEach(s => {
+            s.hasChange = true
+            newState[s.index] = s
+          })
           return newState
         }
       default:
