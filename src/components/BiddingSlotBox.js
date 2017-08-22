@@ -8,13 +8,12 @@ const BiddingSlotBox = (props) => {
 			<div className="row slot-row">
 				{
 					slots.map((entry, key) =>
-      					<BiddingSlot  
-					    		key={entry.index}
-									index={entry.index}
-									bid={entry.highestBid}
-									hasChange={entry.hasChange || false}
-									bidder={entry.highestBidder.firstName} 
-									onSlotClick={(e)=> onSlotClick(e, entry.index + 1, entry.highestBid)} />
+							<BiddingSlot key={entry.index} 
+							index={entry.index} 
+							bid={entry.highestBid}
+							hasChange={entry.hasChange || false}
+							bidder={entry.highestBidder.firstName} 
+							onSlotClick={(e)=> onSlotClick(e, entry.index + 1, entry.highestBid)} />
 						)
 				}
 			</div>
