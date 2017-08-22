@@ -75,7 +75,7 @@ exports.setApp = (app, io) => {
     app.get('/startBot', function (request, response) {
         bot = setInterval(function() {
             io.sockets.emit('data', getRandomUpdates());
-        }, 2000);
+        }, request.query.sec);
         response.send();
     });
 
