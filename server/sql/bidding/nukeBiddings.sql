@@ -1,1 +1,1 @@
-DELETE FROM Biddings
+DELETE FROM biddings

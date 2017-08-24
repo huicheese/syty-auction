@@ -1,3 +1,3 @@
-SELECT UserID, FirstName, LastName, Company, TableNumber
-FROM Users
-WHERE UserID = ${userID}
+SELECT user_id, first_name, last_name, company, table_number
+FROM users
+WHERE user_id = ${userID}

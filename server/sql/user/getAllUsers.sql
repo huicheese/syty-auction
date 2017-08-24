@@ -1,2 +1,2 @@
-SELECT UserID, FirstName, LastName, Company, TableNumber
-FROM Users
+SELECT user_id, first_name, last_name, company, table_number
+FROM users

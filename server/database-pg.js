@@ -47,7 +47,7 @@ let getRecentBiddings = size => db.any(sqlGetRecentBiddings, { size: size });
 let submitBid = bidInfo => db.none(sqlSubmitBid, bidInfo);
 let nukeBiddings = () => db.none(sqlDeleteAllBiddings);
 
-let getSlotInfo = slot => db.any(sqlGetSlotInfo, { slot: slot });
+let getSlotInfo = slot => db.oneOrNone(sqlGetSlotInfo, { slot: slot });
 let getAllSlotsInfo = () => db.any(sqlGetAllSlotsInfo);
 
 module.exports = {

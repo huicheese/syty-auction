@@ -1,2 +1,2 @@
-INSERT INTO Biddings(BidID, UserID, Slot, Bid)
+INSERT INTO biddings(bid_id, user_id, slot, bid)
 VALUES(${bidID}, ${userID}, ${slot}, ${bid})

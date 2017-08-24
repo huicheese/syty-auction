@@ -1,7 +1,7 @@
-CREATE TABLE IF NOT EXISTS Users (
-	UserID TEXT NOT NULL PRIMARY KEY,
-	FirstName TEXT NOT NULL,
-	LastName TEXT NOT NULL,
-	Company TEXT,
-	TableNumber INTEGER NOT NULL
+CREATE TABLE IF NOT EXISTS users (
+	user_id TEXT NOT NULL PRIMARY KEY,
+	first_name TEXT NOT NULL,
+	last_name TEXT NOT NULL,
+	company TEXT,
+	table_number INTEGER NOT NULL
 )

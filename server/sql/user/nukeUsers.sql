@@ -1,1 +1,1 @@
-DELETE FROM Users
+DELETE FROM users

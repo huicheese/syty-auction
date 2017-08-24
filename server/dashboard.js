@@ -94,7 +94,7 @@ let buildSlotInfoSnapshot = () =>
 let buildEventSnapshot = (size) =>
     database
         .getRecentBiddings(size)
-        .map(event => buildEventUpdate(event.bidid, event.userid, event.slot, event.bid));
+        .map(event => buildEventUpdate(event.bid_id, event.user_id, event.slot, event.bid));
 
 let validateBid = (authValidationResult, request) => {
     let requestContent = {
@@ -157,19 +157,19 @@ let buildUpdate = (bidID, userID, slot, bid) =>
         .join(
             buildSlotInfoUpdate(slot),
             buildEventUpdate(bidID, userID, slot, bid),
-            (slotInfoUpdate, eventUpdate) => ({ slots: slotInfoUpdate, events: [eventUpdate] })
+            (slotInfoUpdate, eventUpdate) => ({ slots: [slotInfoUpdate], events: [eventUpdate] })
         );
 
 let buildSlotInfoUpdate = slot =>
     database
         .getSlotInfo(slot)
-        .map(slotInfo => parseSlotInfo(slotInfo));
+        .then(slotInfo => parseSlotInfo(slotInfo));
 
 let parseSlotInfo = slotInfo => {
     let index = parseInt(slotInfo.slot) - 1;
     if (slotInfo.bid > 0) {
         return Promise
-                    .resolve(slotInfo.maxuserids)
+                    .resolve(slotInfo.max_user_ids.split(','))
                     .map(userID => getUserInfo(userID))
                     .then(userInfo => ({
                         index: index,
@@ -194,10 +194,10 @@ let getUserInfo = userID =>
         .getUser(userID)
         .then(user => ({
             userID: userID,
-            firstName: user.firstname,
-            lastName: user.lastname,
+            firstName: user.first_name,
+            lastName: user.last_name,
             company: user.company,
-            table: user.tablenumber
+            table: user.table_number
         }));
 
 /* STUB */
