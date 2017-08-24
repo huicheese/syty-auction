@@ -11,7 +11,7 @@ const BiddingSlotBox = (props) => {
 							<BiddingSlot key={entry.index} 
 							index={entry.index} 
 							bid={entry.highestBid}
-							bidder={entry.highestBidders && entry.highestBidders.length && entry.highestBidders[0].firstName} 
+							bidders={entry.highestBidders} 
 							hasChange={entry.hasChange || false}
 							onSlotClick={(e)=> onSlotClick(e, entry.index + 1, entry.highestBid)} />
 						)

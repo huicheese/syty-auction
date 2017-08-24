@@ -1,10 +1,8 @@
 import React from 'react'
 import AnimateOnChange from 'react-animate-on-change'
 
-const BiddingSlot = ({index, hasChange, bid, bidder, onSlotClick}) => {
+const BiddingSlot = ({index, hasChange, bid, bidders, onSlotClick}) => {
   let animateStyle = bid != undefined ? {opacity: 0.8} : {}
-
-  let bidders = [bidder];
 	return (
 
 			<div className="slot-container slot-mask" onClick={onSlotClick}>
@@ -16,7 +14,7 @@ const BiddingSlot = ({index, hasChange, bid, bidder, onSlotClick}) => {
 
           {bidders &&
             <div className="slot-bidder">
-              {bidders.length <= 2 && bidders.map((e,i) => <div key={e}>{e}</div>)}
+              {bidders.length <= 2 && bidders.map((e,i) => <div key={e.userID}>{e.firstName}</div>)}
               {bidders.length >= 3 && <div style={{fontStyle:"italic"}}>{bidders.length} Bidders</div>}
             </div>
           }
