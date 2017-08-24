@@ -253,11 +253,15 @@ button, div {
   width: 100%;
   font-size: 1.5em;
   text-align: center;
-  margin: 1.5em 0;
+  margin: 1.5em 0 0.5em 0;
   background: #eaeaea;
 }
 .slot-bid span {
   color: #a20a0a;
+}
+.slot-bidder {
+  font-size: 1.4em;
+  text-align: center;
 }
 .slot-placeholder img {
   max-width: 60%;
