@@ -27,7 +27,7 @@ let sqlDeleteAllBiddings = sql('bidding/nukeBiddings.sql');
 let sqlGetSlotInfo = sql('summary/getSlotInfo.sql');
 let sqlGetAllSlotsInfo = sql('summary/getAllSlotsInfo.sql');
 
-let initialize = () =>
+exports.initialize = () =>
 	Promise
 		.resolve()
 		.then(() => console.log("Initializing database..."))
@@ -38,30 +38,14 @@ let initialize = () =>
 		.then(() => console.log("Database initialization completed"))
 		.catch(err => console.error(err.stack));
 
-let getUser = userID => db.one(sqlGetUser, { userID: userID });
-let getAllUsers = () => db.any(sqlGetAllUsers);
-let createUser = userInfo => db.none(sqlCreateUser, userInfo);
-let nukeUsers = () => db.none(sqlDeleteAllUsers);
+exports.getUser = userID => db.one(sqlGetUser, { userID: userID });
+exports.getAllUsers = () => db.any(sqlGetAllUsers);
+exports.createUser = userInfo => db.none(sqlCreateUser, userInfo);
+exports.nukeUsers = () => db.none(sqlDeleteAllUsers);
 
-let getRecentBiddings = size => db.any(sqlGetRecentBiddings, { size: size });
-let submitBid = bidInfo => db.none(sqlSubmitBid, bidInfo);
-let nukeBiddings = () => db.none(sqlDeleteAllBiddings);
+exports.getRecentBiddings = size => db.any(sqlGetRecentBiddings, { size: size });
+exports.submitBid = bidInfo => db.none(sqlSubmitBid, bidInfo);
+exports.nukeBiddings = () => db.none(sqlDeleteAllBiddings);
 
-let getSlotInfo = slot => db.oneOrNone(sqlGetSlotInfo, { slot: slot });
-let getAllSlotsInfo = () => db.any(sqlGetAllSlotsInfo);
-
-module.exports = {
-	initialize: initialize,
-
-	getUser: getUser,
-	getAllUsers: getAllUsers,
-	createUser: createUser,
-	nukeUsers: nukeUsers,
-
-	getRecentBiddings: getRecentBiddings,
-	submitBid: submitBid,
-	nukeBiddings: nukeBiddings,
-
-	getSlotInfo: getSlotInfo,
-	getAllSlotsInfo: getAllSlotsInfo
-};
+exports.getSlotInfo = slot => db.oneOrNone(sqlGetSlotInfo, { slot: slot });
+exports.getAllSlotsInfo = () => db.any(sqlGetAllSlotsInfo);

@@ -27,7 +27,7 @@ if (isDevelopment) {
 }
 app.use(express.static(path.join(__dirname, '/www')));
 
-require('./server/database-pg.js').initialize();
+require('./server/database.js').initialize();
 require('./server/properties.js').setApp(app);
 
 const server = app.listen(process.env.PORT || app.locals.port, function() {

@@ -3,7 +3,7 @@ var Promise = require('bluebird');
 var db = require('sqlite')
 var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, allUsersQueryStmt, recentBiddingsQueryStmt, nukeBiddingsStmt, nukeUsersStmt;
 
-let initialize = () =>
+exports.initialize = () =>
 	Promise
 		.resolve()
 		.then(() => db.open(path.join(__dirname, '..', 'database.db'), { Promise }))
@@ -93,11 +93,11 @@ let initialize = () =>
 		.then(() => console.log("Database initialization completed"))
 		.catch(err => console.error(err.stack));
 
-let getUser = userID =>
+exports.getUser = userID =>
 	Promise.resolve(userQueryStmt.get(userID));
-let getAllUsers = () =>
+exports.getAllUsers = () =>
 	Promise.resolve(allUsersQueryStmt.all());
-let createUser = userInfo =>
+exports.createUser = userInfo =>
 	Promise.resolve(
 		createUserStmt.run(
 			userInfo.userID,
@@ -105,38 +105,22 @@ let createUser = userInfo =>
 			userInfo.lastName,
 			userInfo.company,
 			userInfo.table));
-let nukeUsers = () =>
+exports.nukeUsers = () =>
 	Promise.resolve(nukeUsersStmt.run());
 
-let getRecentBiddings = size =>
+exports.getRecentBiddings = size =>
 	Promise.resolve(recentBiddingsQueryStmt.all(size));
-let submitBid = bidInfo =>
+exports.submitBid = bidInfo =>
 	Promise.resolve(
 		submitBidStmt.run(
 			bidInfo.bidID,
 			bidInfo.userID,
 			bidInfo.slot,
 			bidInfo.bid));
-let nukeBiddings = () =>
+exports.nukeBiddings = () =>
 	Promise.resolve(nukeBiddingsStmt.run());
 
-let getSlotInfo = slot =>
+exports.getSlotInfo = slot =>
 	Promise.resolve(slotQueryStmt.get(slot));
-let getAllSlotsInfo = () =>
+exports.getAllSlotsInfo = () =>
 	Promise.resolve(allSlotsQueryStmt.all());
-
-module.exports = {
-	initialize: initialize,
-
-	getUser: getUser,
-	getAllUsers: getAllUsers,
-	createUser: createUser,
-	nukeUsers: nukeUsers,
-
-	getRecentBiddings: getRecentBiddings,
-	submitBid: submitBid,
-	nukeBiddings: nukeBiddings,
-
-	getSlotInfo: getSlotInfo,
-	getAllSlotsInfo: getAllSlotsInfo
-};

@@ -1,6 +1,6 @@
 var Promise = require('bluebird');
 var utils = require('./utils.js');
-var database = require('./database-pg.js');
+var database = require('./database.js');
 
 exports.setApp = (app, io) => {
     io.on('connection', socket => {

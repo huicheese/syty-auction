@@ -1,7 +1,7 @@
 var Promise = require('bluebird');
 var crypto = require('crypto');
 var encode = require('hashcode').hashCode;
-var database = require('./database-pg.js');
+var database = require('./database.js');
 
 let uuid = () => randomHex() + '-' + randomHex() + '-' + randomHex() + '-' + randomHex();
 let randomHex = () => crypto.randomBytes(4).toString('hex');

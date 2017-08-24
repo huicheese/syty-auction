@@ -1,5 +1,5 @@
 var utils = require('./utils.js');
-var database = require('./database-pg.js');
+var database = require('./database.js');
 
 exports.setApp = app => {
     app.post('/login', (request, response) => {
