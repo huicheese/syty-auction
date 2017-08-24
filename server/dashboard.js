@@ -73,6 +73,7 @@ exports.setApp = (app, io) => {
 
     let bot;
     app.get('/startBot', function (request, response) {
+        if(bot) clearInterval(bot);
         bot = setInterval(function() {
             io.sockets.emit('data', getRandomUpdates());
         }, request.query.sec);
