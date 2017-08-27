@@ -1,7 +1,7 @@
 var path = require('path');
 var Promise = require('bluebird');
 var db = require('sqlite')
-var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, allUsersQueryStmt, recentBiddingsQueryStmt, nukeBiddingsStmt, nukeUsersStmt;
+var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, allUsersQueryStmt, recentBiddingsQueryStmt, nukeBiddingsStmt, nukeUsersStmt, toggleUserStmt;
 
 exports.initialize = () =>
 	Promise
@@ -14,7 +14,8 @@ exports.initialize = () =>
 				first_name TEXT NOT NULL,
 				last_name TEXT NOT NULL,
 				company TEXT,
-				table_number INTEGER NOT NULL
+				table_number INTEGER NOT NULL,
+				permission INTERGER NOT NULL
 			)`
 		))
 		.then(() => console.log("Created table Users"))
@@ -28,7 +29,7 @@ exports.initialize = () =>
 		))
 		.then(() => console.log("Created table Biddings"))
 		.then(() => {
-			db.prepare('INSERT OR IGNORE INTO users VALUES(?, ?, ?, ?, ?)')
+			db.prepare('INSERT OR IGNORE INTO users VALUES(?, ?, ?, ?, ?, 1)')
 			.then(stmt => createUserStmt = stmt);
 
 			db.prepare('INSERT INTO biddings VALUES(?, ?, ?, ?)')
@@ -58,14 +59,14 @@ exports.initialize = () =>
 			.then(stmt => allSlotsQueryStmt = stmt);
 
 			db.prepare(`
-				SELECT user_id, first_name, last_name, company, table_number
+				SELECT user_id, first_name, last_name, company, table_number, permission
 				FROM users
 				WHERE user_id = ?
 				`)
 			.then(stmt => userQueryStmt = stmt);
 
 			db.prepare(`
-				SELECT user_id, first_name, last_name, company, table_number
+				SELECT user_id, first_name, last_name, company, table_number, permission
 				FROM users
 				`)
 			.then(stmt => allUsersQueryStmt = stmt);
@@ -89,6 +90,13 @@ exports.initialize = () =>
 				VACCUM;
 				`)
 			.then(stmt => nukeUsersStmt = stmt);
+
+			db.prepare(`
+				UPDATE users
+				SET permission = 1 - permission
+				WHERE user_id = ?
+				`)
+			.then(stmt => toggleUserStmt = stmt);
 		})
 		.then(() => console.log("Database initialization completed"))
 		.catch(err => console.error(err.stack));
@@ -105,6 +113,8 @@ exports.createUser = userInfo =>
 			userInfo.lastName,
 			userInfo.company,
 			userInfo.table));
+exports.toggleUserPermission = userID =>
+	Promise.resolve(toggleUserStmt.run(userID));
 exports.nukeUsers = () =>
 	Promise.resolve(nukeUsersStmt.run());
 

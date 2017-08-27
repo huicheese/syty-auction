@@ -10,18 +10,15 @@ let checkAuth = authCookie => {
     if (typeof authCookie === 'undefined')
         return Promise.resolve({ userID: authCookie, isValid: false });
 
-    return verifyIfUserExists(authCookie)
+    return database
+            .getUser(authCookie)
+            .then(user => typeof user !== 'undefined')
             .then(isValid => ({ userID: authCookie, isValid: isValid }))
             .catch(error => {
                 console.error('Failed to checkAuth for User[%s]', authCookie, error.stack);
                 return { userID: authCookie, isValid: false };
             });
 }
-
-let verifyIfUserExists = userID =>
-    database
-        .getUser(userID)
-        .then(user => typeof user !== 'undefined');
 
 let validateUserInfo = userInfo => {
 	let content = {

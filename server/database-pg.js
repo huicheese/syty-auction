@@ -17,6 +17,7 @@ let sqlCreateTableUsers = sql('user/createTableUsers.sql');
 let sqlGetUser = sql('user/getUser.sql');
 let sqlGetAllUsers = sql('user/getAllUsers.sql');
 let sqlCreateUser = sql('user/createUser.sql');
+let sqlToggleUserPermission = sql('user/toggleUserPermission.sql');
 let sqlDeleteAllUsers = sql('user/nukeUsers.sql');
 
 let sqlCreateTableBiddings = sql('bidding/createTableBiddings.sql');
@@ -41,6 +42,7 @@ exports.initialize = () =>
 exports.getUser = userID => db.one(sqlGetUser, { userID: userID });
 exports.getAllUsers = () => db.any(sqlGetAllUsers);
 exports.createUser = userInfo => db.none(sqlCreateUser, userInfo);
+exports.toggleUserPermission = userID => db.none(sqlToggleUserPermission, { userID: userID });
 exports.nukeUsers = () => db.none(sqlDeleteAllUsers);
 
 exports.getRecentBiddings = size => db.any(sqlGetRecentBiddings, { size: size });

@@ -6,6 +6,7 @@ module.exports = {
 	getUser: database.getUser,
 	getAllUsers: database.getAllUsers,
 	createUser: database.createUser,
+	toggleUserPermission: database.toggleUserPermission,
 	nukeUsers: database.nukeUsers,
 
 	getRecentBiddings: database.getRecentBiddings,

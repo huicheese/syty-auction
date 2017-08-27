@@ -2,6 +2,8 @@ var Promise = require('bluebird');
 var utils = require('./utils.js');
 var database = require('./database.js');
 
+let allowBiddings = true;
+
 exports.setApp = (app, io) => {
     io.on('connection', socket => {
         Promise
@@ -14,8 +16,14 @@ exports.setApp = (app, io) => {
     });
 
     app.post('/submit', (request, response) => {
+        if (!allowBiddings) {
+            response.status(403).send('Bidding is not allowed at the moment');
+            return;
+        }
+
         utils
             .checkAuth(request.cookies.sytyAuth)
+            .then(authValidationResult => validateUserPermission(authValidationResult))
             .then(authValidationResult => validateBid(authValidationResult, request))
             .then(bidValidationResult => executeBid(bidValidationResult))
             .then(submissionResult => respondBiddingResult(submissionResult, response))
@@ -30,6 +38,22 @@ exports.setApp = (app, io) => {
             .then(bidValidationResult => executeBid(bidValidationResult))
             .then(submissionResult => respondBiddingResult(submissionResult, response))
             .then(submissionResult => executeUpdate(submissionResult, io));
+    });
+
+    app.get('/areyousure/toggleBiddingPermission', (request, response) => {
+        allowBiddings = !allowBiddings;
+        response.status(200).send('Toggled bidding permission to ' + allowBiddings);
+    });
+
+    app.post('/areyousure/toggleUser', (request, response) => {
+        Promise
+            .resolve(request.body.userID)
+            .then(userID => database.toggleUserPermission(userID))
+            .then(() => response.status(200).send('Toggled bidding permission for User'))
+            .catch(err => {
+                console.error('Failed to toggle User permission', err);
+                response.status(400).send('Failed to toggle User permission');
+            })
     });
 
     app.get('/areyousure/nukeBiddings', (request, response) => {
@@ -95,6 +119,21 @@ let buildEventSnapshot = (size) =>
     database
         .getRecentBiddings(size)
         .map(event => buildEventUpdate(event.bid_id, event.user_id, event.slot, event.bid));
+
+let validateUserPermission = (authValidationResult) => {
+    if (!authValidationResult.isValid)
+        return authValidationResult;
+
+    return database
+                .getUser(authValidationResult.userID)
+                .then(user => {
+                    if (user.permission != 1) {
+                        authValidationResult.isValid = false;
+                        authValidationResult.error = 'Not allowed to bid';
+                    }
+                    return authValidationResult;
+                });
+};
 
 let validateBid = (authValidationResult, request) => {
     let requestContent = {
