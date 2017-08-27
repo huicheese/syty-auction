@@ -37,8 +37,8 @@ const server = app.listen(process.env.PORT || app.locals.port, function() {
 });
 
 var io = require('socket.io').listen(server, {
-    pingInterval: 20000,
-    pingTimeout: 30000,
+    pingInterval: 10000,
+    pingTimeout: 25000,
 });
 
 require('./server/login.js').setApp(app);
