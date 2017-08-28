@@ -196,7 +196,7 @@ let buildUpdate = (bidID, userID, slot, bid) =>
         .join(
             buildSlotInfoUpdate(slot),
             buildEventUpdate(bidID, userID, slot, bid),
-            (slotInfoUpdate, eventUpdate) => ({ slots: [slotInfoUpdate], events: [eventUpdate] })
+            (slotInfoUpdate, eventUpdate) => ({ slots: [slotInfoUpdate], events: [eventUpdate], isLiveUpdate: true })
         );
 
 let buildSlotInfoUpdate = slot =>

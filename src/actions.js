@@ -46,7 +46,8 @@ export const messageReceived = (msg) => {
   return {
     type: WS_MESSAGE_RECEIVED,
     events: msg.events,
-    slots: msg.slots
+    slots: msg.slots,
+    isLiveUpdate: msg.isLiveUpdate
   }
 }
 

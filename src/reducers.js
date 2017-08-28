@@ -34,10 +34,10 @@ const slots = (state = stubSlots || [], action) => {
       case WS_MESSAGE_RECEIVED:
         if(action.slots && action.slots.length) {
           let newState = state.map(i => Object.assign({}, i, {hasChange: false}))
-          action.slots.forEach(s => {
-            s.hasChange = true
-            newState[s.index] = s
-          })
+          action.slots.forEach(s => newState[s.index] = s)
+          if(action.isLiveUpdate) {
+            action.slots.forEach(s => s.hasChange = true)
+          }
           return newState
         }
       default:
