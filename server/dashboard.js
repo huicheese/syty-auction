@@ -46,9 +46,8 @@ exports.setApp = (app, io) => {
     });
 
     app.post('/areyousure/toggleUser', (request, response) => {
-        Promise
-            .resolve(request.body.userID)
-            .then(userID => database.toggleUserPermission(userID))
+        database
+            .toggleUserPermission(request.body.userID)
             .then(() => response.status(200).send('Toggled bidding permission for User'))
             .catch(err => {
                 console.error('Failed to toggle User permission', err);
@@ -67,9 +66,8 @@ exports.setApp = (app, io) => {
     });
 
     app.post('/areyousure/deleteBid', (request, response) => {
-        Promise
-            .resolve(request.body.bidID)
-            .then(bidID => database.deleteBid(bidID))
+        database
+            .deleteBid(request.body.bidID, request.body.slot)
             .then(() => response.status(200).send('Single bid deleted successfully'))
             .catch(err => {
                 console.error('Failed to delete single bid', err);

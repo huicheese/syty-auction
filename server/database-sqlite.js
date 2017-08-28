@@ -100,7 +100,7 @@ exports.initialize = () =>
 
 			db.prepare(`
 				DELETE FROM biddings
-				WHERE bid_id = ?
+				WHERE bid_id = ? AND slot = ?
 				`)
 			.then(stmt => deleteBidStmt = stmt);
 		})
@@ -133,8 +133,8 @@ exports.submitBid = bidInfo =>
 			bidInfo.userID,
 			bidInfo.slot,
 			bidInfo.bid));
-exports.deleteBid = bidID =>
-	Promise.resolve(deleteBidStmt.run(bidID));
+exports.deleteBid = (bidID, slot) =>
+	Promise.resolve(deleteBidStmt.run(bidID, slot));
 exports.nukeBiddings = () =>
 	Promise.resolve(nukeBiddingsStmt.run());
 

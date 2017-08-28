@@ -48,7 +48,7 @@ exports.nukeUsers = () => db.none(sqlDeleteAllUsers);
 
 exports.getRecentBiddings = size => db.any(sqlGetRecentBiddings, { size: size });
 exports.submitBid = bidInfo => db.none(sqlSubmitBid, bidInfo);
-exports.deleteBid = bidID => db.none(sqlDeleteBid, { bidID: bidID })
+exports.deleteBid = (bidID, slot) => db.none(sqlDeleteBid, { bidID: bidID, slot: slot })
 exports.nukeBiddings = () => db.none(sqlDeleteAllBiddings);
 
 exports.getSlotInfo = slot => db.oneOrNone(sqlGetSlotInfo, { slot: slot });
