@@ -11,6 +11,7 @@ module.exports = {
 
 	getRecentBiddings: database.getRecentBiddings,
 	submitBid: database.submitBid,
+	deleteBid: database.deleteBid,
 	nukeBiddings: database.nukeBiddings,
 
 	getSlotInfo: database.getSlotInfo,

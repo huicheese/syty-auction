@@ -23,6 +23,7 @@ let sqlDeleteAllUsers = sql('user/nukeUsers.sql');
 let sqlCreateTableBiddings = sql('bidding/createTableBiddings.sql');
 let sqlGetRecentBiddings = sql('bidding/getRecentBiddings.sql');
 let sqlSubmitBid = sql('bidding/submitBid.sql');
+let sqlDeleteBid = sql('bidding/deleteBid.sql');
 let sqlDeleteAllBiddings = sql('bidding/nukeBiddings.sql');
 
 let sqlGetSlotInfo = sql('summary/getSlotInfo.sql');
@@ -47,6 +48,7 @@ exports.nukeUsers = () => db.none(sqlDeleteAllUsers);
 
 exports.getRecentBiddings = size => db.any(sqlGetRecentBiddings, { size: size });
 exports.submitBid = bidInfo => db.none(sqlSubmitBid, bidInfo);
+exports.deleteBid = bidID => db.none(sqlDeleteBid, { bidID: bidID })
 exports.nukeBiddings = () => db.none(sqlDeleteAllBiddings);
 
 exports.getSlotInfo = slot => db.oneOrNone(sqlGetSlotInfo, { slot: slot });

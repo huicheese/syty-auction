@@ -1,7 +1,7 @@
 var path = require('path');
 var Promise = require('bluebird');
 var db = require('sqlite')
-var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, allUsersQueryStmt, recentBiddingsQueryStmt, nukeBiddingsStmt, nukeUsersStmt, toggleUserStmt;
+var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, allUsersQueryStmt, recentBiddingsQueryStmt, nukeBiddingsStmt, nukeUsersStmt, toggleUserStmt, deleteBidStmt;
 
 exports.initialize = () =>
 	Promise
@@ -97,6 +97,12 @@ exports.initialize = () =>
 				WHERE user_id = ?
 				`)
 			.then(stmt => toggleUserStmt = stmt);
+
+			db.prepare(`
+				DELETE FROM biddings
+				WHERE bid_id = ?
+				`)
+			.then(stmt => deleteBidStmt = stmt);
 		})
 		.then(() => console.log("Database initialization completed"))
 		.catch(err => console.error(err.stack));
@@ -127,6 +133,8 @@ exports.submitBid = bidInfo =>
 			bidInfo.userID,
 			bidInfo.slot,
 			bidInfo.bid));
+exports.deleteBid = bidID =>
+	Promise.resolve(deleteBidStmt.run(bidID));
 exports.nukeBiddings = () =>
 	Promise.resolve(nukeBiddingsStmt.run());
 

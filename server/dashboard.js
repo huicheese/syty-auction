@@ -53,16 +53,6 @@ exports.setApp = (app, io) => {
             .catch(err => {
                 console.error('Failed to toggle User permission', err);
                 response.status(400).send('Failed to toggle User permission');
-            })
-    });
-
-    app.get('/areyousure/nukeBiddings', (request, response) => {
-        database
-            .nukeBiddings()
-            .then(() => response.status(200).send('Cleaned up all Biddings history'))
-            .catch(err => {
-                console.error('Failed to nuke Biddings history', err.stack);
-                response.status(400).send('Failed to clean up Biddings history');
             });
     });
 
@@ -73,6 +63,33 @@ exports.setApp = (app, io) => {
             .catch(err => {
                 console.error('Failed to nuke Users', err.stack);
                 response.status(400).send('Failed to clean up Users');
+            });
+    });
+
+    app.post('/areyousure/deleteBid', (request, response) => {
+        Promise
+            .resolve(request.body.bidID)
+            .then(bidID => database.deleteBid(bidID))
+            .then(() => response.status(200).send('Single bid deleted successfully'))
+            .catch(err => {
+                console.error('Failed to delete single bid', err);
+                response.status(400).send('Failed to delete single bid');
+            })
+            .finally(() => {
+                buildSlotInfoUpdate(request.body.slot)
+                    .then(slotInfoUpdate => ({ slots: [slotInfoUpdate], events: [], isLiveUpdate: true }))
+                    .then(updateJson => JSON.stringify(updateJson))
+                    .then(update => io.sockets.emit('data', update));
+            });
+    });
+
+    app.get('/areyousure/nukeBiddings', (request, response) => {
+        database
+            .nukeBiddings()
+            .then(() => response.status(200).send('Cleaned up all Biddings history'))
+            .catch(err => {
+                console.error('Failed to nuke Biddings history', err.stack);
+                response.status(400).send('Failed to clean up Biddings history');
             });
     });
 
