@@ -10,8 +10,17 @@ const BiddingSlot = ({index, hasChange, bid, bidders, onSlotClick}) => {
         <div className="slot-corner" />
           <div className="slot-index">{index + 1}</div>
           {bid && 
-            <div className="slot-bid"><span>$ </span><span>{Intl.NumberFormat().format(bid || 0)}</span></div>}
-
+            <div className="slot-bid">
+            <AnimateOnChange 
+              baseClassName="dummy"
+              animationClassName="shining"
+              animate={hasChange} >
+              $ {Intl.NumberFormat().format(bid || 0)}
+              </AnimateOnChange>
+            </div>}
+          {!bid && 
+            <div className="bid-me linear-wipe">Bid Me!</div>
+          }
           {bidders &&
             <div className="slot-bidder">
               {bidders.length <= 2 && bidders.map((e,i) => <div key={e.userID}>{e.firstName}</div>)}

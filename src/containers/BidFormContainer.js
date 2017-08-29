@@ -7,8 +7,8 @@ function mapStateToProps(state, ownProps) {
     bidRequested: false, // TODO
     initialValues: {
       slot: ownProps.slot, 
-      amount: 0
-      // amount: state.slots[ownProps.slot - 1].highestBid || 0
+      // amount: 0
+      amount: state.slots[ownProps.slot - 1].highestBid || 0
     },
     highestBid: state.slots[ownProps.slot - 1].highestBid
   };

@@ -11,20 +11,21 @@ class BidSubmissionRoot extends React.Component {
 	}
 
 	render() {
+		const {requireLogin, slotRequested, loginExpanded, isLoggedIn} = this.props;
 		return (
 			<div className="container">
-				{!this.props.isLoggedIn && 
-					<div className="login-required-mask" onClick={this.props.requireLogin}></div>
+				{!isLoggedIn && 
+					<div className="login-required-mask" onClick={requireLogin}></div>
 				}
-				{this.props.loginExpanded &&
+				{loginExpanded &&
 					<InteractionBox 
 						title="First Time Login"
 						bodyComponent={<LoginFormContainer />} />
 				}
-				{this.props.slotRequested &&
+				{slotRequested &&
 					<InteractionBox 
-						title={"Slot " + this.props.slotRequested}
-						bodyComponent={<BidFormContainer slot={this.props.slotRequested}/>} />
+						title={"Slot " + slotRequested}
+						bodyComponent={<BidFormContainer slot={slotRequested}/>} />
 				}
 				<div className="c8 row">
 

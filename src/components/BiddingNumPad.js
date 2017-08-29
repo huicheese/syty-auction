@@ -43,23 +43,12 @@ export default class BiddingNumPad extends Component {
     const { value } = this.props.input
     return (
       <div className="row cal-row">
-        <div className="cal-display">{value}</div>
-        <CalculatorButton className="cal-button-buy" displayText="+5" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 5)} />
-        <CalculatorButton className="cal-button-buy" displayText="+50" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 50)} />
-        <CalculatorButton className="cal-button-sell" displayText="+100" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 100)} />
+        <div className="cal-display"><span className="blinker">{Intl.NumberFormat().format(value)}</span></div>
+        <CalculatorButton w="25" displayText="+5" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 5)} />
+        <CalculatorButton w="25" displayText="+10" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 50)} />
+        <CalculatorButton w="25" className="cal-button-red" displayText="+50" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 50)} />
+        <CalculatorButton w="25" displayText="+100" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 100)} />
         <div style={{width: 100+'%', padding:0.3+'em'}} ></div>
-        <CalculatorButton displayText="1" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 1)} />  
-        <CalculatorButton displayText="2" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 2)} />  
-        <CalculatorButton displayText="3" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 3)} />  
-        <CalculatorButton displayText="4" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 4)} />  
-        <CalculatorButton displayText="5" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 5)} />  
-        <CalculatorButton displayText="6" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 6)} />  
-        <CalculatorButton displayText="7" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 7)} />  
-        <CalculatorButton displayText="8" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 8)} />  
-        <CalculatorButton displayText="9" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 9)} />  
-        <CalculatorButton displayText="C" onCalButtonClick={() => this.modifyAmount(CAL_CLEAR, 0)} />  
-        <CalculatorButton displayText="0" onCalButtonClick={() => this.modifyAmount(CAL_APPEND, 0)} />  
-        <CalculatorButton displayText="<" onCalButtonClick={() => this.modifyAmount(CAL_BACK, -1)} />
       </div>
     )
   }

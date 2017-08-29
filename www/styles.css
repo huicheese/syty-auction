@@ -146,6 +146,7 @@ button, div {
 }
 .cal-button {
   width: 100%;
+  height: 2.5em;
   background-color: #fafafa;
   border-top: 1px solid #e7e7e7;
   border-right: 2px solid #ddd;
@@ -173,15 +174,38 @@ button, div {
   opacity: 0.8;
 }
 
-.cal-button-buy {
-  background-color: #ffdfdf
+.cal-button-red {
+  background-color: #ffdfdf;
 }
 
-.cal-button-sell {
-  background-color: #dfffdf
+.blinker {
+  animation: blinker 0.75s linear infinite;
+}
+.shining {
+  animation: shining linear 0.2s;
+  animation-iteration-count: 6;
+}
+.dummy{}
+@keyframes shining {
+  0% { color: #0000ff }
+  40% { color: #0000ff }
+  60% { color: #ff0000 }
+  100% { color: #ff0000 }
 }
 
-
+@keyframes blinker {
+  0% { opacity: 1; }
+  40% { opacity: 1; }
+  60% { opacity: 0.1; }
+  100% { opacity: 0; }
+}
+.bid-me {
+  width: 100%;
+  font-size: 1.5em;
+  text-align: center;
+  margin: 1.5em 0 0.5em 0;
+  background: linear-gradient(to right, #FFF 20%, #ffff9e 40%, #ffff9e 60%, #FFF 80%);
+}
 .slot-row {
   width: 100%;
   flex-wrap: wrap;
@@ -217,8 +241,8 @@ button, div {
 }
 .slot-highlight-blink {
   background: rgba(218, 165, 32, 0.3);
-  animation: fadeinout linear 0.5s;
-  animation-iteration-count: 1;
+  animation: fadeinout linear 0.4s;
+  animation-iteration-count: 2;
   transform-origin: 50% 50%;
 }
 .slot-placeholder:after {

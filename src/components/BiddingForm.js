@@ -7,7 +7,7 @@ const BiddingForm = props => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        {highestBid && <div>Current Highest Bid: S$ {highestBid}</div>}
+        {highestBid && <div className="">Current Highest Bid: S$ {highestBid}</div>}
         <br/>
         <div>
           <Field name="amount" component={BiddingNumPad} />
