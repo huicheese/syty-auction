@@ -45,7 +45,7 @@ export default class BiddingNumPad extends Component {
       <div className="row cal-row">
         <div className="cal-display"><span className="blinker">{Intl.NumberFormat().format(value)}</span></div>
         <CalculatorButton w="25" displayText="+5" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 5)} />
-        <CalculatorButton w="25" displayText="+10" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 50)} />
+        <CalculatorButton w="25" displayText="+10" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 10)} />
         <CalculatorButton w="25" className="cal-button-red" displayText="+50" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 50)} />
         <CalculatorButton w="25" displayText="+100" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 100)} />
         <div style={{width: 100+'%', padding:0.3+'em'}} ></div>
