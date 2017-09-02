@@ -10,7 +10,8 @@ function mapStateToProps(state, ownProps) {
       // amount: 0
       amount: state.slots[ownProps.slot - 1].highestBid || 0
     },
-    highestBid: state.slots[ownProps.slot - 1].highestBid
+    highestBid: state.slots[ownProps.slot - 1].highestBid,
+    hasChange: state.slots[ownProps.slot - 1].hasChange
   };
 }
 

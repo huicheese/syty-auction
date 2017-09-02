@@ -43,7 +43,7 @@ export default class BiddingNumPad extends Component {
     const { value } = this.props.input
     return (
       <div className="row cal-row">
-        <div className="cal-display"><span className="blinker">{Intl.NumberFormat().format(value)}</span></div>
+        <div className="cal-display"><span className="cal-display-text blinker">{Intl.NumberFormat().format(value)}</span></div>
         <CalculatorButton w="24.75" displayText="+50" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 50)} />
         <CalculatorButton w="24.75" displayText="+100" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 100)} />
         <CalculatorButton w="24.75" displayText="+200" onCalButtonClick={() => this.modifyAmount(CAL_INCREMENT, 200)} />
