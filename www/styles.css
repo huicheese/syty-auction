@@ -107,7 +107,7 @@ button, div {
   font-size: 1em;
   padding: 0 0.4em 0.75em 0.4em;
   overflow: hidden;
-  animation: ticker 30s cubic-bezier(1, 0, .5, 0) infinite;
+  animation: ticker 18s cubic-bezier(1, 0, .5, 0) infinite;
 }
 .header-row-activity span {
   display: block;
@@ -136,13 +136,13 @@ button, div {
   overflow-y: auto;
 }
 .interaction-background {
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.8);
 }
 .interaction-body {
   z-index: 900;
   position: relative;
   max-width: 600px;
-  margin: 3.5em 0.7em 0 0.7em;
+  margin: 3em 0.7em 0 0.7em;
 }
 .interaction-header {
   padding-bottom: 0.7em !important;
@@ -179,7 +179,8 @@ button, div {
 .login-form div > input {
   padding: 0.3em;
   width: 100%;
-  color:black;
+  color: #538ebe;
+  border-radius: 5px;
 }
 .cal-body {
   border-bottom:  3px solid #828282;
@@ -416,15 +417,11 @@ button, div {
 }
 @keyframes ticker {
   0%   {margin-top: 0}
-  10%  {margin-top: -2.5em}
-  20%  {margin-top: -5em}
-  30%  {margin-top: -7.5em}
-  40%  {margin-top: -10em}
-  50%  {margin-top: -12.5em}
-  60%  {margin-top: -15em}
-  70%  {margin-top: -17.5em}
-  80%  {margin-top: -20em}
-  90%  {margin-top: -22.5em}
+  16.6%  {margin-top: -2.5em}
+  33.3%  {margin-top: -5em}
+  50%  {margin-top: -7.5em}
+  66.6%  {margin-top: -10em}
+  83.3%  {margin-top: -12.5em}
   100% {margin-top: 0}
 }
 
@@ -458,23 +455,17 @@ button, div {
   }
 
 
-  @media screen and (min-width: 40.5em) {
-    html body {
-      padding: 1px;
-    }
-    .interaction-body {
-      height: auto;
-      margin: 3.5em auto auto auto;
-    }
-
-    .slot-container {
-      width: 16.65%;
-    }
-
-    .slot-row {
-    }
-
-    .container {
-      width: 95%;
-    }
+@media screen and (min-width: 40.5em) {
+  .interaction-body {
+    height: auto;
+    margin: 3.5em auto auto auto;
   }
+
+  .slot-container {
+    width: 16.65%;
+  }
+
+  .container {
+    width: 95%;
+  }
+}

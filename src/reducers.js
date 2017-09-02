@@ -30,16 +30,21 @@ const user = (state = {
 }
 
 const slots = (state = stubSlots || [], action) => {
+    let newState;
     switch (action.type) {
       case WS_MESSAGE_RECEIVED:
         if(action.slots && action.slots.length) {
-          let newState = state.map(i => Object.assign({}, i, {hasChange: false}))
+          newState = state.map(i => Object.assign({}, i, {hasChange: false}))
           action.slots.forEach(s => newState[s.index] = s)
           if(action.isLiveUpdate) {
             action.slots.forEach(s => s.hasChange = true)
           }
           return newState
         }
+      case SLOT_CLICK:
+        newState = state.slice();
+        newState[action.slot - 1].hasChange = false;
+        return newState;
       default:
         // empty
     }
