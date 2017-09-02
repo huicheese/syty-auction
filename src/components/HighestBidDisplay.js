@@ -6,7 +6,7 @@ class HighestBidDisplay extends React.Component {
     return this.props.highestBid != nextProps.highestBid;
   }
   render() {
-    const {hasChange, highestBid} = this.props
+    const {hasChange, highestBid, bidders} = this.props
     return (
         <div className="">Current Bid: 
           <AnimateOnChange 
@@ -14,7 +14,10 @@ class HighestBidDisplay extends React.Component {
             animationClassName="shining"
             animate={hasChange || false} >
             &nbsp; $ {Intl.NumberFormat().format(highestBid || 0)}
-          </AnimateOnChange>
+          </AnimateOnChange> 
+          {bidders && bidders.length==1 &&
+            <span>&nbsp;&nbsp;by <span className="slot-bidder-win">{" ♛ " + bidders[0].firstName}</span></span>
+          }
         </div>
       )
   }

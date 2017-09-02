@@ -11,7 +11,8 @@ function mapStateToProps(state, ownProps) {
       amount: state.slots[ownProps.slot - 1].highestBid || 0
     },
     highestBid: state.slots[ownProps.slot - 1].highestBid,
-    hasChange: state.slots[ownProps.slot - 1].hasChange
+    hasChange: state.slots[ownProps.slot - 1].hasChange,
+    highestBidders: state.slots[ownProps.slot - 1].highestBidders
   };
 }
 

@@ -10,9 +10,9 @@ import * as Cookies from "js-cookie";
 let curAuth = Cookies.get('sytyAuth')
 const store = configureStore({user:{isLoggedIn: curAuth != undefined}})
 
-document.addEventListener('gesturestart', function (e) {
-    e.preventDefault();
-});
+// document.addEventListener('gesturestart', function (e) {
+//     e.preventDefault();
+// });
 
 export default class Root extends Component {
 	render() {
