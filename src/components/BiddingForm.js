@@ -1,34 +1,36 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import BiddingNumPad from './BiddingNumPad'
-import AnimateOnChange from 'react-animate-on-change'
+import HighestBidDisplay from './HighestBidDisplay'
 
-const BiddingForm = props => {
-  const { handleSubmit, pristine, reset, bidRequested, highestBid,hasChange } = props;
-  return (
-    <form className="cal-body" onSubmit={handleSubmit}>
-    <div className="slot-prize-icon cal-icon">&nbsp;</div>
-      <div>
-        {highestBid && 
-          <div className="">Current Bid: 
-            <AnimateOnChange 
-              baseClassName="dummy"
-              animationClassName="shining"
-              animate={hasChange} >
-              &nbsp; $ {Intl.NumberFormat().format(highestBid || 0)}
-            </AnimateOnChange>
-          </div>
-        }
-        <br/>
+class BiddingForm extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const { handleSubmit, pristine, reset, bidRequested, highestBid, hasChange } = this.props;
+    return (
+      <form className="cal-body" onSubmit={handleSubmit}>
+      <div className="slot-prize-icon cal-icon">&nbsp;</div>
         <div>
-          <Field name="amount" component={BiddingNumPad} />
+          {highestBid && 
+              <HighestBidDisplay hasChange={hasChange} highestBid={highestBid} />
+          }
+          <br/>
+          <div>
+            <Field name="amount" component={BiddingNumPad} />
+          </div>
         </div>
-      </div>
-      <div className="interaction-footer">
-        <button type="submit" disabled={pristine || bidRequested}>Submit</button>
-      </div>
-    </form>
+        <br/>
+        <br/>
+
+        <div className="interaction-footer">
+          <button type="submit" disabled={pristine || bidRequested}>Submit</button>
+        </div>
+      </form>
     );
+  }
 };
 
 
