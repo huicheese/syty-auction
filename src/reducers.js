@@ -8,7 +8,7 @@ import {
 import { reducer as reduxFormReducer } from 'redux-form';
 
 const numSlot = 30
-const numEvents = 35
+const numEvents = 10
 const stubSlots = new Array(numSlot).fill().map(
   (e,i) => ({
     index: i,
@@ -50,10 +50,9 @@ const activityEvents = (state = [], action) => {
     switch (action.type) {
       case WS_MESSAGE_RECEIVED:
         if(action.events && action.events.length) {
-          let shifts = action.events.length - numEvents + state.length
-          let newState = shifts > 0 ? state.slice(0, -shifts) :  state.slice()
+          let newState = state.slice()
           newState.unshift(...action.events)
-          return newState
+          return newState.slice(0, numEvents);
         }
       default:
         // empty

@@ -2,6 +2,7 @@ import React from 'react'
 import BiddingSlotBoxContainer from '../containers/BiddingSlotBoxContainer'
 import LoginFormContainer from '../containers/LoginFormContainer'
 import BidFormContainer from '../containers/BidFormContainer'
+import ActivityEventBoxContainer from '../containers/ActivityEventBoxContainer'
 import InteractionBox from './InteractionBox'
 
 class BidSubmissionRoot extends React.Component {
@@ -14,6 +15,8 @@ class BidSubmissionRoot extends React.Component {
 		const {requireLogin, slotRequested, loginExpanded, isLoggedIn} = this.props;
 		return (
 			<div className="container">
+				<ActivityEventBoxContainer />
+
 				{!isLoggedIn && 
 					<div className="login-required-mask" onClick={requireLogin}></div>
 				}
@@ -27,7 +30,7 @@ class BidSubmissionRoot extends React.Component {
 						title={"Slot " + slotRequested}
 						bodyComponent={<BidFormContainer slot={slotRequested}/>} />
 				}
-				<div className="c8 row">
+				<div className="body c8 row">
 
 					<BiddingSlotBoxContainer />
 				</div>

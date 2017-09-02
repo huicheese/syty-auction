@@ -86,7 +86,35 @@ button, div {
 }
 
 .header-row {
-  height: 3em; 
+  z-index: 800;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: 2.5em;
+  display: flex;
+  background: rgba(29, 43, 56, 0.8);
+  border-bottom: 1px solid #2e526f;
+}
+.header-row-icon {
+  font-size: 1.5em;
+  padding: 0.3em;
+  color: #fadeb2;
+  border-right: 1px solid #2e526f;
+  background: #070a0c;
+}
+.header-row-activity {
+  font-size: 1em;
+  padding: 0 0.4em 0.75em 0.4em;
+  overflow: hidden;
+  animation: ticker 30s cubic-bezier(1, 0, .5, 0) infinite;
+}
+.header-row-activity span {
+  display: block;
+  line-height: 2.5em; 
+}
+.body {
+  margin-top: 2.5em;
 }
 .login-required-mask {
   position:fixed;
@@ -385,6 +413,19 @@ button, div {
   text-align: center;
 }
 .slot-placeholder img {
+}
+@keyframes ticker {
+  0%   {margin-top: 0}
+  10%  {margin-top: -2.5em}
+  20%  {margin-top: -5em}
+  30%  {margin-top: -7.5em}
+  40%  {margin-top: -10em}
+  50%  {margin-top: -12.5em}
+  60%  {margin-top: -15em}
+  70%  {margin-top: -17.5em}
+  80%  {margin-top: -20em}
+  90%  {margin-top: -22.5em}
+  100% {margin-top: 0}
 }
 
 @-webkit-keyframes fadeinout {
