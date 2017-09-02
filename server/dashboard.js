@@ -264,8 +264,8 @@ const getRandomName = () => nameArray[getRandomInt(0,nameArray.length-1)]
 
 const stubSlots = new Array(30)
 
-function getStubSlotUpdate(i) {
-  let index = i || getRandomInt(0,29);
+function getStubSlotUpdate() {
+  let index = getRandomInt(0,25);
   let cur = stubSlots[index] || {
     index: index,
     highestBid: 0
@@ -287,14 +287,16 @@ function getStubEventUpdates() {
   return {
     "bidder": { firstName: getRandomName() },
     "bid": getRandomArbitrary(1, 100),
-    "slot": getRandomInt(1,25)
+    "index": utils.uuid(),
+    "slot": getRandomInt(3,25)
   }
 }
 
 let getRandomUpdates = () => {
-  let numUpdates = getRandomInt(1,5);
+  let numUpdates = getRandomInt(1,1);
   return JSON.stringify({
     slots: new Array(numUpdates).fill().map((e,i) => getStubSlotUpdate(i)),
-    events: new Array(numUpdates).fill().map((e,i) => getStubEventUpdates(i))
+    events: new Array(numUpdates).fill().map((e,i) => getStubEventUpdates(i)),
+    isLiveUpdate: true
   })
 }
