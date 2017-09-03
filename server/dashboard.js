@@ -223,8 +223,22 @@ let parseSlotInfo = slotInfo => {
     let index = parseInt(slotInfo.slot) - 1;
     if (slotInfo.bid > 0) {
         return Promise
-                    .resolve(slotInfo.max_user_ids.split(','))
-                    .map(userID => getUserInfo(userID))
+                    .resolve(slotInfo.bid_infos)
+                    .then(bidInfos => {
+                        if (typeof bidInfos === 'string')
+                            return JSON.parse(bidInfos);
+                        return bidInfos;
+                    })
+                    .map(bidInfo => {
+                        return Promise
+                                    .resolve(bidInfo.user_id)
+                                    .then(userID => getUserInfo(userID))
+                                    .then(userInfo => {
+                                        userInfo.bidID = bidInfo.bid_id;
+                                        userInfo.bidTS = bidInfo.added_ts;
+                                        return userInfo;
+                                    });
+                    })
                     .then(userInfo => ({
                         index: index,
                         highestBid: slotInfo.bid,

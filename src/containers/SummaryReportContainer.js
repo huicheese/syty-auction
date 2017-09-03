@@ -1,4 +1,4 @@
-import BiddingSlotBox from '../components/BiddingSlotBox'
+import SummaryReport from '../components/SummaryReport'
 import { connect } from 'react-redux'
 import { expandSlot } from '../actions'
 
@@ -9,13 +9,5 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onSlotClick: (event, index) => {
-      dispatch(expandSlot(index));
-    }
-  };
-}
-
-const SummaryReportContainer = connect(mapStateToProps, mapDispatchToProps)(BiddingSlotBox)
+const SummaryReportContainer = connect(mapStateToProps, null)(SummaryReport)
 export default SummaryReportContainer
