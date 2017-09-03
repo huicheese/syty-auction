@@ -1,15 +1,6 @@
 import React from 'react'
 import AnimateOnChange from 'react-animate-on-change'
-
-const dynoSize = (name: "") => {
-  if(name.length < 10) return 1;
-  if(name.length < 12) return 2;
-  if(name.length < 15) return 3;
-  if(name.length < 20) return 4;
-  if(name.length < 25) return 5;
-  return 0;
-}
-              // ♛ ♕ ♔ 
+import BidderNamePlate from './BidderNamePlate'
 
 const BiddingSlot = ({index, hasChange, bid, bidders, onSlotClick}) => {
 	return (
@@ -30,11 +21,8 @@ const BiddingSlot = ({index, hasChange, bid, bidders, onSlotClick}) => {
               </div>
               {bidders &&
                 <div className="slot-bidder">
-                  {bidders.length == 1 && 
-                    <span className={"slot-bidder-name-"+dynoSize(bidders[0].firstName)}>
-                      <span className="slot-bidder-win">♛ </span><span>{bidders[0].firstName}</span>
-                      </span>}
-                  {bidders.length == 2 && bidders.map((e,i) => <span key={e.userID} className={"slot-bidder-mul slot-bidder-name-"+dynoSize(e.firstName)}>{e.firstName}</span>)}
+                  {bidders.length == 1 && <BidderNamePlate bidder={bidders[0]} />}
+                  {bidders.length == 2 && bidders.map((e,i) => <BidderNamePlate key={e.userID} bidder={e} />)}
                   {bidders.length >= 3 && <span style={{fontStyle:"italic"}}>{bidders.length} Bidders</span>}
                 </div>
               }
