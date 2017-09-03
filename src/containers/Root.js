@@ -6,6 +6,7 @@ import DashboardRootContainer from './DashboardRootContainer'
 import BidSubmissionRootContainer from './BidSubmissionRootContainer'
 import AdminBidRootContainer from './AdminBidRootContainer'
 import SummaryReportRootContainer from './SummaryReportRootContainer'
+import ControlRootContainer from './ControlRootContainer'
 import * as Cookies from "js-cookie";
 
 let curAuth = Cookies.get('sytyAuth')
@@ -25,6 +26,7 @@ export default class Root extends Component {
 						<Route exact path="/dashboard" component={DashboardRootContainer} />
 						<Route exact path="/adminBid" component={AdminBidRootContainer} />
 						<Route exact path="/summaryReport" component={SummaryReportRootContainer} />
+						<Route exact path="/control" component={ControlRootContainer} />
 					</div>
 				</Router>
 			</Provider>

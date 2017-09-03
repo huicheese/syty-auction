@@ -21,6 +21,9 @@ export const BID_REQUESTED = 'BID_REQUESTED'
 export const BID_SUCCESS = 'BID_SUCCESS'
 export const BID_FAIL = 'BID_FAIL'
 
+export const TOGGLE_SYSTEM_PERMISSION_REQUESTED = 'TOGGLE_SYSTEM_PERMISSION_REQUESTED'
+export const TOGGLE_SYSTEM_PERMISSION_COMPLETED = 'TOGGLE_SYSTEM_PERMISSION_COMPLETED'
+
 export const initializeConnection = () => {
   return {
     type: WS_CONNECT
@@ -115,6 +118,20 @@ export function fetchAdminBid(firstName, lastName, company, table, slot, bid) {
         response.text().then(msg => dispatch(bidFail(opID, msg)))
       ).catch(v1 => console.log(opID + ": " + v1))
 
+  }
+}
+
+const toggleSystemPermissionRequested = (opID) => ({ opID: opID, type: TOGGLE_SYSTEM_PERMISSION_REQUESTED })
+const toggleSystemPermissionCompleted = (opID, msg) => ({ opID: opID, type: TOGGLE_SYSTEM_PERMISSION_COMPLETED, msg: msg })
+
+export function toggleSystemPermission() {
+  let opID = "toggleSystemPermission-" + Math.random()
+  return dispatch => {
+    dispatch(toggleSystemPermissionRequested(opID))
+    return basePost(`/areyousure/toggleBiddingPermission`, {})
+      .then(response =>
+        response.text().then(msg => dispatch(toggleSystemPermissionCompleted(opID, msg)))
+      ).catch(v1 => console.log(opID + ": " + v1))
   }
 }
 

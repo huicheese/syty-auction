@@ -40,7 +40,7 @@ exports.setApp = (app, io) => {
             .then(submissionResult => executeUpdate(submissionResult, io));
     });
 
-    app.get('/areyousure/toggleBiddingPermission', (request, response) => {
+    app.post('/areyousure/toggleBiddingPermission', (request, response) => {
         allowBiddings = !allowBiddings;
         response.status(200).send('Toggled bidding permission to ' + allowBiddings);
     });
