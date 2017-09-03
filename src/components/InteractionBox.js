@@ -22,7 +22,7 @@ const InteractionBox = ({bodyComponent, title, handleClose}) => {
         {title && <div className="interaction-header">{title}<button className="interaction-close" onClick={handleClose}>X</button></div>}
         {bodyComponent}
       </div>
-      <div className="interaction-background" onClick={handleClose}></div>
+      <div className="interaction-background" onClick={handleClose}><span className="interaction-dismiss">Tap anywhere to dismiss</span></div>
     </div>
   )
 }
