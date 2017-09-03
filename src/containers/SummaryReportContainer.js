@@ -17,5 +17,5 @@ const mapDispatchToProps = (dispatch) => {
   };
 }
 
-const DashboardSlotBoxContainer = connect(mapStateToProps, mapDispatchToProps)(BiddingSlotBox)
-export default DashboardSlotBoxContainer
+const SummaryReportContainer = connect(mapStateToProps, mapDispatchToProps)(BiddingSlotBox)
+export default SummaryReportContainer
