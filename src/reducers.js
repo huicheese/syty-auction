@@ -8,12 +8,15 @@ import {
 import { reducer as reduxFormReducer } from 'redux-form';
 
 const numSlot = 30
-const numEvents = 10
+const numEvents = 6
 const stubSlots = new Array(numSlot).fill().map(
   (e,i) => ({
     index: i,
     highestBidders: {}
   })
+)
+const stubEvents = new Array(numEvents).fill().map(
+  (e,i) => ({})
 )
 
 // retrieve login state from cookie
@@ -67,13 +70,28 @@ const slots = (state = stubSlots || [], action) => {
     return state
 }
 
-const activityEvents = (state = [], action) => {
+let cur = 0;
+const nextSlot = () => {
+  cur = (cur+numEvents-1)%numEvents;
+  return cur;
+}
+const activityEvents = (state = stubEvents, action) => {
     switch (action.type) {
       case WS_MESSAGE_RECEIVED:
         if(action.events && action.events.length) {
           let newState = state.slice()
-          newState.unshift(...action.events)
-          return newState.slice(0, numEvents);
+          action.events.reverse().forEach(e => {
+            for(let i=0; i<newState.length; i++) {
+              if(newState[i].slot == e.slot) {
+                if(newState[i].bid <= e.bid)
+                  newState[i] = e;
+                return;
+              }
+            }
+            newState[nextSlot()] = e; // side effect of moving nextSlot/cur backward
+          })
+
+          return newState;
         }
       default:
         // empty

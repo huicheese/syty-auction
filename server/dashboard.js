@@ -274,6 +274,7 @@ const getRandomArbitrary = (min, max) => Math.round((Math.random() * (max - min)
 
 const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
 const nameArray = ["Darwin", "Paris", "Jackie", "Dominick", "Abel", "Nelson", "Jeff", "Ivan", "Gene", "Bill", "William", "Myron", "Clayton", "Bryant", "Johnie", "Graig", "Elliott", "Dante", "Benjamin", "Brant", "Bertram", "Morgan", "Johnny", "Jonathan", "Wilfred", "Robert", "Robin", "Mohammed", "Joey", "Bradly", "Denver", "Elden", "Ryan", "Leigh", "Jc", "Asa", "Hayden", "Darrell", "Von", "Gary", "Augustus", "Alphonso", "Logan", "Leon", "Marquis", "Miguel", "Ignacio", "Don", "Derrick", "Jarod"]
+// const nameArray = ["M", "MM", "WWW", "WWWW", "WWWWW", "WWWWWW", "WWWWWWW", "WWWWWWWW", "WWWWWWWWW", "WWWWWWWWWW", "WWWWWWWWWWW", "WWWWWWWWWWWW", "WWWWWWWWWWWWW", "WWWWWWWWWWWWWW"]
 const getRandomName = () => nameArray[getRandomInt(0,nameArray.length-1)]
 
 const stubSlots = new Array(30)
@@ -285,7 +286,7 @@ function getStubSlotUpdate() {
     highestBid: 0
   };
   cur.highestBid += getRandomInt(1, 100);
-  if(cur.highestBid > 5000) {
+  if(cur.highestBid > 3500) {
     stubSlots.forEach(e => e.highestBid = 0);    
   }
   let name = getRandomName();

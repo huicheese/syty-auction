@@ -8,7 +8,7 @@ const ActivityEventBox = ({activityEvents}) => {
       	<div className="header-row-activity">
 					{
 						activityEvents.map((entry, key) => 
-							entry && entry.bidder && <ActivityEvent key={entry.index} entry={entry}/>)
+							entry && entry.bidder && <ActivityEvent key={key} entry={entry}/>)
 					}
       	</div>
     	</div>
