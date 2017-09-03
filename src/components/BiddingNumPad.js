@@ -8,7 +8,7 @@ const CAL_INCREMENT = "CAL_INCREMENT"
 const CalculatorButton = ({w=33.3, className, displayText, onCalButtonClick}) => {
     return (
       <div className="cal-button-mask" style={{width:w+'%'}}>
-        <button type="button" className={"cal-button "+ className} onClick={onCalButtonClick}>{displayText}</button>
+        <button type="button" className={"cal-button "+ (className?className:"")} onClick={onCalButtonClick}>{displayText}</button>
       </div>
     ); 
 };

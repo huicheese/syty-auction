@@ -115,7 +115,6 @@ button, div {
   animation: ticker 18s cubic-bezier(1, 0, .5, 0) infinite;
 }
 .header-row-activity span {
-  display: block;
   line-height: 2.5em; 
 }
 .body {
@@ -216,14 +215,15 @@ button, div {
   width: 90%;
   height: 2.5em;
   font-size: 1.1em;
+  padding: 0;
 }
 
-.cal-button:after, .cal-button:before{
+/*.cal-button:after, .cal-button:before{
   clear: both;
   display: table;
   content: " ";
   padding: 2px 0 2px 0;
-}
+}*/
 
 .cal-button-mask {
  width: 33.3%;
@@ -488,7 +488,17 @@ button, div {
     height: auto;
     margin: 3.5em auto auto auto;
   }
-
+  .slot-corner {
+    font-size: 1.5em;
+  }
+  .slot-bid {
+    font-size: 1.5em;
+  }
+  .slot-bidder-name-1 {font-size: 1.5em;}
+  .slot-bidder-name-2 {font-size: 1.2em;}
+  .slot-bidder-name-3 {font-size: 0.9em;}
+  .slot-bidder-name-4 {font-size: 0.6em;}
+  .slot-bidder-name-5 {font-size: 0.3em;}
   .slot-container {
     width: 16.65%;
   }

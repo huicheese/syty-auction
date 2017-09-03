@@ -56,6 +56,7 @@ const slots = (state = stubSlots || [], action) => {
 
           return newState
         }
+        break;
       case SLOT_CLICK:
         newState = state.slice();
         newState[action.slot - 1].hasChange = false;

@@ -1,10 +1,11 @@
 import React from 'react'
+import BidderNamePlate from './BidderNamePlate'
 
-const generateActivity = (index, someone, bidInput, slot) => {
+const generateActivity = (index, bidder, bidInput, slot) => {
   let bid = Intl.NumberFormat().format(bidInput);
   switch(index) {
     default:
-      return someone + " bids $ " + bid + " on slot " + slot;
+      return <span><BidderNamePlate bidder={bidder} dyno={false}/>{"\xa0\xa0bids $ " + bid + " on slot " + slot}<br/></span>;
 
   }
 }
@@ -12,8 +13,9 @@ const generateActivity = (index, someone, bidInput, slot) => {
 const simpleHashIndex = (index) => parseInt((index || "000").substring(0,3), 16) % 3
 
 const ActivityEvent = ({entry}) => {
+  
 	return (
-			<span>{generateActivity(simpleHashIndex(entry.index), entry.bidder.firstName, entry.bid, entry.slot)}</span>
+			<span>{generateActivity(simpleHashIndex(entry.index), entry.bidder, entry.bid, entry.slot)}</span>
 		)
 }
 
