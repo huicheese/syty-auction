@@ -8,7 +8,7 @@ const SummaryReport = (props) => {
 				{
 					slots.map((entry, key) =>
 							<div className="row slot-row" key={entry.index}>
-								Slot: {entry.index}
+								Slot: { Number.parseInt(entry.index, 10) + 1 }
 								<br/>
 								HighestBid: {entry.highestBid}
 								<div className="container">
