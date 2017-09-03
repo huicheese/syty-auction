@@ -1,7 +1,12 @@
 *     {
   font-family: sans-serif;
   color: #fff0e1;
-  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 }
 
 html {
@@ -12,11 +17,10 @@ html {
 
 html body{
   font-size: 16px;
-  margin: auto;
 
-  background: #2c3e50;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to top, #3498db, #2c3e50);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to top, #3498db, #2c3e50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #1c2833;  /* fallback for old browsers */
+  /*background: -webkit-linear-gradient(to top, #3498db, #2c3e50);  /* Chrome 10-25, Safari 5.1-6 */*/
+  /*background: linear-gradient(to top, #3498db, #2c3e50);  W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 }
 input {
@@ -79,7 +83,7 @@ button, div {
 .c7 { width : 87.5% }
 .c8 { width : 100% }
 
-.container { margin: 0 auto; }
+.container { margin: 0 auto; padding-top: 2.5em;}
 
 .row {
   display: flex; 
@@ -109,16 +113,17 @@ button, div {
   color: #fff9db;
 }
 .header-row-activity {
+  white-space: nowrap;
   font-size: 1em;
   padding: 0 0.4em 0.75em 0.4em;
   overflow: hidden;
+  margin-right: 0.5em;
 }
 .activity-entry {
   animation: ticker 18s cubic-bezier(1, 0, .5, 0) infinite;
   line-height: 2.5em; 
 }
 .body {
-  margin-top: 2.5em;
 }
 .login-required-mask {
   position:fixed;
@@ -194,6 +199,64 @@ button, div {
   color: #538ebe;
   border-radius: 5px;
 }
+.block {
+  width: 100%;
+  height: 106em;
+  position: absolute; 
+  top:3.2em;
+
+  background: #2c3e50;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #3498db, #2c3e50);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #3498db, #2c3e50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.stats-row {
+  position: fixed;
+  top: 5em;
+  padding: 0.7em 0.5em 0.3em 0.5em;
+  border-bottom: 1px solid #333;
+  margin-top: -2.5em;
+}
+.stats-row div {
+  padding-bottom: 0.3em;
+}
+.my-profile {
+  font-size: 0.95em;
+  padding-right: 0.5em;
+}
+.my-bids {
+  font-size: 1.4em;
+  float: right;
+  display: block;
+}
+.my-slots {
+  padding-top: 0.5em;
+  clear: both;
+}
+.my-slot-i {
+  background-image: -webkit-linear-gradient(top, #f4f1ee, #fff);
+  background-image: linear-gradient(top, #f4f1ee, #fff);
+  border-radius: 50%;
+  box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, .3), inset 0px 4px 1px 1px white, inset 0px -3px 1px 1px rgba(204,198,197,.5);
+  padding-top: 0.1em !important;
+  padding-right: 0.1em;
+  text-align: center;
+  color: #b98d1d;
+  font-size: 0.8em;
+  height: 1.5em;
+  width: 1.5em;
+  display: inline-block;
+  margin-right: 0.4em;
+}
+.top-title {
+  padding-bottom: 0.3em;
+}
+.top-ranking .entry{
+  display: block;
+  font-size: 0.8em;
+  float: right;
+  clear: both;
+}
+
 .cal-body {
   border-bottom:  3px solid #828282;
   border-radius: 0 0 1em 1em;
@@ -225,13 +288,6 @@ button, div {
   font-size: 1.1em;
   padding: 0;
 }
-
-/*.cal-button:after, .cal-button:before{
-  clear: both;
-  display: table;
-  content: " ";
-  padding: 2px 0 2px 0;
-}*/
 
 .cal-button-mask {
  width: 33.3%;
@@ -294,10 +350,11 @@ button, div {
   background: linear-gradient(to right, #FFF 20%, #ffff9e 40%, #ffff9e 60%, #FFF 80%);
 }
 .slot-row {
+  background: #000;
   width: 100%;
   flex-wrap: wrap;
-
-  padding: 0.5em 0.5em 2em 0.5em;
+  /*margin-top: 1em;*/
+  padding: 1em 0.2em 2em 0.4em;
 }
 .slot-container {
   width: 33.3%;
@@ -331,7 +388,7 @@ button, div {
    box-shadow: 0px 3px 0px #2b638f, 0px 3px 15px rgba(0,0,0,.4), inset 0px 1px 0px rgba(255,255,255,.3), inset 0px 0px 3px rgba(255,255,255,.5);
 
 
-   margin: 0.7em 0.4em;
+   margin: 0.7em 0.2em;
 
  }
  .slot-mask:active {
@@ -370,23 +427,24 @@ button, div {
   transform-origin: 50% 50%;
 }
 .slot-corner {
-    background-image: -webkit-linear-gradient(top, #f4f1ee, #fff);
-    background-image: linear-gradient(top, #f4f1ee, #fff);
-    border-radius: 50%;
-    box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, .3), inset 0px 4px 1px 1px white, inset 0px -3px 1px 1px rgba(204,198,197,.5);
-    float:left;
-    position: relative;
-    padding-top: 0.2em !important;
-    
-    height: 1.7em;
-    width: 1.7em;
-    top: -0.8em;
-    left: -0.4em;
+  background-image: -webkit-linear-gradient(top, #f4f1ee, #fff);
+  background-image: linear-gradient(top, #f4f1ee, #fff);
+  border-radius: 50%;
+  box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, .3), inset 0px 4px 1px 1px white, inset 0px -3px 1px 1px rgba(204,198,197,.5);
+  float:left;
+  position: relative;
+  padding-top: 0.2em !important;
 
-    text-align:  center;
-    color: #b98d1d;
-  }
-.slot-index {
+  height: 1.7em;
+  width: 1.7em;
+  top: -0.8em;
+  left: -0.4em;
+
+  text-align:  center;
+  color: #b98d1d;
+}
+.slot-bidder .bidder-entry {
+  display: block;
 }
 .slot-bid-container {
   position: absolute;
@@ -429,10 +487,10 @@ button, div {
 }
 .slot-bidder-name-0 {}
 .slot-bidder-name-1 {font-size: 1.2em;}
-.slot-bidder-name-2 {font-size: 0.9em;}
+.slot-bidder-name-2 {font-size: 1.0em;}
 .slot-bidder-name-3 {font-size: 0.8em;}
 .slot-bidder-name-4 {font-size: 0.6em;}
-.slot-bidder-name-5 {font-size: 0.5em;}
+.slot-bidder-name-5 {font-size: 0.45em;}
 .slot-bidder .slot-bidder-mul {
   display: block;
 }
@@ -492,7 +550,34 @@ button, div {
     100% { opacity: 1; }
   }
 
+@media screen and (max-width: 20em) {
+  .activity-entry {
+    line-height: 2.5em;
+    font-size: 0.8em;
+  }
+
+  .header-row-activity {
+    padding-top: 0.3em;
+  }
+  .slot-row {
+    padding-right: 0.1em;
+    padding-left: 0.4em;
+  }
+  .slot-placeholder {
+  }
+  .slot-mask {
+    margin-right: 0.1em;
+    margin-left: 0.1em;
+  }
+  .slot-bidder-name-1 {font-size: 1em;}
+  .slot-bidder-name-2 {font-size: 0.9em;}
+  .slot-bidder-name-3 {font-size: 0.7em;}
+  .slot-bidder-name-4 {font-size: 0.5em;}
+  .slot-bidder-name-5 {font-size: 0.4em;}
+}
+
 @media screen and (min-width: 40.5em) {
+  .container {margin: 0 auto;}
   .interaction-body {
     height: auto;
     margin: 3.5em auto auto auto;
@@ -504,10 +589,10 @@ button, div {
     font-size: 1.5em;
   }
   .slot-bidder-name-1 {font-size: 1.5em;}
-  .slot-bidder-name-2 {font-size: 1.2em;}
-  .slot-bidder-name-3 {font-size: 0.9em;}
-  .slot-bidder-name-4 {font-size: 0.6em;}
-  .slot-bidder-name-5 {font-size: 0.3em;}
+  .slot-bidder-name-2 {font-size: 1.4em;}
+  .slot-bidder-name-3 {font-size: 1.3em;}
+  .slot-bidder-name-4 {font-size: 1.2em;}
+  .slot-bidder-name-5 {font-size: 0.9em;}
   .slot-container {
     width: 16.65%;
   }
