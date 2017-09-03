@@ -24,7 +24,8 @@ exports.initialize = () =>
 				bid_id TEXT NOT NULL,
 				user_id TEXT NOT NULL,
 				slot INTEGER NOT NULL,
-				bid INTEGER NOT NULL
+				bid INTEGER NOT NULL,
+				added_ts DATETIME DEFAULT CURRENT_TIMESTAMP
 			)`
 		))
 		.then(() => console.log("Created table Biddings"))
@@ -32,11 +33,11 @@ exports.initialize = () =>
 			db.prepare('INSERT OR IGNORE INTO users VALUES(?, ?, ?, ?, ?, 1)')
 			.then(stmt => createUserStmt = stmt);
 
-			db.prepare('INSERT INTO biddings VALUES(?, ?, ?, ?)')
+			db.prepare('INSERT INTO biddings(bid_id, user_id, slot, bid) VALUES(?, ?, ?, ?)')
 			.then(stmt => submitBidStmt = stmt);
 
 			db.prepare(`
-				SELECT t.slot, t.bid, GROUP_CONCAT(DISTINCT t.user_id) AS max_user_ids
+				SELECT t.slot, t.bid, JSON_ARRAY(JSON_OBJECT('user_id', t.user_id, 'bid_id', t.bid_id, 'added_ts', t.added_ts)) AS bid_infos
 				FROM biddings t
 				WHERE t.bid =
 				    (SELECT MAX(h.bid)
@@ -48,7 +49,7 @@ exports.initialize = () =>
 			.then(stmt => slotQueryStmt = stmt);
 
 			db.prepare(`
-				SELECT t.slot, t.bid, GROUP_CONCAT(DISTINCT t.user_id) AS max_user_ids
+				SELECT t.slot, t.bid, JSON_ARRAY(JSON_OBJECT('user_id', t.user_id, 'bid_id', t.bid_id, 'added_ts', t.added_ts)) AS bid_infos
 				FROM biddings t
 				WHERE t.bid =
 				    (SELECT MAX(h.bid)
