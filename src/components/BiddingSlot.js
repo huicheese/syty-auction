@@ -29,7 +29,7 @@ const BiddingSlot = ({index, hasChange, bid, bidders, onSlotClick}) => {
             </div>
           }
           {!bid && 
-            <div className="slot-bid-container slot-bid-empty"><span>Bid Now</span></div>
+            <div className="slot-bid-container slot-bid-empty"><span>⚑ Bid Now</span></div>
           }
           <AnimateOnChange 
           baseClassName="slot-highlight"
