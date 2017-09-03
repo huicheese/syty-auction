@@ -274,7 +274,8 @@ function getStubSlotUpdate() {
   if(cur.highestBid > 5000) {
     stubSlots.forEach(e => e.highestBid = 0);    
   }
-  cur.highestBidders = [{ firstName: getRandomName() }];
+  let name = getRandomName();
+  cur.highestBidders = [{ firstName: name, userID: name}];
   stubSlots[index] = cur;
   return cur;
 }

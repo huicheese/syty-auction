@@ -39,6 +39,21 @@ const slots = (state = stubSlots || [], action) => {
           if(action.isLiveUpdate) {
             action.slots.forEach(s => s.hasChange = true)
           }
+          let sum = {}
+          newState.forEach(s => {
+            if(!s.highestBidders || s.highestBidders.length != 1)
+              return;
+            sum[s.highestBidders[0].userID] = (sum[s.highestBidders[0].userID] || 0) + s.highestBid
+            
+          })
+
+          newState.forEach(s => {
+            if(s.highestBidders && s.highestBidders.length > 0)
+              s.highestBidders.forEach(b => {
+                b.sum = sum[b.userID]
+              })
+          })
+
           return newState
         }
       case SLOT_CLICK:

@@ -16,14 +16,14 @@ const BiddingSlot = ({index, hasChange, bid, bidders, onSlotClick}) => {
                 baseClassName="dummy"
                 animationClassName="shining"
                 animate={hasChange} >
-                  $ {Intl.NumberFormat().format(bid || 0)}
+                  {"$ " + Intl.NumberFormat().format(bid || 0)}
                 </AnimateOnChange>
               </div>
               {bidders &&
                 <div className="slot-bidder">
                   {bidders.length == 1 && <BidderNamePlate bidder={bidders[0]} />}
                   {bidders.length == 2 && bidders.map((e,i) => <BidderNamePlate key={e.userID} bidder={e} />)}
-                  {bidders.length >= 3 && <span style={{fontStyle:"italic"}}>{bidders.length} Bidders</span>}
+                  {bidders.length >= 3 && <span style={{fontStyle:"italic"}}>{bidders.length + " Bidders"}</span>}
                 </div>
               }
             </div>

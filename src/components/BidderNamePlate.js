@@ -16,7 +16,7 @@ const BidderNamePlate = (props) => {
   const {bidder, dyno=true} = props
   return (
       <span className={"slot-bidder-name-"+dynoSize(bidder.firstName, dyno)}>
-        <span className="bidder-c bidder-l">♥ </span><span className={""}>{bidder.firstName}</span>
+        <span className={"bidder-c " + bidder.sum>1500 ? "":"bidder-l"}>{bidder.sum > 1500 ? "💛 ": "♥ "}</span><span className={bidder.sum>1500 ? "bidder-h" : ""}>{bidder.firstName}</span>
       </span>
     )
 }
