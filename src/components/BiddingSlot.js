@@ -22,7 +22,7 @@ const BiddingSlot = ({index, hasChange, bid, bidders, onSlotClick}) => {
               {bidders &&
                 <div className="slot-bidder">
                   {bidders.length == 1 && <BidderNamePlateContainer bidder={bidders[0]} />}
-                  {bidders.length == 2 && bidders.map((e,i) => <BidderNamePlate key={e.userID} bidder={e} />)}
+                  {bidders.length == 2 && bidders.map((e,i) => <BidderNamePlateContainer key={e.userID} bidder={e} />)}
                   {bidders.length >= 3 && <span style={{fontStyle:"italic"}}>{bidders.length + " Bidders"}</span>}
                 </div>
               }
