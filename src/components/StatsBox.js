@@ -26,7 +26,7 @@ const StatsBox = ({mySlots, me, top3}) => {
       <div className="top-ranking c4">
         <span className="entry top-title">Top Ranking</span>
         {top3.map((e,i) => 
-        <span className="entry">
+        <span key={i} className="entry">
           <BidderNamePlate bidder={e} dyno={false}/>{" $"+e.sum}
         </span>
         )}
