@@ -45,7 +45,7 @@ exports.setApp = (app, io) => {
         response.status(200).send('Toggled bidding permission to ' + allowBiddings);
     });
 
-    app.post('/areyousure/toggleUser', (request, response) => {
+    app.post('/areyousure/toggleUserPermission', (request, response) => {
         database
             .toggleUserPermission(request.body.userID)
             .then(() => response.status(200).send('Toggled bidding permission for User'))

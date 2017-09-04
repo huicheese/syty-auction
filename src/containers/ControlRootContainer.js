@@ -1,13 +1,27 @@
 import { connect } from 'react-redux'
 import ControlRoot from '../components/ControlRoot'
-import { toggleSystemPermission } from '../actions'
+import { toggleSystemPermission, toggleUserPermission, fetchAllUsers } from '../actions'
 
-function mapDispatchToProps(dispatch) {
-  return {
-    onSystemPermissionClick: () => {
-    	dispatch(toggleSystemPermission());
-    }
-  };
+function mapStateToProps(state) {
+	return {
+    	users: state.users
+  	};
 }
 
-export default connect(null, mapDispatchToProps)(ControlRoot);
+function mapDispatchToProps(dispatch) {
+	return {
+	    onSystemPermissionClick: () => {
+	    	dispatch(toggleSystemPermission());
+	    },
+
+	    onUserPermissionClick: (userID) => {
+	    	dispatch(toggleUserPermission(userID));
+	    },
+
+	    onRefreshUsersClick: () => {
+	    	dispatch(fetchAllUsers());
+	    }
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ControlRoot);

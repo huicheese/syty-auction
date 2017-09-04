@@ -24,6 +24,12 @@ export const BID_FAIL = 'BID_FAIL'
 export const TOGGLE_SYSTEM_PERMISSION_REQUESTED = 'TOGGLE_SYSTEM_PERMISSION_REQUESTED'
 export const TOGGLE_SYSTEM_PERMISSION_COMPLETED = 'TOGGLE_SYSTEM_PERMISSION_COMPLETED'
 
+export const TOGGLE_USER_PERMISSION_REQUESTED = 'TOGGLE_USER_PERMISSION_REQUESTED'
+export const TOGGLE_USER_PERMISSION_COMPLETED = 'TOGGLE_USER_PERMISSION_COMPLETED'
+
+export const FETCH_ALL_USERS_REQUESTED = 'FETCH_ALL_USERS_REQUESTED'
+export const FETCH_ALL_USERS_COMPLETED = 'FETCH_ALL_USERS_COMPLETED'
+
 export const initializeConnection = () => {
   return {
     type: WS_CONNECT
@@ -135,6 +141,37 @@ export function toggleSystemPermission() {
   }
 }
 
+const toggleUserPermissionRequested = (opID) => ({ opID: opID, type: TOGGLE_USER_PERMISSION_REQUESTED })
+const toggleUserPermissionCompleted = (opID, msg) => ({ opID: opID, type: TOGGLE_USER_PERMISSION_COMPLETED, msg: msg })
+
+export function toggleUserPermission(userID) {
+  let opID = "toggleUserPermission-" + userID + "-" + Math.random()
+  return dispatch => {
+    dispatch(toggleUserPermissionRequested(opID))
+    return basePost(`/areyousure/toggleUserPermission`, {userID})
+      .then(response =>
+        response
+          .text()
+          .then(msg => dispatch(toggleUserPermissionCompleted(opID, msg)))
+          .then(() => dispatch(fetchAllUsers()))
+      ).catch(v1 => console.log(opID + ": " + v1))
+  }
+}
+
+const fetchAllUsersRequested = (opID) => ({ opID: opID, type: FETCH_ALL_USERS_REQUESTED })
+const fetchAllUsersCompleted = (opID, msg) => ({ opID: opID, type: FETCH_ALL_USERS_COMPLETED, msg: msg })
+
+export function fetchAllUsers() {
+  let opID = "fetchAllUsers-" + Math.random()
+  return dispatch => {
+    dispatch(fetchAllUsersRequested(opID))
+    return basePost(`/reporting/users`, {})
+      .then(response =>
+        response.text().then(msg => dispatch(fetchAllUsersCompleted(opID, msg)))
+      ).catch(v1 => console.log(opID + ": " + v1))
+  }
+}
+
 function basePost(apiPath, data) {
   let toSend = JSON.stringify(data)
   return fetch(apiPath, {
@@ -145,4 +182,3 @@ function basePost(apiPath, data) {
                 credentials: 'same-origin',
                 body: toSend})
 }
-

@@ -3,7 +3,8 @@ import {
   WS_MESSAGE_RECEIVED, 
   INTERACTION_BOX_CLOSE,
   SLOT_CLICK, SLOT_EXPAND, BID_REQUESTED,
-  LOGIN_EXPAND, LOGIN_SUCCESS
+  LOGIN_EXPAND, LOGIN_SUCCESS,
+  FETCH_ALL_USERS_COMPLETED
 } from './actions'
 import { reducer as reduxFormReducer } from 'redux-form';
 
@@ -138,11 +139,24 @@ const interaction = (state = {
   return state
 }
 
+const users = (state = [], action) => {
+  switch(action.type) {
+    case FETCH_ALL_USERS_COMPLETED:
+      let newState = []
+      JSON.parse(action.msg).forEach(user => newState.push(user))
+      return newState
+    default:
+      // empty
+  }
+  return state
+}
+
 const rootReducer = combineReducers({
   user,
   slots,
   activityEvents,
   interaction,
+  users,
   form: reduxFormReducer, // mounted under "form"
 })
 
