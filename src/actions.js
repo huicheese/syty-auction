@@ -24,6 +24,18 @@ export const BID_FAIL = 'BID_FAIL'
 export const TOGGLE_SYSTEM_PERMISSION_REQUESTED = 'TOGGLE_SYSTEM_PERMISSION_REQUESTED'
 export const TOGGLE_SYSTEM_PERMISSION_COMPLETED = 'TOGGLE_SYSTEM_PERMISSION_COMPLETED'
 
+export const TOGGLE_USER_PERMISSION_REQUESTED = 'TOGGLE_USER_PERMISSION_REQUESTED'
+export const TOGGLE_USER_PERMISSION_COMPLETED = 'TOGGLE_USER_PERMISSION_COMPLETED'
+
+export const FETCH_ALL_USERS_REQUESTED = 'FETCH_ALL_USERS_REQUESTED'
+export const FETCH_ALL_USERS_COMPLETED = 'FETCH_ALL_USERS_COMPLETED'
+
+export const FETCH_USER_BIDDINGS_REQUESTED = 'FETCH_USER_BIDDINGS_REQUESTED'
+export const FETCH_USER_BIDDINGS_COMPLETED = 'FETCH_USER_BIDDINGS_COMPLETED'
+
+export const DELETE_BID_REQUESTED = 'DELETE_BID_REQUESTED'
+export const DELETE_BID_COMPLETED = 'DELETE_BID_COMPLETED'
+
 export const initializeConnection = () => {
   return {
     type: WS_CONNECT
@@ -139,6 +151,69 @@ export function toggleSystemPermission() {
   }
 }
 
+const toggleUserPermissionRequested = (opID) => ({ opID: opID, type: TOGGLE_USER_PERMISSION_REQUESTED })
+const toggleUserPermissionCompleted = (opID, msg) => ({ opID: opID, type: TOGGLE_USER_PERMISSION_COMPLETED, msg: msg })
+
+export function toggleUserPermission(userID) {
+  let opID = "toggleUserPermission-" + userID + "-" + Math.random()
+  return dispatch => {
+    dispatch(toggleUserPermissionRequested(opID))
+    return basePost(`/areyousure/toggleUserPermission`, {userID})
+      .then(response =>
+        response
+          .text()
+          .then(msg => dispatch(toggleUserPermissionCompleted(opID, msg)))
+          .then(() => dispatch(fetchAllUsers()))
+      ).catch(v1 => console.log(opID + ": " + v1))
+  }
+}
+
+const fetchAllUsersRequested = (opID) => ({ opID: opID, type: FETCH_ALL_USERS_REQUESTED })
+const fetchAllUsersCompleted = (opID, msg) => ({ opID: opID, type: FETCH_ALL_USERS_COMPLETED, msg: msg })
+
+export function fetchAllUsers() {
+  let opID = "fetchAllUsers-" + Math.random()
+  return dispatch => {
+    dispatch(fetchAllUsersRequested(opID))
+    return basePost(`/reporting/users`, {})
+      .then(response =>
+        response.text().then(msg => dispatch(fetchAllUsersCompleted(opID, msg)))
+      ).catch(v1 => console.log(opID + ": " + v1))
+  }
+}
+
+const fetchUserBidsRequested = (opID) => ({ opID: opID, type: FETCH_USER_BIDDINGS_REQUESTED })
+const fetchUserBidsCompleted = (opID, msg) => ({ opID: opID, type: FETCH_USER_BIDDINGS_COMPLETED, msg: msg })
+
+export function fetchUserBids(userID) {
+  let opID = "fetchUserBids-" + userID + "-" + Math.random()
+  return dispatch => {
+    dispatch(fetchUserBidsRequested(opID))
+    return basePost(`/reporting/userBiddings`, {userID})
+      .then(response =>
+        response.text().then(msg => dispatch(fetchUserBidsCompleted(opID, msg)))
+      ).catch(v1 => console.log(opID + ": " + v1))
+  }
+}
+
+const deleteBidRequested = (opID) => ({ opID: opID, type: DELETE_BID_REQUESTED })
+const deleteBidCompleted = (opID, msg) => ({ opID: opID, type: DELETE_BID_COMPLETED, msg: msg })
+
+export function deleteBid(bidID, slot, userID) {
+  let opID = "deleteBid-" + bidID + "-" + Math.random()
+  return dispatch => {
+    dispatch(deleteBidRequested(opID))
+    return basePost(`/areyousure/deleteBid`, {bidID, slot})
+      .then(response =>
+        response
+          .text()
+          .then(msg => dispatch(deleteBidCompleted(opID, msg)))
+          .then(() => dispatch(fetchAllUsers()))
+          .then(() => dispatch(fetchUserBids(userID)))
+      ).catch(v1 => console.log(opID + ": " + v1))
+  }
+}
+
 function basePost(apiPath, data) {
   let toSend = JSON.stringify(data)
   return fetch(apiPath, {
@@ -149,4 +224,3 @@ function basePost(apiPath, data) {
                 credentials: 'same-origin',
                 body: toSend})
 }
-

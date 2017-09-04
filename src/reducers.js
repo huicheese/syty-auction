@@ -3,7 +3,9 @@ import {
   WS_MESSAGE_RECEIVED, 
   INTERACTION_BOX_CLOSE,
   SLOT_CLICK, SLOT_EXPAND, BID_REQUESTED,
-  LOGIN_EXPAND, LOGIN_SUCCESS
+  LOGIN_EXPAND, LOGIN_SUCCESS,
+  FETCH_ALL_USERS_COMPLETED,
+  FETCH_USER_BIDDINGS_COMPLETED
 } from './actions'
 import { reducer as reduxFormReducer } from 'redux-form';
 
@@ -174,11 +176,39 @@ const interaction = (state = {
   return state
 }
 
+const users = (state = [], action) => {
+  switch(action.type) {
+    case FETCH_ALL_USERS_COMPLETED:
+      return converJsonStringToArray(action.msg)
+    default:
+      // empty
+  }
+  return state
+}
+
+const userBiddings = (state = [], action) => {
+  switch(action.type) {
+    case FETCH_USER_BIDDINGS_COMPLETED:
+      return converJsonStringToArray(action.msg)
+    default:
+      // empty
+  }
+  return state
+}
+
+const converJsonStringToArray = msg => {
+  let result = []
+  JSON.parse(msg).forEach(item => result.push(item))
+  return result
+}
+
 const rootReducer = combineReducers({
   user,
   slots,
   activityEvents,
   interaction,
+  users,
+  userBiddings,
   form: reduxFormReducer, // mounted under "form"
 })
 

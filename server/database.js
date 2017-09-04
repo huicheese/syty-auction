@@ -15,5 +15,6 @@ module.exports = {
 	nukeBiddings: database.nukeBiddings,
 
 	getSlotInfo: database.getSlotInfo,
-	getAllSlotsInfo: database.getAllSlotsInfo
+	getAllSlotsInfo: database.getAllSlotsInfo,
+	getUserBiddings: database.getUserBiddings
 };

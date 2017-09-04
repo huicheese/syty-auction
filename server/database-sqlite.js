@@ -1,7 +1,7 @@
 var path = require('path');
 var Promise = require('bluebird');
 var db = require('sqlite')
-var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, allUsersQueryStmt, recentBiddingsQueryStmt, nukeBiddingsStmt, nukeUsersStmt, toggleUserStmt, deleteBidStmt;
+var createUserStmt, submitBidStmt, slotQueryStmt, allSlotsQueryStmt, userQueryStmt, allUsersQueryStmt, recentBiddingsQueryStmt, nukeBiddingsStmt, nukeUsersStmt, toggleUserStmt, deleteBidStmt, userBiddingsQueryStmt;
 
 exports.initialize = () =>
 	Promise
@@ -67,8 +67,15 @@ exports.initialize = () =>
 			.then(stmt => userQueryStmt = stmt);
 
 			db.prepare(`
-				SELECT user_id, first_name, last_name, company, table_number, permission
-				FROM users
+				SELECT u.user_id, u.first_name, u.last_name, u.company, u.table_number, u.permission, COALESCE(s.count_bid, 0) AS count_bid
+				FROM
+					users u
+					LEFT OUTER JOIN
+					(SELECT user_id, COUNT(*) AS count_bid
+					FROM biddings
+					GROUP BY user_id) s
+					ON (u.user_id = s.user_id)
+				ORDER BY u.user_id
 				`)
 			.then(stmt => allUsersQueryStmt = stmt);
 
@@ -79,6 +86,14 @@ exports.initialize = () =>
 				LIMIT ?
 				`)
 			.then(stmt => recentBiddingsQueryStmt = stmt);
+
+			db.prepare(`
+				SELECT user_id, bid_id, slot, bid, added_ts
+				FROM biddings
+				WHERE user_id = ?
+				ORDER BY added_ts DESC
+				`)
+			.then(stmt => userBiddingsQueryStmt = stmt);
 
 			db.prepare(`
 				DELETE FROM biddings;
@@ -143,3 +158,5 @@ exports.getSlotInfo = slot =>
 	Promise.resolve(slotQueryStmt.get(slot));
 exports.getAllSlotsInfo = () =>
 	Promise.resolve(allSlotsQueryStmt.all());
+exports.getUserBiddings = userID =>
+	Promise.resolve(userBiddingsQueryStmt.all(userID));
