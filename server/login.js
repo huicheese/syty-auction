@@ -34,7 +34,7 @@ let executeLogin = (authValidationResult, userInfo, response, cookiesExpiration)
                 if (userCreationResult.isValid) {
                     let expiry = new Date(Date.now() + cookiesExpiration);
                     response.cookie('sytyAuth', userCreationResult.userID, { expires: expiry });
-                    response.status(200).send('Login successful');
+                    response.status(200).send(userCreationResult.userID);
                 } else {
                     response.status(400).send('Failed to login');
                 }

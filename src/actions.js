@@ -55,7 +55,10 @@ export const messageReceived = (msg) => {
 }
 
 const loginRequested = () => ({ type: LOGIN_REQUESTED})
-const loginSuccess = () => ({ type: LOGIN_SUCCESS})
+const loginSuccess = (token) => ({ 
+  type: LOGIN_SUCCESS,
+  token: token
+})
 const loginFail = (msg) => ({ type: LOGIN_FAIL, error:msg})
 
 export const expandLogin = () => ({
@@ -72,7 +75,8 @@ export function fetchLogin(firstName, lastName, company, table) {
                   table:table
                 })
       .then(response => response.ok ?
-        dispatch(loginSuccess()) : 
+        response.text().then(token => dispatch(loginSuccess(token)))
+        : 
         response.text().then(msg => dispatch(loginFail(msg)))
       ).catch(v1 => console.log(v1))
 

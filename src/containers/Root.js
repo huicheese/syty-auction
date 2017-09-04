@@ -10,7 +10,7 @@ import ControlRootContainer from './ControlRootContainer'
 import * as Cookies from "js-cookie";
 
 let curAuth = Cookies.get('sytyAuth')
-const store = configureStore({user:{isLoggedIn: curAuth != undefined}})
+const store = configureStore({user:{isLoggedIn: curAuth != undefined, userID: curAuth}})
 
 // document.addEventListener('gesturestart', function (e) {
 //     e.preventDefault();

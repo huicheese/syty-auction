@@ -19,20 +19,25 @@ const stubEvents = new Array(numEvents).fill().map(
   (e,i) => ({})
 )
 
+
+
 // retrieve login state from cookie
 const user = (state = {
-  isLoggedIn: false
+  isLoggedIn: false,
+  userID: null
 }, action) => {
   switch (action.type) {
     case LOGIN_SUCCESS:
       return Object.assign({}, state, {
-        isLoggedIn: true
+        isLoggedIn: true,
+        userID: action.token
     })
   }
   return state;
 }
 
-const slots = (state = stubSlots || [], action) => {
+const slots = (state = stubSlots || []
+, action) => {
     let newState;
     switch (action.type) {
       case WS_MESSAGE_RECEIVED:
