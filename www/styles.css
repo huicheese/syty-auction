@@ -596,8 +596,12 @@ button, div {
   .slot-container {
     width: 16.65%;
   }
-
-  .container {
-    width: 95%;
+  .block {
+    height: 52em;
   }
+  
+  .container {
+    /*width: 95%;*/
+  }
+
 }

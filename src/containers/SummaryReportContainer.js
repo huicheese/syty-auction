@@ -2,7 +2,7 @@ import SummaryReport from '../components/SummaryReport'
 import { connect } from 'react-redux'
 
 const mapStateToProps = (state, ownProps) => {
-  const { slots } = state
+  const { slots } = state.slots
   return {
     slots
   }

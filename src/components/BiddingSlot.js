@@ -1,6 +1,6 @@
 import React from 'react'
 import AnimateOnChange from 'react-animate-on-change'
-import BidderNamePlate from './BidderNamePlate'
+import BidderNamePlateContainer from '../containers/BidderNamePlateContainer'
 
 const BiddingSlot = ({index, hasChange, bid, bidders, onSlotClick}) => {
 	return (
@@ -21,7 +21,7 @@ const BiddingSlot = ({index, hasChange, bid, bidders, onSlotClick}) => {
               </div>
               {bidders &&
                 <div className="slot-bidder">
-                  {bidders.length == 1 && <BidderNamePlate bidder={bidders[0]} />}
+                  {bidders.length == 1 && <BidderNamePlateContainer bidder={bidders[0]} />}
                   {bidders.length == 2 && bidders.map((e,i) => <BidderNamePlate key={e.userID} bidder={e} />)}
                   {bidders.length >= 3 && <span style={{fontStyle:"italic"}}>{bidders.length + " Bidders"}</span>}
                 </div>

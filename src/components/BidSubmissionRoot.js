@@ -4,7 +4,7 @@ import LoginFormContainer from '../containers/LoginFormContainer'
 import BidFormContainer from '../containers/BidFormContainer'
 import ActivityEventBoxContainer from '../containers/ActivityEventBoxContainer'
 import InteractionBox from './InteractionBox'
-import StatsBoxContainer from './StatsBoxContainer'
+import StatsBoxContainer from '../containers/StatsBoxContainer'
 
 class BidSubmissionRoot extends React.Component {
 

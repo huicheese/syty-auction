@@ -35,39 +35,70 @@ const user = (state = {
   }
   return state;
 }
+const bidderSorter = (b1, b2) => {
+  if (b1.sum > b2.sum)
+    return -1;
+  if (b1.sum < b2.sum)
+    return 1;
 
-const slots = (state = stubSlots || []
-, action) => {
+  if (b1.bidTS < b2.bidTS)
+    return -1;
+  if (b1.bidTS > b2.bidTS)
+    return 1;
+
+  return 0;
+}
+
+const slots = (state = {
+  slots: stubSlots || [],
+  bidders: {},
+  byUser: {},
+  top: []
+}, action) => {
     let newState;
     switch (action.type) {
       case WS_MESSAGE_RECEIVED:
         if(action.slots && action.slots.length) {
-          newState = state.map(i => Object.assign({}, i, {hasChange: false}))
-          action.slots.forEach(s => newState[s.index] = s)
+          newState = {};
+
+          newState.slots = state.slots.map(i => Object.assign({}, i, {hasChange: false}))
           if(action.isLiveUpdate) {
             action.slots.forEach(s => s.hasChange = true)
           }
-          let sum = {}
-          newState.forEach(s => {
-            if(!s.highestBidders || s.highestBidders.length != 1)
+          action.slots.forEach(s => newState.slots[s.index] = Object.assign({},s))
+
+          newState.bidders = {}
+          newState.byUser = {}
+          
+          newState.slots.forEach(slot => {
+            if(!slot.highestBidders || slot.highestBidders.length != 1)
               return;
-            sum[s.highestBidders[0].userID] = (sum[s.highestBidders[0].userID] || 0) + s.highestBid
-            
+
+            let thisUserID = slot.highestBidders[0].userID
+            if(!newState.bidders[thisUserID])
+               newState.bidders[thisUserID] = Object.assign({}, slot.highestBidders[0], {sum: 0})
+            let bidder = newState.bidders[thisUserID]
+            if(bidder.bidTS || bidder.bidTS > slot.highestBidders[0].bidTS)
+              bidder.bidTS = slot.highestBidders[0].bidTS
+
+            bidder.sum = (bidder.sum || 0) + slot.highestBid
+
+            let slotOfUser = newState.byUser[thisUserID] || []
+            slotOfUser.push(slot.index + 1)
+            newState.byUser[thisUserID] = slotOfUser
           })
 
-          newState.forEach(s => {
-            if(s.highestBidders && s.highestBidders.length > 0)
-              s.highestBidders.forEach(b => {
-                b.sum = sum[b.userID]
-              })
-          })
-
+          let top3 = Object.keys(newState.bidders).map(
+              (key, index) => newState.bidders[key]);
+          top3.sort(bidderSorter)
+          newState.top3 = top3.slice(0,3)
+          
           return newState
         }
         break;
       case SLOT_CLICK:
-        newState = state.slice();
-        newState[action.slot - 1].hasChange = false;
+        newState = Object.assign({}, state)
+        newState.slots[action.slot - 1].hasChange = false;
         return newState;
       default:
         // empty
