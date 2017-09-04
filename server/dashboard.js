@@ -91,7 +91,7 @@ exports.setApp = (app, io) => {
             });
     });
 
-    app.get('/reporting/users', (request, response) => {
+    app.post('/reporting/users', (request, response) => {
         database
             .getAllUsers()
             .then(users => response.status(200).send(JSON.stringify(users)))
