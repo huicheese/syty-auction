@@ -101,12 +101,13 @@ exports.setApp = (app, io) => {
             });
     });
 
-    app.get('/reporting/biddings', (request, response) => {
-        buildSlotInfoSnapshot()
-            .then(slotInfoSnapshot => response.status(200).send(JSON.stringify(slotInfoSnapshot)))
+    app.post('/reporting/userBiddings', (request, response) => {
+        database
+            .getUserBiddings(request.body.userID)
+            .then(userBiddings => response.status(200).send(JSON.stringify(userBiddings)))
             .catch(err => {
-                console.error('Failed to query Biddings result', err.stack);
-                response.status(400).send('Failed to query Biddings result');
+                console.error('Failed to query UserBiddings result', err.stack);
+                response.status(400).send('Failed to query UserBiddings result');
             });
     });
 

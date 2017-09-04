@@ -28,6 +28,7 @@ let sqlDeleteAllBiddings = sql('bidding/nukeBiddings.sql');
 
 let sqlGetSlotInfo = sql('summary/getSlotInfo.sql');
 let sqlGetAllSlotsInfo = sql('summary/getAllSlotsInfo.sql');
+let sqlGetUserBiddings = sql('summary/getUserBiddings.sql');
 
 exports.initialize = () =>
 	Promise
@@ -53,3 +54,4 @@ exports.nukeBiddings = () => db.none(sqlDeleteAllBiddings);
 
 exports.getSlotInfo = slot => db.oneOrNone(sqlGetSlotInfo, { slot: slot });
 exports.getAllSlotsInfo = () => db.any(sqlGetAllSlotsInfo);
+exports.getUserBiddings = (userID) => db.any(sqlGetUserBiddings, { userID: userID });

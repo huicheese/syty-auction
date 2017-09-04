@@ -1,10 +1,11 @@
 import { connect } from 'react-redux'
 import ControlRoot from '../components/ControlRoot'
-import { toggleSystemPermission, toggleUserPermission, fetchAllUsers } from '../actions'
+import { toggleSystemPermission, toggleUserPermission, fetchAllUsers, fetchUserBids, deleteBid } from '../actions'
 
 function mapStateToProps(state) {
 	return {
-    	users: state.users
+    	users: state.users,
+    	userBiddings: state.userBiddings
   	};
 }
 
@@ -20,6 +21,14 @@ function mapDispatchToProps(dispatch) {
 
 	    onRefreshUsersClick: () => {
 	    	dispatch(fetchAllUsers());
+	    },
+
+	    onRefreshUserBidsClick: (userID) => {
+	    	dispatch(fetchUserBids(userID));
+	    },
+
+	    onDeleteBidClick: (bidID, slot, userID) => {
+	    	dispatch(deleteBid(bidID, slot, userID));
 	    }
 	};
 }
