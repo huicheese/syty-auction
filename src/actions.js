@@ -130,7 +130,7 @@ export function fetchAdminBid(firstName, lastName, company, table, slot, bid) {
     dispatch(bidRequested(opID))
     return basePost(`adminSubmit`, {firstName, lastName, company, table, bid, slot})
       .then(response => response.ok ?
-        dispatch(bidSuccess(opID)) : 
+        dispatch(bidSuccess(opID, slot, bid)) : 
         response.text().then(msg => dispatch(bidFail(opID, msg)))
       ).catch(v1 => console.log(opID + ": " + v1))
 

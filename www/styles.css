@@ -74,10 +74,6 @@ button, div {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-.adminField {
-  color: black;
-}
-
 .c1 { width : 12.5% }
 .c2 { width : 25% }
 .c3 { width : 37.5% }
@@ -601,6 +597,23 @@ button, div {
     50% { opacity: 0; }
     100% { opacity: 1; }
   }
+
+.admin-form {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.admin-form div > input {
+  color:#000;
+}
+
+.admin-form div > button {
+  font-size: 0.7em;
+  padding: 0.4em;
+}
 
 @media screen and (max-width: 20em) {
   .event {
