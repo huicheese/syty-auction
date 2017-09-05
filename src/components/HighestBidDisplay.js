@@ -1,6 +1,6 @@
 import React from 'react';
 import AnimateOnChange from 'react-animate-on-change'
-import BidderNamePlate from './BidderNamePlate'
+import BidderNamePlateContainer from '../containers/BidderNamePlateContainer'
 
 class HighestBidDisplay extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -17,7 +17,7 @@ class HighestBidDisplay extends React.Component {
             &nbsp; $ {Intl.NumberFormat().format(highestBid || 0)}
           </AnimateOnChange> 
           {bidders && bidders.length==1 &&
-            <span> by&nbsp;&nbsp;<BidderNamePlate bidder={bidders[0]} dyno={false}/></span>
+            <span> by&nbsp;&nbsp;<BidderNamePlateContainer bidder={bidders[0]} dyno={false}/></span>
           }
         </div>
       )
