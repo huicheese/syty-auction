@@ -218,7 +218,11 @@ let buildUpdate = (bidID, userID, slot, bid) =>
 let buildSlotInfoUpdate = slot =>
     database
         .getSlotInfo(slot)
-        .then(slotInfo => parseSlotInfo(slotInfo));
+        .then(slotInfo => {
+            if (slotInfo)
+                return parseSlotInfo(slotInfo);
+            return { index : slot - 1 };
+        });
 
 let parseSlotInfo = slotInfo => {
     let index = parseInt(slotInfo.slot) - 1;
