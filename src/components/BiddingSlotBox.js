@@ -5,7 +5,7 @@ const BiddingSlotBox = (props) => {
 
 	const {slots, onSlotClick} = props
 	return (
-			<div className="row slot-row">
+			<div className="row slot-row dashboard">
 				{
 					slots.map((entry, key) =>
 							<BiddingSlot key={entry.index} 

@@ -5,11 +5,13 @@ const ActivityEventBox = ({activityEvents}) => {
 	return (
  		<div className="header-row">
       <div className="header-row-icon"><span>CC</span>G</div>
-      	<div className="header-row-activity">
-					{
-						activityEvents.map((entry, key) => 
-							entry && entry.bidder && <ActivityEvent key={key} entry={entry}/>)
-					}
+        <div className="header-row-activity">
+          <div className="activities">
+            {
+              activityEvents.map((entry, key) => 
+                entry && entry.bidder && <ActivityEvent key={key} entry={entry}/>)
+            }
+          </div>
       	</div>
     	</div>
 		)

@@ -1,11 +1,11 @@
 import React from 'react'
-import BidderNamePlate from './BidderNamePlate'
+import BidderNamePlateContainer from '../containers/BidderNamePlateContainer'
 
 const generateActivity = (index, bidder, bidInput, slot) => {
   let bid = Intl.NumberFormat().format(bidInput);
   switch(index) {
     default:
-      return <div className="activity-entry"><BidderNamePlate bidder={bidder} dyno={false}/>{"\xa0\xa0bids $ " + bid + " on slot " + slot}</div>;
+      return <div className="event"><BidderNamePlateContainer bidder={bidder} dyno={false}/>{"\xa0\xa0bids $ " + bid + " on slot " + slot}</div>;
 
   }
 }

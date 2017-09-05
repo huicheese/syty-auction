@@ -119,9 +119,11 @@ button, div {
   overflow: hidden;
   margin-right: 0.5em;
 }
-.activity-entry {
+.activities {
   animation: ticker 18s cubic-bezier(1, 0, .5, 0) infinite;
-  line-height: 2.5em; 
+}
+.event {
+  line-height: 2.5em;   
 }
 .body {
 }
@@ -230,7 +232,12 @@ button, div {
 }
 .my-slots {
   padding-top: 0.5em;
+  font-size: 0.95em;
   clear: both;
+}
+.my-slots-title {
+  width: 4.3em;
+  display: inline-block;
 }
 .my-slot-i {
   background-image: -webkit-linear-gradient(top, #f4f1ee, #fff);
@@ -241,13 +248,14 @@ button, div {
   padding-right: 0.1em;
   text-align: center;
   color: #b98d1d;
-  font-size: 0.8em;
+  font-size: 0.75em;
   height: 1.5em;
   width: 1.5em;
   display: inline-block;
   margin-right: 0.4em;
 }
 .top-title {
+  font-size: 0.95em;
   padding-bottom: 0.3em;
 }
 .top-ranking .entry{
@@ -551,9 +559,10 @@ button, div {
   }
 
 @media screen and (max-width: 20em) {
-  .activity-entry {
+  .event {
     line-height: 2.5em;
     font-size: 0.8em;
+    padding-bottom: 0.63em;
   }
 
   .header-row-activity {
@@ -578,9 +587,16 @@ button, div {
 
 @media screen and (min-width: 40.5em) {
   .container {margin: 0 auto;}
+  .dashboard { margin-top: -1.5em;}
   .interaction-body {
     height: auto;
     margin: 3.5em auto auto auto;
+  }
+  .slot-row {
+    background: none;
+    width: 100%;
+    flex-wrap: wrap;
+    padding: 1em 0.2em 2em 0.4em;
   }
   .slot-corner {
     font-size: 1.5em;
@@ -599,9 +615,10 @@ button, div {
   .block {
     height: 52em;
   }
-  
+
   .container {
     /*width: 95%;*/
+    padding-top: 2.5em;
   }
 
 }

@@ -4,10 +4,11 @@ import BidderNamePlate from '../components/BidderNamePlate'
 const mapStateToProps = (state, ownProps) => {
   const { bidders } = state.slots
   let bidder = ownProps.bidder
-  bidder.sum = (bidders[bidder.userID] && bidders[bidder.userID].sum) || 0
+  
   return {
-    dyno: ownProps.dyno || true,
-    bidder
+    dyno: ownProps.dyno,
+    name: bidder.firstName,
+    sum: (bidders[bidder.userID] && bidders[bidder.userID].sum) || 0
   }
 }
 

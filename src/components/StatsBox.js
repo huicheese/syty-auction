@@ -1,5 +1,5 @@
 import React from 'react'
-import BidderNamePlate from './BidderNamePlate'
+import BidderNamePlateContainer from '../containers/BidderNamePlateContainer'
 
 const StatsBox = ({mySlots, me, top3}) => {
   return (
@@ -7,12 +7,13 @@ const StatsBox = ({mySlots, me, top3}) => {
     {me && me.sum > 0 &&
       <div className="my-profile c4">
         <div>
-          <BidderNamePlate bidder={me} dyno={false}/>'s total bid:
+          <BidderNamePlateContainer bidder={me} dyno={false}/>'s total:
         </div>
         <div>
           <span className="my-bids">{"$ " + Intl.NumberFormat().format(me.sum)}</span>
         </div>
         <div className="my-slots">
+          <div className="my-slots-title">Winning: </div>
         {mySlots.map((e, i) => 
           <div key={e} className="my-slot-i">{e}</div>
         )}
@@ -27,7 +28,7 @@ const StatsBox = ({mySlots, me, top3}) => {
         <span className="entry top-title">Top Ranking</span>
         {top3.map((e,i) => 
         <span key={i} className="entry">
-          <BidderNamePlate bidder={e} dyno={false}/>{" $"+e.sum}
+          <BidderNamePlateContainer bidder={e} dyno={false}/><span>{" $"+e.sum}</span>
         </span>
         )}
       </div>
