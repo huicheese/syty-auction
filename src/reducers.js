@@ -2,8 +2,8 @@ import { combineReducers } from 'redux'
 import {
   WS_MESSAGE_RECEIVED, 
   INTERACTION_BOX_CLOSE,
-  SLOT_CLICK, SLOT_EXPAND, BID_REQUESTED,
-  LOGIN_EXPAND, LOGIN_SUCCESS,
+  SLOT_CLICK, SLOT_EXPAND, BID_REQUESTED, BID_SUCCESS, BID_FAIL,
+  LOGIN_EXPAND, LOGIN_SUCCESS, LOGIN_FAIL,
   FETCH_ALL_USERS_COMPLETED,
   FETCH_USER_BIDDINGS_COMPLETED
 } from './actions'
@@ -21,7 +21,37 @@ const stubEvents = new Array(numEvents).fill().map(
   (e,i) => ({})
 )
 
-
+const nc = (state={
+  msg:null
+}, action) => {
+  switch (action.type) {
+    case LOGIN_SUCCESS:
+      return { 
+        msg: "Login Success", 
+        isError: false,
+        ts: Date.now()
+      }
+    case LOGIN_FAIL:
+      return { 
+        msg: "Login Fail: " + action.error,
+        isError: true,
+        ts: Date.now()
+      }  
+    case BID_SUCCESS:
+      return { 
+        msg: "Bidded $ " + Intl.NumberFormat().format(action.bid) + " on slot " + action.slot,
+        isError: false,
+        ts: Date.now()
+      }
+    case BID_FAIL:
+      return { 
+        msg: action.error,
+        isError: true,
+        ts: Date.now()
+      }
+  }
+  return state;
+}
 
 // retrieve login state from cookie
 const user = (state = {
@@ -203,6 +233,7 @@ const converJsonStringToArray = msg => {
 }
 
 const rootReducer = combineReducers({
+  nc,
   user,
   slots,
   activityEvents,

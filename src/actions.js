@@ -108,8 +108,8 @@ export const expandSlot = (slot) => ({
 })
 
 const bidRequested = (opID) => ({ opID: opID, type: BID_REQUESTED})
-const bidSuccess = (opID) => ({ opID: opID, type: BID_SUCCESS})
-const bidFail = (opID, msg) => ({ opID: opID, type: BID_FAIL, error:msg})
+const bidSuccess = (opID, slot, bid) => ({ opID: opID, type: BID_SUCCESS, slot, bid})
+const bidFail = (opID, msg, slot, bid) => ({ opID: opID, type: BID_FAIL, error:msg, slot, bid})
 
 export function fetchBid(slot, bid) {
   let opID = slot + "-" + bid + "-" + Math.random()
@@ -117,8 +117,8 @@ export function fetchBid(slot, bid) {
     dispatch(bidRequested(opID))
     return basePost(`submit`, {bid, slot})
       .then(response => response.ok ?
-        dispatch(bidSuccess(opID)) : 
-        response.text().then(msg => dispatch(bidFail(opID, msg)))
+        dispatch(bidSuccess(opID, slot, bid)) : 
+        response.text().then(msg => dispatch(bidFail(opID, msg, slot, bid)))
       ).catch(v1 => console.log(opID + ": " + v1))
 
   }

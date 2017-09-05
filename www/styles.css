@@ -127,6 +127,46 @@ button, div {
 }
 .body {
 }
+.nc-container {
+  position: fixed;
+  z-index: 1010;
+  font-size: 0.85em;
+  top: 1em;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin: 0 0.5em;
+  line-height: 3em;
+  overflow: hidden; 
+  -webkit-box-shadow: 0 0 5px black;
+  -moz-box-shadow:    0 0 5px black;
+  box-shadow:         0 0 5px black;
+  display: none;
+}
+.nc-msg {
+  background: #DFF2BF;
+  color: #4F8A10;
+}
+.nc-error {
+  color: #D8000C;
+  background-color: #FFBABA;
+}
+.nc-show {
+  display: block;
+  -webkit-transform: translateY(-4.5em);
+  -webkit-animation: slideDown 2.5s 1 ease forwards;
+  -moz-transform:    translateY(-4.5em);
+  -moz-animation:    slideDown 2.5s 1 ease forwards;
+}
+
+@-webkit-keyframes slideDown {
+    0%, 100% { -webkit-transform: translateY(-4.5em); }
+    10%, 90% { -webkit-transform: translateY(0px); }
+}
+@-moz-keyframes slideDown {
+    0%, 100% { -moz-transform: translateY(-4.5em); }
+    10%, 90% { -moz-transform: translateY(0px); }
+}
 .login-required-mask {
   position:fixed;
   top:0;

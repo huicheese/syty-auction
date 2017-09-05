@@ -9,7 +9,7 @@ class Dashboard extends React.Component {
 
 	render() {
 		return (
-			<div className="container">
+			<div className="container dashboard">
 				<div className="c8 row">
 					<DashboardSlotBoxContainer />
 				</div>

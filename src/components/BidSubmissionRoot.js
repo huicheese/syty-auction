@@ -5,6 +5,7 @@ import BidFormContainer from '../containers/BidFormContainer'
 import ActivityEventBoxContainer from '../containers/ActivityEventBoxContainer'
 import InteractionBox from './InteractionBox'
 import StatsBoxContainer from '../containers/StatsBoxContainer'
+import NotificationCentreContainer from '../containers/NotificationCentreContainer'
 
 class BidSubmissionRoot extends React.Component {
 
@@ -16,6 +17,7 @@ class BidSubmissionRoot extends React.Component {
 		const {requireLogin, slotRequested, loginExpanded, isLoggedIn} = this.props;
 		return (
 			<div className="container">
+				<NotificationCentreContainer />
 				<ActivityEventBoxContainer />
 				{!isLoggedIn && 
 					<div className="login-required-mask" onClick={requireLogin}></div>
