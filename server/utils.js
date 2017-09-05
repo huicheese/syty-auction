@@ -49,9 +49,9 @@ let validateUserInfo = userInfo => {
 let generateUserID = (userInfo) => {
     let userID =
     	encode().value(JSON.stringify({
-        	firstName: userInfo.firstName,
-	        lastName: userInfo.lastName,
-	        company: userInfo.company,
+        	firstName: userInfo.firstName.toLowerCase(),
+	        lastName: userInfo.lastName.toLowerCase(),
+	        company: userInfo.company.toLowerCase(),
 	        table: userInfo.table
 	    })).toString();
     userInfo.userID = userID;
