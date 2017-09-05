@@ -74,6 +74,10 @@ button, div {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
+.adminField {
+  color: black;
+}
+
 .c1 { width : 12.5% }
 .c2 { width : 25% }
 .c3 { width : 37.5% }
