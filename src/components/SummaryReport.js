@@ -5,6 +5,13 @@ const SummaryReport = (props) => {
 	const { slots } = props
 	return (
 			<div className="container">
+				<div className="row slot row">
+					Sum: 	{
+								slots
+									.map((entry, key) => Number.parseInt(entry.highestBid) || 0)
+									.reduce((a,b) => a + b, 0)
+							}
+				</div>
 				{
 					slots.map((entry, key) =>
 							<div className="row slot-row" key={entry.index}>
