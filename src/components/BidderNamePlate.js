@@ -22,16 +22,17 @@ const dynoSize = (name: "", dyno) => {
   if(sum < 200) return 5;
   return 0;
 }
-const isVip = (sum) => {return (sum || 0) >= 1500}
+const isOverLimit = (sum, limit) => {return (sum || 0) >= limit}
 const BidderNamePlate = (props) => {
 // ♥💛
-  const {name, dyno=true, sum} = props
+  const {name, dyno=true, sum, goldenLimit} = props
+  const isVip = isOverLimit(sum, goldenLimit)
   return (
       <span className={"bidder-entry slot-bidder-name-"+dynoSize(name, dyno)}>
-        <span className={"bidder-c " + (isVip(sum) ? "":"bidder-l")}>
-          {isVip(sum) ? "💛 ": "♥ "}
+        <span className={"bidder-c " + (isVip ? "":"bidder-l")}>
+          {isVip ? "💛 ": "♥ "}
         </span>
-        <span className={isVip(sum) ? "bidder-h" : ""}>
+        <span className={isVip ? "bidder-h" : ""}>
           {name}
         </span>
       </span>

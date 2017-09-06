@@ -10,7 +10,12 @@ exports.setApp = (app, io) => {
             .join(
                 buildSlotInfoSnapshot(),
                 buildEventSnapshot(process.env.EVENT_SNAPSHOT_SIZE || app.locals.eventSnapshotSize),
-                (slotInfoSnapshot, eventSnapshot) => ({ slots: slotInfoSnapshot, events: eventSnapshot }))
+                (slotInfoSnapshot, eventSnapshot) => (
+                    {
+                        slots: slotInfoSnapshot,
+                        events: eventSnapshot,
+                        goldenLimit: process.env.GOLDEN_LIMIT || app.locals.goldenLimit 
+                    }))
             .then(snapshotJson => JSON.stringify(snapshotJson))
             .then(snapshotData => socket.emit('data', snapshotData));
     });
