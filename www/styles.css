@@ -195,7 +195,9 @@ button, div {
   margin: 0 auto;
   text-align: center;
   width: 100%;
-  color: #777; 
+  color: #777;
+  -webkit-animation: fadeinout-inv 3s infinite;
+  animation: fadeinout-inv 3s infinite;
 }
 .interaction-body {
   z-index: 900;
@@ -240,6 +242,10 @@ button, div {
   width: 100%;
   color: #538ebe;
   border-radius: 5px;
+}
+.login-form div>div>span {
+  font-size: 0.8em;
+  color:#ef3b3b;
 }
 .block {
   width: 100%;
@@ -436,7 +442,7 @@ button, div {
    box-shadow: 0px 3px 0px #2b638f, 0px 3px 15px rgba(0,0,0,.4), inset 0px 1px 0px rgba(255,255,255,.3), inset 0px 0px 3px rgba(255,255,255,.5);
 
 
-   margin: 0.7em 0.2em;
+   margin: 0.6em 0.2em;
 
  }
  .slot-mask:active {
@@ -485,11 +491,14 @@ button, div {
 
   height: 1.7em;
   width: 1.7em;
-  top: -0.8em;
+  top: -0.7em;
   left: -0.4em;
 
   text-align:  center;
   color: #b98d1d;
+}
+.bidder-entry span {
+  white-space: nowrap;
 }
 .slot-bidder .bidder-entry {
   display: block;

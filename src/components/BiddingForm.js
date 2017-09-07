@@ -9,9 +9,9 @@ class BiddingForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, pristine, reset, bidRequested, highestBid, hasChange, highestBidders } = this.props;
+    const { handleSubmit, onSubmit, pristine, reset, bidRequested, highestBid, hasChange, highestBidders } = this.props;
     return (
-      <form className="cal-body" onSubmit={handleSubmit}>
+      <form className="cal-body" onSubmit={handleSubmit((values, dispatcher) => onSubmit(values, dispatcher, highestBid))}>
       <div className="slot-prize-icon cal-icon">&nbsp;</div>
         <div>
           {highestBid && 

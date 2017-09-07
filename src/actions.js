@@ -71,7 +71,7 @@ const loginSuccess = (token) => ({
   type: LOGIN_SUCCESS,
   token: token
 })
-const loginFail = (msg) => ({ type: LOGIN_FAIL, error:msg})
+export const loginFail = (msg) => ({ type: LOGIN_FAIL, error:msg})
 
 export const expandLogin = () => ({
   type: LOGIN_EXPAND
@@ -109,7 +109,7 @@ export const expandSlot = (slot) => ({
 
 const bidRequested = (opID) => ({ opID: opID, type: BID_REQUESTED})
 const bidSuccess = (opID, slot, bid) => ({ opID: opID, type: BID_SUCCESS, slot, bid})
-const bidFail = (opID, msg, slot, bid) => ({ opID: opID, type: BID_FAIL, error:msg, slot, bid})
+export const bidFail = (opID, msg, slot, bid) => ({ opID: opID, type: BID_FAIL, error:msg, slot, bid})
 
 export function fetchBid(slot, bid) {
   let opID = slot + "-" + bid + "-" + Math.random()

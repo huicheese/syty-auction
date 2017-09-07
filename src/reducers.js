@@ -27,13 +27,13 @@ const nc = (state={
   switch (action.type) {
     case LOGIN_SUCCESS:
       return { 
-        msg: "Login Success", 
+        msg: "Let's get started!", 
         isError: false,
         ts: Date.now()
       }
     case LOGIN_FAIL:
       return { 
-        msg: "Login Fail: " + action.error,
+        msg: "Hmmm... " + action.error,
         isError: true,
         ts: Date.now()
       }  

@@ -1,36 +1,26 @@
 import React from 'react';
 import { Form, Field, reduxForm } from 'redux-form';
+import RenderedInput, { RenderedNumberInput } from './RenderedInput'
 
 const LoginForm = props => {
   const { handleSubmit, pristine, reset, loginRequested } = props;
   return (
     <form className="login-form" onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="firstName">First Name</label>
-        <div>
-          <Field name="firstName" component="input" type="text" placeholder="First Name"/>
-        </div>
-      </div>
-      <div>
-        <label htmlFor="lastName">Last Name</label>
-        <div>
-          <Field name="lastName" component="input" type="text" placeholder="Last Name"/>
-        </div>
-      </div>
-      <div>
-        <label htmlFor="company">Company</label>
-        <div>
-          <Field name="company" component="input" type="text" placeholder="Company"/>
-        </div>
-      </div>
-      <div>
-        <label htmlFor="firstName">Table</label>
-        <div>
-          <Field name="table" component="input" type="number" step={1} pattern={"\\d*"} placeholder="Table Number"/>
-        </div>
-      </div>
+      <Field name="firstName" component={RenderedInput} type="text" 
+          label="First Name *"
+          placeholder="Display Name"/>
+      <Field name="lastName" component={RenderedInput} type="text" 
+          label="Last Name *"
+          placeholder="Last Name"/>
+      <Field name="company" component={RenderedInput} type="text" 
+          label="Company *"
+          placeholder="Company"/>
+      <Field name="table" component={RenderedNumberInput} type="number" step={1} pattern={"\\d*"}  
+          label="Table *"
+          placeholder="Table Number"/>
+      <br/>
       <div className="interaction-footer">
-        <button type="submit" disabled={pristine || loginRequested}>Login</button>
+        <button type="submit" disabled={pristine || loginRequested}>Start Bidding!</button>
       </div>
     </form>
     );

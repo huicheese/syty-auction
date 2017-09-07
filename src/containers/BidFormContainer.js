@@ -1,26 +1,31 @@
 import { connect } from 'react-redux'
 import BiddingForm from '../components/BiddingForm'
-import { fetchBid } from '../actions'
+import { fetchBid, bidFail } from '../actions'
 
 function mapStateToProps(state, ownProps) {
   const {slots} = state.slots
+  let slot = slots[ownProps.slot - 1]
   return {
     bidRequested: false, // TODO
     initialValues: {
       slot: ownProps.slot, 
       // amount: 0
-      amount: slots[ownProps.slot - 1].highestBid || 0
+      amount: slot.highestBid || 0,
+      highestBid: slot.highestBid
     },
-    highestBid: slots[ownProps.slot - 1].highestBid,
-    hasChange: slots[ownProps.slot - 1].hasChange,
-    highestBidders: slots[ownProps.slot - 1].highestBidders
+    highestBid: slot.highestBid,
+    hasChange: slot.hasChange,
+    highestBidders: slot.highestBidders
   };
 }
 
 function mapDispatchToProps() {
   return {
-    onSubmit: (values, dispatch) => {
-    	dispatch(fetchBid(values.slot, 	values.amount));
+    onSubmit: (values, dispatch, highestBid) => {
+      if(highestBid && values.amount <= highestBid)
+        dispatch(bidFail(null, "Current highest bid is $" + highestBid, values.slot,  values.amount));
+      else
+    	  dispatch(fetchBid(values.slot, 	values.amount));
     }
   };
 }

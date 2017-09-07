@@ -19,10 +19,10 @@ const dynoSize = (name: "", dyno) => {
   if(sum <  77) return 2;
   if(sum < 104) return 3;
   if(sum < 142) return 4;
-  if(sum < 200) return 5;
+  else return 5;
   return 0;
 }
-const isVip = (sum) => {return (sum || 0) >= 1500}
+const isVip = (sum) => {return (sum || 0) >= 3000}
 const BidderNamePlate = (props) => {
 // ♥💛
   const {name, dyno=true, sum} = props

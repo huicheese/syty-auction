@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { fetchLogin } from '../actions'
+import { fetchLogin, loginFail } from '../actions'
 import LoginForm from '../components/LoginForm'
 
 function mapStateToProps(state) {
@@ -11,10 +11,19 @@ function mapStateToProps(state) {
 function mapDispatchToProps() {
   return {
     onSubmit: (values, dispatch) => {
-    	dispatch(fetchLogin(values.firstName, 
-    		values.lastName,
-    		values.company,
-    		values.table));
+      if(!values.firstName)
+        dispatch(loginFail("First Name is required"))
+      else if(!values.lastName)
+        dispatch(loginFail("Last Name is required"))
+      else if(!values.company)
+        dispatch(loginFail("Company is required"))
+      else if(!values.table)
+        dispatch(loginFail("Table number is required"))
+      else 
+    	  dispatch(fetchLogin(values.firstName, 
+          values.lastName,
+          values.company,
+          values.table));
     }
   };
 }

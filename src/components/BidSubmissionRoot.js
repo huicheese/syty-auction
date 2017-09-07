@@ -24,7 +24,7 @@ class BidSubmissionRoot extends React.Component {
 				}
 				{loginExpanded &&
 					<InteractionBox 
-						title="First Time Login"
+						title="First Time Bidder?"
 						bodyComponent={<LoginFormContainer />} />
 				}
 				{slotRequested &&
