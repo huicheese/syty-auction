@@ -10,7 +10,12 @@ exports.setApp = (app, io) => {
             .join(
                 buildSlotInfoSnapshot(),
                 buildEventSnapshot(process.env.EVENT_SNAPSHOT_SIZE || app.locals.eventSnapshotSize),
-                (slotInfoSnapshot, eventSnapshot) => ({ slots: slotInfoSnapshot, events: eventSnapshot }))
+                (slotInfoSnapshot, eventSnapshot) => (
+                    {
+                        slots: slotInfoSnapshot,
+                        events: eventSnapshot,
+                        goldenLimit: process.env.GOLDEN_LIMIT || app.locals.goldenLimit 
+                    }))
             .then(snapshotJson => JSON.stringify(snapshotJson))
             .then(snapshotData => socket.emit('data', snapshotData));
     });
@@ -233,6 +238,22 @@ let parseSlotInfo = slotInfo => {
                         if (typeof bidInfos === 'string')
                             return JSON.parse(bidInfos);
                         return bidInfos;
+                    })
+                    .then(bidInfos => {
+                        var distinctUserBids = {};
+                        bidInfos.forEach(bidInfo => {
+                            var userBid = distinctUserBids[bidInfo.user_id] = distinctUserBids[bidInfo.user_id] || {};
+                            userBid.bidID = bidInfo.bid_id;
+                            userBid.bidTS = bidInfo.added_ts;
+                        })
+                        return distinctUserBids;
+                    })
+                    .then(distinctUserBids => {
+                        var flatUserBids = [];
+                        for (var userID in distinctUserBids) {
+                            flatUserBids.push({ user_id: userID, bid_id: distinctUserBids[userID].bidID, added_ts: distinctUserBids[userID].bidTS });
+                        }
+                        return flatUserBids;
                     })
                     .map(bidInfo => {
                         return Promise

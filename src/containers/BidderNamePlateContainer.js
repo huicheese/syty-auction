@@ -8,7 +8,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     dyno: ownProps.dyno,
     name: bidder.firstName,
-    sum: (bidders[bidder.userID] && bidders[bidder.userID].sum) || 0
+    sum: (bidders[bidder.userID] && bidders[bidder.userID].sum) || 0,
+    goldenLimit: state.goldenLimit
   }
 }
 

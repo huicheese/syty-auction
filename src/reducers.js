@@ -81,6 +81,17 @@ const bidderSorter = (b1, b2) => {
   return 0;
 }
 
+const goldenLimit = (state = 3000, action) => {
+  switch (action.type) {
+    case WS_MESSAGE_RECEIVED:
+      let newState = action.goldenLimit || state;
+      return newState;
+    default:
+      //empty
+  }
+  return state
+}
+
 const slots = (state = {
   slots: stubSlots || [],
   bidders: {},
@@ -240,6 +251,7 @@ const rootReducer = combineReducers({
   interaction,
   users,
   userBiddings,
+  goldenLimit,
   form: reduxFormReducer, // mounted under "form"
 })
 
