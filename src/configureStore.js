@@ -10,8 +10,8 @@ export default function configureStore(preloadedState) {
 		preloadedState,
 		applyMiddleware(
 			socketMiddleware,
-			thunkMiddleware,
-			createLogger()
+			thunkMiddleware
+      // , createLogger()
 			)
 		)
 }
