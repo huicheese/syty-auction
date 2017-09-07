@@ -239,6 +239,22 @@ let parseSlotInfo = slotInfo => {
                             return JSON.parse(bidInfos);
                         return bidInfos;
                     })
+                    .then(bidInfos => {
+                        var distinctUserBids = {};
+                        bidInfos.forEach(bidInfo => {
+                            var userBid = distinctUserBids[bidInfo.user_id] = distinctUserBids[bidInfo.user_id] || {};
+                            userBid.bidID = bidInfo.bid_id;
+                            userBid.bidTS = bidInfo.added_ts;
+                        })
+                        return distinctUserBids;
+                    })
+                    .then(distinctUserBids => {
+                        var flatUserBids = [];
+                        for (var userID in distinctUserBids) {
+                            flatUserBids.push({ user_id: userID, bid_id: distinctUserBids[userID].bidID, added_ts: distinctUserBids[userID].bidTS });
+                        }
+                        return flatUserBids;
+                    })
                     .map(bidInfo => {
                         return Promise
                                     .resolve(bidInfo.user_id)
