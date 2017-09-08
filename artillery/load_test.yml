@@ -29,4 +29,4 @@ scenarios:
                 slot: "{{ slot }}"
                 bid: "{{ bid }}"
           - think: 5
-        count: 60
+        count: 10

@@ -4,4 +4,6 @@ CREATE TABLE IF NOT EXISTS biddings (
 	slot INTEGER NOT NULL,
 	bid INTEGER NOT NULL,
 	added_ts TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW() AT TIME ZONE 'utc')
-)
+);
+
+CREATE INDEX IF NOT EXITS biddings_idx_slot_bid ON biddings (slot, bid);
