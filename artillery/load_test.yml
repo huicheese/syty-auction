@@ -1,0 +1,32 @@
+config:
+  target: "https://ccg2017.herokuapp.com"
+  processor: "./loadtest.js"
+  phases:
+    - duration: 300
+      arrivalRate: 5
+scenarios:
+  - name: "Connect and Watch"
+    weight: 2
+    flow:
+      - get:
+          url: "/"
+      - think: 1
+  - name: "Connect and Bid"
+    weight: 1
+    flow:
+      - get:
+          url: "/"
+      - think: 1
+      - loop:
+          - function: "generateRandomBid"
+          - post:
+              url: "/adminSubmit"
+              json:
+                firstName: "{{ firstName }}"
+                lastName: "{{ lastName }}"
+                company: "{{ company }}"
+                table: "{{ table }}"
+                slot: "{{ slot }}"
+                bid: "{{ bid }}"
+          - think: 5
+        count: 60
