@@ -2,9 +2,9 @@ SELECT t.slot, t.bid, JSON_AGG(JSON_BUILD_OBJECT('user_id', t.user_id, 'bid_id',
 FROM
   biddings t
   INNER JOIN
-  (SELECT slot, MAX(bid) AS bid
+  (SELECT MAX(bid) AS bid
    FROM biddings
    WHERE slot = ${slot}) h
 ON t.bid = h.bid
-AND t.slot = h.slot
+WHERE t.slot = ${slot}
 GROUP BY t.slot, t.bid
