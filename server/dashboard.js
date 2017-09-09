@@ -116,6 +116,26 @@ exports.setApp = (app, io) => {
             });
     });
 
+    app.get('/reporting/getAllUsers', (request, response) => {
+        database
+            .reportAllUsers()
+            .then(users => response.status(200).send(JSON.stringify(users)))
+            .catch(err => {
+                console.error('Failed to query Users', err.stack);
+                response.status(400).send('Failed to query Users');
+            });
+    });
+
+    app.get('/reporting/getAllBiddings', (request, response) => {
+        database
+            .reportAllBiddings()
+            .then(biddings => response.status(200).send(JSON.stringify(biddings)))
+            .catch(err => {
+                console.error('Failed to query Biddings', err.stack);
+                response.status(400).send('Failed to query Biddings');
+            });
+    });
+
     let bot;
     app.get('/startBot', function (request, response) {
         if(bot) clearInterval(bot);

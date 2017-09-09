@@ -22,12 +22,14 @@ let sqlGetAllUsers = sql('user/getAllUsers.sql');
 let sqlCreateUser = sql('user/createUser.sql');
 let sqlToggleUserPermission = sql('user/toggleUserPermission.sql');
 let sqlDeleteAllUsers = sql('user/nukeUsers.sql');
+let sqlReportAllUsers = sql('user/reportAllUsers.sql');
 
 let sqlCreateTableBiddings = sql('bidding/createTableBiddings.sql');
 let sqlGetRecentBiddings = sql('bidding/getRecentBiddings.sql');
 let sqlSubmitBid = sql('bidding/submitBid.sql');
 let sqlDeleteBid = sql('bidding/deleteBid.sql');
 let sqlDeleteAllBiddings = sql('bidding/nukeBiddings.sql');
+let sqlReportAllBiddings = sql('bidding/reportAllBiddings.sql');
 
 let sqlGetSlotInfo = sql('summary/getSlotInfo.sql');
 let sqlGetAllSlotsInfo = sql('summary/getAllSlotsInfo.sql');
@@ -49,11 +51,13 @@ exports.getAllUsers = () => db.any(sqlGetAllUsers);
 exports.createUser = userInfo => db.none(sqlCreateUser, userInfo);
 exports.toggleUserPermission = userID => db.none(sqlToggleUserPermission, { userID: userID });
 exports.nukeUsers = () => db.none(sqlDeleteAllUsers);
+exports.reportAllUsers = () => db.any(sqlReportAllUsers);
 
 exports.getRecentBiddings = size => db.any(sqlGetRecentBiddings, { size: size });
 exports.submitBid = bidInfo => db.none(sqlSubmitBid, bidInfo);
 exports.deleteBid = (bidID, slot) => db.none(sqlDeleteBid, { bidID: bidID, slot: slot })
 exports.nukeBiddings = () => db.none(sqlDeleteAllBiddings);
+exports.reportAllBiddings = () => db.any(sqlReportAllBiddings);
 
 exports.getSlotInfo = slot => db.oneOrNone(sqlGetSlotInfo, { slot: slot });
 exports.getAllSlotsInfo = () => db.any(sqlGetAllSlotsInfo);

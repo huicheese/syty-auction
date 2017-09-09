@@ -6,4 +6,4 @@ CREATE TABLE IF NOT EXISTS biddings (
 	added_ts TIMESTAMP WITHOUT TIME ZONE DEFAULT (NOW() AT TIME ZONE 'utc')
 );
 
-CREATE INDEX IF NOT EXITS biddings_idx_slot_bid ON biddings (slot, bid);
+CREATE INDEX IF NOT EXISTS biddings_idx_slot_bid ON biddings (slot, bid);

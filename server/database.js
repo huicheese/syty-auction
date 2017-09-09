@@ -8,11 +8,13 @@ module.exports = {
 	createUser: database.createUser,
 	toggleUserPermission: database.toggleUserPermission,
 	nukeUsers: database.nukeUsers,
+	reportAllUsers: database.reportAllUsers,
 
 	getRecentBiddings: database.getRecentBiddings,
 	submitBid: database.submitBid,
 	deleteBid: database.deleteBid,
 	nukeBiddings: database.nukeBiddings,
+	reportAllBiddings: database.reportAllBiddings,
 
 	getSlotInfo: database.getSlotInfo,
 	getAllSlotsInfo: database.getAllSlotsInfo,
