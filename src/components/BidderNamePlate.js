@@ -23,15 +23,21 @@ const dynoSize = (name: "", dyno) => {
   return 0;
 }
 const isOverLimit = (sum, limit) => {return (sum || 0) >= limit}
+const isSpecial = (name) => {
+  if(!name || typeof name != "string")
+    return false
+  return "诗诗shishi".indexOf(name.toLowerCase()) >=0
+}
 const BidderNamePlate = (props) => {
   const {name, dyno=true, sum, goldenLimit} = props
   const isVip = isOverLimit(sum, goldenLimit)
+  const pick = (t1, t2, t3) => isSpecial(name) ? t3 : isVip ? t2 : t1
   return (
       <span className={"bidder-entry slot-bidder-name-"+dynoSize(name, dyno)}>
-        <span className={"bidder-c " + (isVip ? "":"bidder-l")}>
-          {isVip ? "💛 ": "♥ "}
+        <span className={"bidder-c " + pick("bidder-l", "", "bidder-s")}>
+          {pick("♥ ", "💛 ", "🦄 ")}
         </span>
-        <span className={isVip ? "bidder-h" : ""}>
+        <span className={pick("", "bidder-h", "bidder-s")}>
           {name}
         </span>
       </span>

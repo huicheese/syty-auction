@@ -515,15 +515,16 @@ button, div {
 }
 .slot-prize-icon {
   height: 6em;
-  background-image: url("https://shou1dwe.github.io/i-am-rich-yo/images/box.png"); 
+  /*background-image: url("https://shou1dwe.github.io/i-am-rich-yo/images/box.png"); */
+  background-image: url("rainbow-cupcake.png"); 
   background-position: center;
   background-repeat: no-repeat;
   background-position: center;
   background-repeat: no-repeat;
-  -webkit-background-size: contain;
-  -moz-background-size: contain;
-  -o-background-size: contain;
-  background-size: contain;
+  -webkit-background-size: 65% 88%;
+  -moz-background-size: 65% 88%;
+  -o-background-size: 65% 88%;
+  background-size: 65% 88%;
   margin-top: 0.7em;
 }
 .slot-bid {
@@ -541,6 +542,15 @@ button, div {
 }
 .bidder-h {
   color: #ffd700;
+}
+.bidder-s {
+  color: #ff8fb5;
+  text-shadow: 
+  rgba(255, 255, 255, 1) 0px 0px 100px, 
+  rgba(255, 255, 255, 0.3) 0px 0px 15px, 
+  rgba(255, 255, 255, 0.3) 0px 0px 30px, 
+  #ff8fb5 0px 0px 35px, 
+  rgb(255, 0, 222) 0px 0px 40px;
 }
 .slot-bidder-name-0 {}
 .slot-bidder-name-1 {font-size: 1.2em;}
